@@ -26,6 +26,7 @@ wikidata = json.load(response)
 
 wikititle = wikidata['parse']['title']
 wikibodytext = wikidata['parse']['text']
+wikibodytext = wikibodytext.decode(encoding='UTF-8', errors='strict')
 
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -38,7 +39,13 @@ def print_html_doc():
 			bodytext = wikibodytext
 )
 
+def print_headers():
+	print "Content-type: text/html"
+	print "\n\r"
+
 if __name__ == '__main__':
+
+	print_headers()
 	print_html_doc()
 
 
