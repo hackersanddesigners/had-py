@@ -25,19 +25,17 @@ response = urllib2.urlopen(url)
 wikidata = json.load(response)
 
 wikititle = wikidata['parse']['title']
-wikibodytext = wikidata['parse']['text']
-wikibodytext = wikibodytext.decode(encoding='UTF-8', errors='strict')
-
+wikibodytext = wikidata['parse']['text'].encode('utf-8').strip()
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def print_html_doc():
 	j2_env = Environment(loader=FileSystemLoader(THIS_DIR),
 											 trim_blocks=True)
-	print j2_env.get_template('index.html').render(
+	output = j2_env.get_template('index.html').render(
 			title 	 = wikititle,
-			bodytext = wikibodytext
-)
+			bodytext = wikibodytext)
+        print output.encode('utf-8').strip()
 
 def print_headers():
 	print "Content-type: text/html"
@@ -46,6 +44,7 @@ def print_headers():
 if __name__ == '__main__':
 
 	print_headers()
-	print_html_doc()
+        print wikibodytext
+	#print_html_doc()
 
 
