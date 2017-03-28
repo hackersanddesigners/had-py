@@ -14,20 +14,18 @@
 #response = urllib2.urlopen("https://wiki.hackersanddesigners.nl/mediawiki/api.php?action=ask&query=[[Category:Events]][[Type::Summer Academy]]|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending&format=json") 
 # print response.read() import json import urllib2 
 
-import urllib2 
-import json 
+import requests 
 
 from jinja2 import Environment, FileSystemLoader 
 import os 
 
 url = "https://wiki.hackersanddesigners.nl/mediawiki/api.php?action=parse&page=Hackers_%26_Designers&format=json&disableeditsection=true"
-response = urllib2.urlopen(url) 
-wikidata = json.load(response) 
+response = requests.get(url) 
+wikidata = response.json()
 
 wikititle = wikidata['parse']['title']
 #wikibodytext = wikidata['parse']['text']['*'].encode('utf-8').strip()
-wikibodytext = wikidata['parse']['text']
-
+wikibodytext = wikidata['parse']['text']['*']
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
