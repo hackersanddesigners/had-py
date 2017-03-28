@@ -14,37 +14,42 @@
 #response = urllib2.urlopen("https://wiki.hackersanddesigners.nl/mediawiki/api.php?action=ask&query=[[Category:Events]][[Type::Summer Academy]]|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending&format=json") 
 # print response.read() import json import urllib2 
 
-import urllib2
-import json
+import urllib2 
+import json 
 
-from jinja2 import Environment, FileSystemLoader
-import os
+from jinja2 import Environment, FileSystemLoader 
+import os 
 
-url = "https://wiki.hackersanddesigners.nl/mediawiki/api.php?action=parse&page=Hackers_%26_Designers&format=json&formatversion=2&utf8=&disableeditsection=true"
-response = urllib2.urlopen(url)
-wikidata = json.load(response)
+url = "https://wiki.hackersanddesigners.nl/mediawiki/api.php?action=parse&page=Hackers_%26_Designers&format=json&disableeditsection=true"
+response = urllib2.urlopen(url) 
+wikidata = json.load(response) 
 
 wikititle = wikidata['parse']['title']
-wikibodytext = wikidata['parse']['text'].encode('utf-8').strip()
+#wikibodytext = wikidata['parse']['text']['*'].encode('utf-8').strip()
+wikibodytext = wikidata['parse']['text']
+
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-
-def print_html_doc():
-	j2_env = Environment(loader=FileSystemLoader(THIS_DIR),
-											 trim_blocks=True)
-	output = j2_env.get_template('index.html').render(
-			title 	 = wikititle,
-			bodytext = wikibodytext)
-        print output.encode('utf-8').strip()
 
 def print_headers():
 	print "Content-type: text/html"
 	print "\n\r"
 
+
+def print_html_doc():
+	j2_env = Environment(loader=FileSystemLoader(THIS_DIR),
+											 trim_blocks=True)
+	print j2_env.get_template('index.html').render(
+			title 	 = wikititle,
+			bodytext = wikibodytext
+	)
+
 if __name__ == '__main__':
 
 	print_headers()
-        print wikibodytext
-	#print_html_doc()
+# print wikibodytext
+#	print output.encode('utf-8').strip()
+
+	print_html_doc()
 
 
