@@ -23,9 +23,9 @@ url = "https://wiki.hackersanddesigners.nl/mediawiki/api.php?action=parse&page=H
 response = requests.get(url) 
 wikidata = response.json()
 
-wikititle = wikidata['parse']['title']
-#wikibodytext = wikidata['parse']['text']['*'].encode('utf-8').strip()
-wikibodytext = wikidata['parse']['text']['*']
+wikititle = wikidata['parse']['title'].encode('utf-8').strip()
+wikibodytext = wikidata['parse']['text']['*'].encode('utf-8').strip()
+#wikibodytext = wikidata['parse']['text']['*']
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -45,7 +45,6 @@ def print_html_doc():
 if __name__ == '__main__':
 
 	print_headers()
-# print wikibodytext
 #	print output.encode('utf-8').strip()
 
 	print_html_doc()
