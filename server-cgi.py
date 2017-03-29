@@ -1,14 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-import BaseHTTPServer
-import CGIHTTPServer
-#This line enables CGI error reporting
-import cgitb; cgitb.enable()
+PORT = 8000
+import http.server
+httpd = http.server.HTTPServer( ("", PORT), http.server.CGIHTTPRequestHandler)
 
-server = BaseHTTPServer.HTTPServer
-handler = CGIHTTPServer.CGIHTTPRequestHandler
-server_address = ("", 8000)
-handler.cgi_directories = ["/"]
-
-httpd = server(server_address, handler)
-httpd.serve_forever()
+try:
+		print ("Server Started at port:", PORT)
+		httpd.serve_forever()
+except KeyboardInterrupt:
+		print('\nShutting down server')
+		httpd.socket.close()
