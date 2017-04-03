@@ -6,6 +6,8 @@ from werkzeug.wsgi import SharedDataMiddleware
 from werkzeug.utils import redirect
 
 import requests
+import re
+from bs4 import BeautifulSoup
 from jinja2 import Environment, FileSystemLoader
 
 
@@ -31,7 +33,28 @@ class had(object):
 		wikititle = wikidata['parse']['title']
 		wikibodytext = wikidata['parse']['text']['*']
 		
-		return self.render_template('index.html', title=wikititle, bodytext=wikibodytext)
+		#def rel_link(self):
+		#	head = 'http://wikidev.hackersanddesigners.nl'
+		#	soup = BeautifulSoup(wikibodytext, 'html.parser')
+
+		#	for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+		#		rel_link = a.get('href')
+		#		new_link = a['href'].replace(rel_link, (head + rel_link))
+		#		return new_link
+
+		#	return rel_link
+		
+		head = 'http://wikidev.hackersanddesigners.nl'
+		soup = BeautifulSoup(wikibodytext, 'html.parser')
+
+		for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+			rel_link = a.get('href')
+			new_link = a['href'].replace(rel_link, (head + rel_link))
+			print (new_link)
+		
+		wikibodytext = str(soup)
+
+		return self.render_template('index.html', title=wikititle, bodytext=wikibodytext, links=rel_link)
 
 	def error_404(self):
 		response = self.render_template('404.html')
