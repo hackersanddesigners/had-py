@@ -1,12 +1,10 @@
-#!/usr/bin/env python3
+from werkzeug.wrappers import Request, Response
 
-import http.server
+@Request.application
+def application(request):
+		return Response('hell')
+		return Respone(request.url)
 
-PORT = 8000
-httpd = http.server.HTTPServer( ("", PORT), http.server.CGIHTTPRequestHandler)
-try:
-		print ("Server started at port:", PORT)
-		httpd.serve_forever()
-except KeyboardInterrupt:
-		print('\nShutting down server')
-		httpd.socket.close()
+if __name__ == '__main__':
+		from werkzeug.serving import run_simple
+		run_simple('localhost', 4000, application, use_debugger=True, use_reloader=True)
