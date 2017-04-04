@@ -72,11 +72,11 @@ class had(object):
 		return self.wsgi_app(environ, start_response)
 
 	
-def create_app(with_static=True):
+def create_app(with_assets=True):
 	app = had()
-	if with_static:
+	if with_assets:
 		app.wsgi_app = SharedDataMiddleware(app.wsgi_app, {
-			'/static': os.path.join(os.path.dirname(__file__), 'static')
+			'/assets': os.path.join(os.path.dirname(__file__), 'assets')
 		})
 	return app
 	
