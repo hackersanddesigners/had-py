@@ -34,17 +34,20 @@ class had(object):
 		wikititle = wikidata['parse']['title']
 		wikibodytext = wikidata['parse']['text']['*']
 		
+		base_url = 'http://wikidev.hackersanddesigners.nl'
+		soup = BeautifulSoup(wikibodytext, 'html.parser')
 
-		def new_link(self):
-			head = 'http://wikidev.hackersanddesigners.nl'
-			soup = BeautifulSoup(wikibodytext, 'html.parser')
+		for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+			rel_link = a.get('href')
+			out_link = urljoin(base_url, rel_link)
+			a['href'] = out_link
 
-			for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-				rel_link = a.get('href')
-				new_link = urljoin(head, rel_link)
-				print (a)
-		
-		wikibodytext = new_link(wikibodytext)
+		for img in soup.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+			rel_link = img.get('src')
+			out_link = urljoin(base_url, rel_link)
+			img['src'] = out_link
+
+		wikibodytext = soup
 
 		return self.render_template('index.html', title=wikititle, bodytext=wikibodytext)
 
