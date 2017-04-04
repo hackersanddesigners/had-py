@@ -21,19 +21,17 @@ class had(object):
 		self.url_map = Map([
 			Rule('/', endpoint='home')
 		])
-
-	def render_template(self, template_name, **context):
-		t = self.jinja_env.get_template(template_name)
-		return Response(t.render(context), mimetype='text/html')
 		
 	def on_home(self, request):
-		url = "https://wiki.hackersanddesigners.nl/mediawiki/api.php?action=parse&page=Hackers_%26_Designers&format=json&disableeditsection=true"
+		url = "https://wiki.hackersanddesigners.nl/mediawiki/api.php?action=parse&page=Hackers_%26_Designers&format=json&formatversion=2&disableeditsection=true"
 		response = requests.get(url)
 		wikidata = response.json()
 
+		# fetch content
 		wikititle = wikidata['parse']['title']
-		wikibodytext = wikidata['parse']['text']['*']
+		wikibodytext = wikidata['parse']['text']
 		
+		# fix rel-link to be abs-ones
 		base_url = 'http://wikidev.hackersanddesigners.nl'
 		soup = BeautifulSoup(wikibodytext, 'html.parser')
 
@@ -49,12 +47,21 @@ class had(object):
 
 		wikibodytext = soup
 
-		return self.render_template('index.html', title=wikititle, bodytext=wikibodytext)
+		return self.render_template('index.html', 
+			title=wikititle, 
+			bodytext=wikibodytext
+		)
+
+	
 
 	def error_404(self):
 		response = self.render_template('404.html')
 		response.status_code = 404
 		return response
+
+	def render_template(self, template_name, **context):
+		t = self.jinja_env.get_template(template_name)
+		return Response(t.render(context), mimetype='text/html')
 
 	def dispatch_request(self, request):
 		adapter = self.url_map.bind_to_environ(request.environ)
