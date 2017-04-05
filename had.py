@@ -24,7 +24,7 @@ class had(object):
 		
 	def on_home(self, request):
 		
-		#fetch page main content
+		#fetch content
 		url_content = "https://wiki.hackersanddesigners.nl/mediawiki/api.php?action=parse&page=Hackers_%26_Designers&format=json&formatversion=2&disableeditsection=true"
 		response_content = requests.get(url_content)
 		wikidata = response_content.json()
@@ -32,7 +32,8 @@ class had(object):
 		wikititle = wikidata['parse']['title']
 		wikibodytext = wikidata['parse']['text']
 	
-		#	fetch list of pages w/ category:events
+		#	
+		#url_event_list = "https://wiki.hackersanddesigners.nl/mediawiki/api.php?action=query&generator=categorymembers&gcmtitle=Category:Events&gcmsort=timestamp&gcmdir=desc&prop=info&inprop=url&format=json&formatversion=2
 		url_event_list = "https://wiki.hackersanddesigners.nl/mediawiki/api.php?action=query&list=categorymembers&cmtitle=Category:Events&cmsort=timestamp&cmdir=desc&format=json&formatversion=2"
 		response_event_list = requests.get(url_event_list)
 		wikidata_event_list = response_event_list.json()

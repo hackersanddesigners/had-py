@@ -13,11 +13,12 @@
 		<h1>{{ title }}</h1>
 		{{ bodytext|safe }}
 
-		* * *
-
+		<h2>Upcoming</h2>
 		<ul>
 		{% for event_list in event_title['query']['categorymembers'] %}
-			<li>{{ event_list['title'] }}</li>
+			<li>
+				{{ event_list['title'] }}
+			</li>
 		{% endfor %}
 		</ul>
 	</body>
