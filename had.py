@@ -23,14 +23,20 @@ class had(object):
 		])
 		
 	def on_home(self, request):
-		url = "https://wiki.hackersanddesigners.nl/mediawiki/api.php?action=parse&page=Hackers_%26_Designers&format=json&formatversion=2&disableeditsection=true"
-		response = requests.get(url)
-		wikidata = response.json()
+		
+		#fetch page main content
+		url_content = "https://wiki.hackersanddesigners.nl/mediawiki/api.php?action=parse&page=Hackers_%26_Designers&format=json&formatversion=2&disableeditsection=true"
+		response_content = requests.get(url_content)
+		wikidata = response_content.json()
 
-		# fetch content
 		wikititle = wikidata['parse']['title']
 		wikibodytext = wikidata['parse']['text']
-		
+	
+		#	fetch list of pages w/ category:events
+		url_event_list = "https://wiki.hackersanddesigners.nl/mediawiki/api.php?action=query&list=categorymembers&cmtitle=Category:Events&cmsort=timestamp&cmdir=desc&format=json&formatversion=2"
+		response_event_list = requests.get(url_event_list)
+		wikidata_event_list = response_event_list.json()
+
 		# fix rel-link to be abs-ones
 		base_url = 'http://wikidev.hackersanddesigners.nl'
 		soup = BeautifulSoup(wikibodytext, 'html.parser')
@@ -47,12 +53,12 @@ class had(object):
 
 		wikibodytext = soup
 
+		#build template
 		return self.render_template('index.html', 
 			title=wikititle, 
-			bodytext=wikibodytext
+			bodytext=wikibodytext,
+			event_title=wikidata_event_list
 		)
-
-	
 
 	def error_404(self):
 		response = self.render_template('404.html')

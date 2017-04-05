@@ -8,7 +8,17 @@
 	</head>
 
 	<body>
+		<nav>
+		</nav>
 		<h1>{{ title }}</h1>
 		{{ bodytext|safe }}
+
+		* * *
+
+		<ul>
+		{% for event_list in event_title['query']['categorymembers'] %}
+			<li>{{ event_list['title'] }}</li>
+		{% endfor %}
+		</ul>
 	</body>
 </html>
