@@ -4,22 +4,11 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1.0">
 		<link rel="stylesheet" type="text/css" href="assets/style.css"/>
-		<title>{{title }}</title>
+		<title>{{ title }}</title>
 	</head>
 
 	<body>
-		<nav>
-		</nav>
 		<h1>{{ title }}</h1>
 		{{ bodytext|safe }}
-
-		<h2>Upcoming</h2>
-		<ul>
-		{% for event_item in event_list['query']['pages'] %}
-			<li>
-				<a href="/{{ event_item['title'] }}">{{ event_item['title'] }}</a>
-			</li>
-		{% endfor %}
-		</ul>
 	</body>
 </html>

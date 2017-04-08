@@ -4,11 +4,10 @@ from werkzeug.routing import Map, Rule
 from werkzeug.exceptions import HTTPException, NotFound
 from werkzeug.wsgi import SharedDataMiddleware
 from werkzeug.utils import redirect
-
 import requests
 import re
 from bs4 import BeautifulSoup
-from urllib.parse import urljoin
+from urllib.parse import urljoin, quote
 from jinja2 import Environment, FileSystemLoader
 
 
@@ -19,27 +18,35 @@ class had(object):
 		self.jinja_env = Environment(loader=FileSystemLoader(template_path),
 																 autoescape=True)
 		self.url_map = Map([
-			Rule('/', endpoint='home')
+			Rule('/', endpoint='home'),
+			Rule('/<pageid>', endpoint='article')
 		])
 		
 	def on_home(self, request):
 		
 		#fetch content
-		url_content = "https://wiki.hackersanddesigners.nl/mediawiki/api.php?action=parse&page=Hackers_%26_Designers&format=json&formatversion=2&disableeditsection=true"
-		response_content = requests.get(url_content)
+		base_url = "http://wikidev.hackersanddesigners.nl/"
+		folder_url = "mediawiki/"
+		query_url = "api.php?action=parse&page=Hackers_%26_Designers&format=json&formatversion=2&disableeditsection=true"
+		url = base_url + folder_url + query_url
+		print(url)
+		response_content = requests.get(url)
 		wikidata = response_content.json()
 
 		wikititle = wikidata['parse']['title']
 		wikibodytext = wikidata['parse']['text']
 	
-		#	
-		#url_event_list = "https://wiki.hackersanddesigners.nl/mediawiki/api.php?action=query&generator=categorymembers&gcmtitle=Category:Events&gcmsort=timestamp&gcmdir=desc&prop=info&inprop=url&format=json&formatversion=2
-		url_event_list = "https://wiki.hackersanddesigners.nl/mediawiki/api.php?action=query&list=categorymembers&cmtitle=Category:Events&cmsort=timestamp&cmdir=desc&format=json&formatversion=2"
-		response_event_list = requests.get(url_event_list)
+		#ask_url = "api.php?action=ask&query=[[Category:Events]]|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
+		query = "api.php?action=query&generator=categorymembers&gcmtitle=Category:Events&gcmsort=timestamp&gcmdir=desc&prop=info&inprop=url&format=json&formatversion=2"
+		url_event = base_url + query
+
+		response_event_list = requests.get(url_event)
 		wikidata_event_list = response_event_list.json()
+		
+		for event_list in wikidata_event_list['query']['pages']:
+			pageid = event_list['title']
 
 		# fix rel-link to be abs-ones
-		base_url = 'http://wikidev.hackersanddesigners.nl'
 		soup = BeautifulSoup(wikibodytext, 'html.parser')
 
 		for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
@@ -56,9 +63,54 @@ class had(object):
 
 		#build template
 		return self.render_template('index.html', 
-			title=wikititle, 
+			title=wikititle,
 			bodytext=wikibodytext,
-			event_title=wikidata_event_list
+			event_list=wikidata_event_list
+		)
+
+	def on_article(self, request, pageid):
+		
+		#fetch content
+		base_url = "http://wikidev.hackersanddesigners.nl/"
+		folder_url = "mediawiki/"
+		url_action = "api.php?action=parse&page="
+		url_query_pageid = quote(pageid)
+		url_query_format = "&format=json&formatversion=2&disableeditsection=true"
+
+		url_fetch_page_content = base_url + folder_url + url_action + url_query_pageid + url_query_format
+		
+		response_content = requests.get(url_fetch_page_content)
+		wikidata = response_content.json()
+
+		wikititle = wikidata['parse']['title']
+		wikibodytext = wikidata['parse']['text']
+
+	
+		# fix rel-link to be abs-ones
+		soup = BeautifulSoup(wikibodytext, 'html.parser')
+
+		for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+			rel_link = a.get('href')
+			out_link = urljoin(base_url, rel_link)
+			a['href'] = out_link
+
+		for img in soup.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+			src_rel_link = img.get('src')
+			srcset_rel_link = img.get('srcset')
+			if (src_rel_link):
+				out_link = urljoin(base_url, src_rel_link)
+				img['src'] = out_link
+			if (srcset_rel_link): 
+				out_link = urljoin(base_url, srcset_rel_link)
+				img['srcset'] = out_link
+				print(out_link)
+
+		wikibodytext = soup
+
+		#build template
+		return self.render_template('article.html',
+			title=wikititle,
+			bodytext=wikibodytext
 		)
 
 	def error_404(self):
