@@ -78,15 +78,13 @@ class had(object):
 		url_query_format = "&format=json&formatversion=2&disableeditsection=true"
 
 		url_fetch_page_content = base_url + folder_url + url_action + url_query_pageid + url_query_format
-		
+		print(url_fetch_page_content)
 		response_content = requests.get(url_fetch_page_content)
 		wikidata = response_content.json()
 
 		wikititle = wikidata['parse']['title']
 		wikibodytext = wikidata['parse']['text']
 
-	
-		# fix rel-link to be abs-ones
 		soup = BeautifulSoup(wikibodytext, 'html.parser')
 
 		for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
@@ -100,10 +98,12 @@ class had(object):
 			if (src_rel_link):
 				out_link = urljoin(base_url, src_rel_link)
 				img['src'] = out_link
-			if (srcset_rel_link): 
-				out_link = urljoin(base_url, srcset_rel_link)
-				img['srcset'] = out_link
-				print(out_link)
+			if (srcset_rel_link):
+				srcset_list = re.split(r'[,]\s*', srcset_rel_link)
+				srcset_lu = srcset_list
+				srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
+				srcset_s = ', '.join(srcset_lu)
+				img['srcset'] = srcset_s
 
 		wikibodytext = soup
 
