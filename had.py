@@ -113,6 +113,10 @@ class had(object):
 				srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
 				srcset_s = ', '.join(srcset_lu)
 				img['srcset'] = srcset_s
+			
+			# get rid of <a>s wrapping <img>s
+			a_img = img.find_parent("a")
+			a_img.unwrap()
 
 		# delete wiki infobox
 		infobox = soup.find('table')
