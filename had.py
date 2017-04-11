@@ -29,7 +29,6 @@ class had(object):
 		folder_url = "mediawiki/"
 		query_url = "api.php?action=parse&page=Hackers_%26_Designers&format=json&formatversion=2&disableeditsection=true"
 		url = base_url + folder_url + query_url
-		print(url)
 		response_content = requests.get(url)
 		wikidata = response_content.json()
 
@@ -48,11 +47,11 @@ class had(object):
 		#for event_list in wikidata_event_list['query']['pages']:
 		#	pageid = event_list['title']
 
-		for event_list in wikidata_event_list['query']['results']:
-			for event in event_list['printouts']['OnDate']:
-				print(event)
+#		for event_list in wikidata_event_list['query']['results']:
+#			for event in event_list['printouts']['OnDate']:
+#				print(event)
 
-		# fix rel-link to be abs-ones
+		# fix rel-links to be abs-ones
 		soup = BeautifulSoup(wikibodytext, 'html.parser')
 
 		for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
@@ -90,7 +89,11 @@ class had(object):
 
 		wikititle = wikidata['parse']['title']
 		wikibodytext = wikidata['parse']['text']
+		
+		wikimeta = wikidata['parse']['links']
+		wikidate = wikimeta[4]['title']
 
+		# fix rel-links to be abs-ones
 		soup = BeautifulSoup(wikibodytext, 'html.parser')
 
 		for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
@@ -111,11 +114,16 @@ class had(object):
 				srcset_s = ', '.join(srcset_lu)
 				img['srcset'] = srcset_s
 
+		# delete wiki infobox
+		infobox = soup.find('table')
+		infobox.decompose()
+
 		wikibodytext = soup
 
 		#build template
 		return self.render_template('article.html',
 			title=wikititle,
+			date=wikidate,
 			bodytext=wikibodytext
 		)
 
@@ -159,3 +167,4 @@ if __name__ == '__main__':
 	from werkzeug.serving import run_simple
 	app = create_app()
 	run_simple('127.0.0.1', 5000, app, use_debugger=True, use_reloader=True)
+
