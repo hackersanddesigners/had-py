@@ -36,15 +36,21 @@ class had(object):
 		wikititle = wikidata['parse']['title']
 		wikibodytext = wikidata['parse']['text']
 	
-		#ask_url = "api.php?action=ask&query=[[Category:Events]]|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
-		query = "api.php?action=query&generator=categorymembers&gcmtitle=Category:Events&gcmsort=timestamp&gcmdir=desc&prop=info&inprop=url&format=json&formatversion=2"
-		url_event = base_url + query
+		query = "api.php?action=ask&query=[[Category:Events]][[Type::HDSA2015]]|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
+		#query = "api.php?action=query&generator=categorymembers&gcmtitle=Category:Events&gcmsort=timestamp&gcmdir=desc&prop=info&inprop=url&format=json&formatversion=2"
+		url_format = "&format=json&formatversion=2"
+		url_event = base_url + query + url_format
+		print(url_event)
 
 		response_event_list = requests.get(url_event)
 		wikidata_event_list = response_event_list.json()
-		
-		for event_list in wikidata_event_list['query']['pages']:
-			pageid = event_list['title']
+
+		#for event_list in wikidata_event_list['query']['pages']:
+		#	pageid = event_list['title']
+
+		for event_list in wikidata_event_list['query']['results']:
+			for event in event_list['printouts']['NameOfEvents']['OnDate']:
+				print(event)
 
 		# fix rel-link to be abs-ones
 		soup = BeautifulSoup(wikibodytext, 'html.parser')
