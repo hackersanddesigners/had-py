@@ -49,7 +49,7 @@ class had(object):
 		#	pageid = event_list['title']
 
 		for event_list in wikidata_event_list['query']['results']:
-			for event in event_list['printouts']['NameOfEvents']['OnDate']:
+			for event in event_list['printouts']['OnDate']:
 				print(event)
 
 		# fix rel-link to be abs-ones
