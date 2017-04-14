@@ -35,8 +35,8 @@ class had(object):
 		wikititle = wikidata['parse']['title']
 		wikibodytext = wikidata['parse']['text']
 	
-		query = "api.php?action=ask&query=[[Category:Events]][[Type::HDSA2015]]|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
-		#query = "api.php?action=query&generator=categorymembers&gcmtitle=Category:Events&gcmsort=timestamp&gcmdir=desc&prop=info&inprop=url&format=json&formatversion=2"
+		#query = "api.php?action=ask&query=[[Category:Events]][[Type::HDSA2015]]|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
+		query = "api.php?action=ask&query=[[Category:Events]]|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
 		url_format = "&format=json&formatversion=2"
 		url_event = base_url + query + url_format
 		print(url_event)
@@ -44,12 +44,10 @@ class had(object):
 		response_event_list = requests.get(url_event)
 		wikidata_event_list = response_event_list.json()
 
-		#for event_list in wikidata_event_list['query']['pages']:
-		#	pageid = event_list['title']
-
-#		for event_list in wikidata_event_list['query']['results']:
-#			for event in event_list['printouts']['OnDate']:
-#				print(event)
+		for articles in wikidata_event_list['query']['results'].items():
+			data = articles[1]['printouts']
+			print(data['NameOfEvent'][0]['fulltext'])
+			print(data['OnDate'][0]['fulltext'])
 
 		# fix rel-links to be abs-ones
 		soup = BeautifulSoup(wikibodytext, 'html.parser')
@@ -96,10 +94,11 @@ class had(object):
 		# fix rel-links to be abs-ones
 		soup = BeautifulSoup(wikibodytext, 'html.parser')
 
-		for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+		for a in soup.find_all('a', href=re.compile(r'(\/mediawiki\/.+)')):
 			rel_link = a.get('href')
-			out_link = urljoin(base_url, rel_link)
-			a['href'] = out_link
+			print (rel_link)
+			#out_link = urljoin(base_url, rel_link)
+			#a['href'] = out_link
 
 		for img in soup.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
 			src_rel_link = img.get('src')

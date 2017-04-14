@@ -15,9 +15,12 @@
 
 		<h2>Upcoming</h2>
 		<ul>
-		{% for event_item in event_list['query']['pages'] %}
+		{% for articles in event_list['query']['results'].items() %}
 			<li>
-				<a href="/{{ event_item['title'] }}">{{ event_item['title'] }}</a>
+				{{ articles[1]['printouts']['OnDate'][0]['fulltext']}}
+				<a href="/{{ articles[1]['printouts']['NameOfEvent'][0]['fulltext']}}">
+					{{ articles[1]['printouts']['NameOfEvent'][0]['fulltext']}}
+				</a>
 			</li>
 		{% endfor %}
 		</ul>
