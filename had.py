@@ -5,6 +5,7 @@ from werkzeug.exceptions import HTTPException, NotFound
 from werkzeug.wsgi import SharedDataMiddleware
 from werkzeug.utils import redirect
 import requests
+import datetime
 import re
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, quote
@@ -34,11 +35,14 @@ class had(object):
 
 		wikititle = wikidata['parse']['title']
 		wikibodytext = wikidata['parse']['text']
-	
-		#query = "api.php?action=ask&query=[[Category:Events]][[Type::HDSA2015]]|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
-		query = "api.php?action=ask&query=[[Category:Events]]|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
+
+		today = datetime.date.today()
+		today = today.strftime('%Y/%m/%d')
+		query = "api.php?action=ask&query=[[Category:Events]]"
+		date = "[[OnDate::>" + today + "]]"
+		options = "|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
 		url_format = "&format=json&formatversion=2"
-		url_event = base_url + query + url_format
+		url_event = base_url + query + date + options + url_format
 		print(url_event)
 
 		response_event_list = requests.get(url_event)
