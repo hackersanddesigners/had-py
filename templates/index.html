@@ -11,18 +11,31 @@
 		<nav>
 		</nav>
 		<h1>{{ title }}</h1>
-		{{ bodytext|safe }}
+		{{ intro|safe }}
 
 		<h2>Upcoming</h2>
 		<ul>
-		{% for articles in event_list['query']['results'].items() %}
+		{% for up_events in up_event_list['query']['results'].items() %}
 			<li>
-				{{ articles[1]['printouts']['OnDate'][0]['fulltext']}}
-				<a href="/{{ articles[1]['printouts']['NameOfEvent'][0]['fulltext']}}">
-					{{ articles[1]['printouts']['NameOfEvent'][0]['fulltext']}}
+				{{ up_events[1]['printouts']['OnDate'][0]['fulltext']}}
+				<a href="/{{ up_events[1]['printouts']['NameOfEvent'][0]['fulltext']}}">
+					{{ up_events[1]['printouts']['NameOfEvent'][0]['fulltext']}}
 				</a>
 			</li>
 		{% endfor %}
 		</ul>
+
+		<h2>Archive</h2>
+		<ul>
+		{% for past_events in past_event_list['query']['results'].items() %}
+			<li>
+				{{ past_events[1]['printouts']['OnDate'][0]['fulltext']}}
+				<a href="/{{ past_events[1]['printouts']['NameOfEvent'][0]['fulltext']}}">
+					{{ past_events[1]['printouts']['NameOfEvent'][0]['fulltext']}}
+				</a>
+			</li>
+		{% endfor %}
+		</ul>
+
 	</body>
 </html>

@@ -25,36 +25,41 @@ class had(object):
 		
 	def on_home(self, request):
 		
-		#fetch content
+		#fetch intro
 		base_url = "http://wikidev.hackersanddesigners.nl/"
 		folder_url = "mediawiki/"
-		query_url = "api.php?action=parse&page=Hackers_%26_Designers&format=json&formatversion=2&disableeditsection=true"
-		url = base_url + folder_url + query_url
-		response_content = requests.get(url)
-		wikidata = response_content.json()
+		options = {'action': 'parse', 'page': 'Hackers_&_Designers' , 'format': 'json', 'formatversion': '2'}
+		intro_url = requests.get(base_url + folder_url + 'api.php?', params=options)
+		wkdata_intro = intro_url.json()
+		print(wkdata_intro)
 
-		wikititle = wikidata['parse']['title']
-		wikibodytext = wikidata['parse']['text']
+		wktitle = wkdata_intro['parse']['title']
+		wkintro = wkdata_intro['parse']['text']
 
+		#fetch upcoming events
 		today = datetime.date.today()
 		today = today.strftime('%Y/%m/%d')
 		query = "api.php?action=ask&query=[[Category:Events]]"
 		date = "[[OnDate::>" + today + "]]"
 		options = "|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
 		url_format = "&format=json&formatversion=2"
-		url_event = base_url + query + date + options + url_format
-		print(url_event)
+		url_up_events = base_url + query + date + options + url_format
+		print(url_up_events)
 
-		response_event_list = requests.get(url_event)
-		wikidata_event_list = response_event_list.json()
+		response_up_event_list = requests.get(url_up_events)
+		wkdata_up_event_list = response_up_event_list.json()
 
-		for articles in wikidata_event_list['query']['results'].items():
-			data = articles[1]['printouts']
-			print(data['NameOfEvent'][0]['fulltext'])
-			print(data['OnDate'][0]['fulltext'])
+		#fetch upcoming events
+		date = "[[OnDate::<" + today + "]]"
+		keep_fetching = "&continue="
+		url_past_events = base_url + query + date + options + url_format + keep_fetching
+		print(url_past_events)
+
+		response_past_event_list = requests.get(url_past_events)
+		wkdata_past_event_list = response_past_event_list.json()
 
 		# fix rel-links to be abs-ones
-		soup = BeautifulSoup(wikibodytext, 'html.parser')
+		soup = BeautifulSoup(wkintro, 'html.parser')
 
 		for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
 			rel_link = a.get('href')
@@ -66,13 +71,14 @@ class had(object):
 			out_link = urljoin(base_url, rel_link)
 			img['src'] = out_link
 
-		wikibodytext = soup
+		wkintro = soup
 
 		#build template
 		return self.render_template('index.html', 
-			title=wikititle,
-			bodytext=wikibodytext,
-			event_list=wikidata_event_list
+			title=wktitle,
+			intro=wkintro,
+			up_event_list=wkdata_up_event_list,
+			past_event_list=wkdata_past_event_list
 		)
 
 	def on_article(self, request, pageid):
