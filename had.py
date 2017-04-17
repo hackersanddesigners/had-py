@@ -28,36 +28,40 @@ class had(object):
 		#fetch intro
 		base_url = "http://wikidev.hackersanddesigners.nl/"
 		folder_url = "mediawiki/"
-		options = {'action': 'parse', 'page': 'Hackers_&_Designers' , 'format': 'json', 'formatversion': '2'}
-		intro_url = requests.get(base_url + folder_url + 'api.php?', params=options)
-		wkdata_intro = intro_url.json()
-		print(wkdata_intro)
+		api_call =  "api.php?"
+		intro_options = {'action': 'parse', 'page': 'Hackers_&_Designers' , 'format': 'json', 'formatversion': '2'}
+		intro_response = requests.get(base_url + folder_url + api_call , params=intro_options)
+		wkdata_intro = intro_response.json()
 
-		wktitle = wkdata_intro['parse']['title']
+		wkpage_title = wkdata_intro['parse']['title']
 		wkintro = wkdata_intro['parse']['text']
 
-		#fetch upcoming events
+		#fetch events
+		
+		category_events = "[[Category:Events]]"
+		filters_events = "|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
 		today = datetime.date.today()
 		today = today.strftime('%Y/%m/%d')
-		query = "api.php?action=ask&query=[[Category:Events]]"
-		date = "[[OnDate::>" + today + "]]"
-		options = "|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
-		url_format = "&format=json&formatversion=2"
-		url_up_events = base_url + query + date + options + url_format
-		print(url_up_events)
 
-		response_up_event_list = requests.get(url_up_events)
-		wkdata_up_event_list = response_up_event_list.json()
+		# ========================
+		# upcoming events
+	
+		date_upevents = "[[OnDate::>" + today + "]]"
+		upevents_options = {'action': 'ask', 'query': category_events + date_upevents + filters_events, 'format': 'json', 'formatversion': '2'}
+		 
+		response_upevents = requests.get(base_url + folder_url + api_call , params=upevents_options)
+		wkdata_upevents = response_upevents.json()
 
-		#fetch upcoming events
-		date = "[[OnDate::<" + today + "]]"
-		keep_fetching = "&continue="
-		url_past_events = base_url + query + date + options + url_format + keep_fetching
-		print(url_past_events)
+		# ========================
+		# past events
 
-		response_past_event_list = requests.get(url_past_events)
-		wkdata_past_event_list = response_past_event_list.json()
+		date_pastevents = "[[OnDate::<" + today + "]]"
+		options_pastevents = {'action': 'ask', 'query': category_events + date_pastevents + filters_events, 'format': 'json', 'formatversion': '2'}
+		 
+		response_pastevents = requests.get(base_url + folder_url + api_call , params=options_pastevents)
+		wkdata_pastevents = response_pastevents.json()
 
+		# =========================
 		# fix rel-links to be abs-ones
 		soup = BeautifulSoup(wkintro, 'html.parser')
 
@@ -72,13 +76,14 @@ class had(object):
 			img['src'] = out_link
 
 		wkintro = soup
-
-		#build template
+		
+		# ==========================
+		# build template
 		return self.render_template('index.html', 
-			title=wktitle,
+			title=wkpage_title,
 			intro=wkintro,
-			up_event_list=wkdata_up_event_list,
-			past_event_list=wkdata_past_event_list
+			up_event_list=wkdata_upevents,
+			past_event_list=wkdata_pastevents
 		)
 
 	def on_article(self, request, pageid):
