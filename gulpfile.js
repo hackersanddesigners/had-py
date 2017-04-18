@@ -13,7 +13,6 @@ var atImport = require('postcss-import');
 
 var jshint = require('gulp-jshint');
 var uglify = require('gulp-uglify');
-var livereload = require('gulp-livereload');
 var notify = require("gulp-notify");
 var inlinesource = require('gulp-inline-source');
 
@@ -39,7 +38,6 @@ var processors = [
 	})
 ];
 
-//export also non-minified version? makes no sense with sourcemap version?
 gulp.task('styles', function(){
 	return gulp.src('assets/src/css/style.css')
 	.pipe(postcss(processors))
@@ -52,8 +50,8 @@ gulp.task('styles', function(){
 	.pipe(notify({ message: 'Styles task complete' }));
 });
 
-// Concatenate & Minify JS ::collection
-gulp.task('scripts:collection', function() {
+// Concatenate & Minify JSn
+/* gulp.task('scripts:collection', function() {
 	return gulp.src('assets/src/js/collection/*.js')
 	.pipe(jshint())
 	.pipe(jshint.reporter('default'))
@@ -69,21 +67,7 @@ gulp.task('scripts:collection', function() {
 
 // Scripts
 gulp.task('scripts', ['scripts:collection']);
-
-gulp.task('watch', function() {
-
-  // Watch .css files
-  gulp.watch('assets/src/css/*.css', ['styles']);
-
-  // Watch .js files
-  gulp.watch('assets/src/js/**/*.js', ['scripts']);
-
-  // Create LiveReload server
-  livereload.listen();
-
-  // Watch any files in dist/, reload on change
-  gulp.watch(['assets/dist/**']).on('change', livereload.changed);
-});
+*/
 
 // Default Task
-gulp.task('default', ['clean', 'styles', 'scripts', 'watch']);
+gulp.task('default', gulp.series('clean', 'styles'));
