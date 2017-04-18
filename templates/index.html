@@ -17,9 +17,9 @@
 		<ul>
 		{% for up_events in up_event_list['query']['results'].items() %}
 			<li>
-				{{ up_events[1]['printouts']['OnDate'][0]['fulltext']}}
-				<a href="/{{ up_events[1]['printouts']['NameOfEvent'][0]['fulltext']}}">
-					{{ up_events[1]['printouts']['NameOfEvent'][0]['fulltext']}}
+				{{ up_events[1]['printouts']['OnDate'][0]['fulltext'] }}
+				<a href="/{{ up_events[1]['printouts']['NameOfEvent'][0]['fulltext'] }}">
+					{{ up_events[1]['printouts']['NameOfEvent'][0]['fulltext'] }}
 				</a>
 			</li>
 		{% endfor %}
@@ -29,9 +29,9 @@
 		<ul>
 		{% for past_events in past_event_list['query']['results'].items() %}
 			<li>
-				{{ past_events[1]['printouts']['OnDate'][0]['fulltext']}}
-				<a href="/{{ past_events[1]['printouts']['NameOfEvent'][0]['fulltext']}}">
-					{{ past_events[1]['printouts']['NameOfEvent'][0]['fulltext']}}
+				{{ past_events[1]['printouts']['OnDate'][0]['fulltext'] }}
+				<a href="/{{ past_events[1]['printouts']['NameOfEvent'][0]['fulltext'] }}">
+					{{ past_events[1]['printouts']['NameOfEvent'][0]['fulltext'] }}
 				</a>
 			</li>
 		{% endfor %}

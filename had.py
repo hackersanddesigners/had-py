@@ -36,6 +36,7 @@ class had(object):
 		wkpage_title = wkdata_intro['parse']['title']
 		wkintro = wkdata_intro['parse']['text']
 
+		# ========================
 		#fetch events
 		
 		category_events = "[[Category:Events]]"
@@ -43,23 +44,53 @@ class had(object):
 		today = datetime.date.today()
 		today = today.strftime('%Y/%m/%d')
 
-		# ========================
 		# upcoming events
 	
 		date_upevents = "[[OnDate::>" + today + "]]"
 		upevents_options = {'action': 'ask', 'query': category_events + date_upevents + filters_events, 'format': 'json', 'formatversion': '2'}
-		 
+
 		response_upevents = requests.get(base_url + folder_url + api_call , params=upevents_options)
 		wkdata_upevents = response_upevents.json()
 
-		# ========================
 		# past events
+
+		options_pasteve = {'action': 'query', 'generator': 'categorymembers', 'gcmtitle': 'Category:Events', 'format': 'json', 'formatversion': '2'}
+		response_pasteve = requests.get(base_url + folder_url + api_call, params=options_pasteve)
+		wkdata_pasteve = response_pasteve.json()
+
+		#print(response_pasteve.url)
+
+		# ========
+
+		def query(request):
+			request['action'] = 'query'
+			request['format'] = 'json'
+			last_continue = {'continue': ''}
+			while True:
+				req = request.copy()
+				req.update(last_continue)
+				
+				result = requests.get(base_url + folder_url + api_call, params=req).json()
+				if 'error' in result:
+					raise Error(result['error'])
+				if 'warnings' in result:
+					print(result['warnings'])
+				if 'query' in result:
+					yield result['query']
+				if 'continue' not in result:
+					break
+				last_continue = result['continue']
+
+		ohhh = query(request = response_pasteve.url)
+		print(ohhh.json())
+		# ========
 
 		date_pastevents = "[[OnDate::<" + today + "]]"
 		options_pastevents = {'action': 'ask', 'query': category_events + date_pastevents + filters_events, 'format': 'json', 'formatversion': '2'}
-		 
+
 		response_pastevents = requests.get(base_url + folder_url + api_call , params=options_pastevents)
 		wkdata_pastevents = response_pastevents.json()
+#		print(response_pastevents.url)
 
 		# =========================
 		# fix rel-links to be abs-ones
