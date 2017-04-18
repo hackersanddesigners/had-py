@@ -1,0 +1,23 @@
+{
+  "name": "had-py",
+  "version": "2.0.0",
+  "description": "had a good py",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "gulpfile.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afincato/had-py.git"
+  },
+  "keywords": [
+    "hackers&designers",
+    "python"
+  ],
+  "author": "André Fincato",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/afincato/had-py/issues"
+  },
+  "homepage": "https://github.com/afincato/had-py#readme"
+}
