@@ -1,0 +1,35 @@
+/* Reset,
+
+or foundational styles
+— http://jaydenseric.com/blog/forget-normalize-or-resets-lay-your-own-css-foundation
+
+*/
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+input, button, textarea {
+  font: inherit;
+  cursor: pointer;
+}
+
+::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+:focus {
+  outline: 0;
+}
+
+hr {
+  border-top: var(--border-main);
+  height: 0.05rem;
+}
