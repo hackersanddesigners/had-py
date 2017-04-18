@@ -29,13 +29,14 @@ class had(object):
 		base_url = "http://wikidev.hackersanddesigners.nl/"
 		folder_url = "mediawiki/"
 		api_call =  "api.php?"
-		intro_options = {'action': 'parse', 'page': 'Hackers_&_Designers' , 'format': 'json', 'formatversion': '2'}
+		intro_options = {'action': 'parse', 'page': 'Hackers_&_Designers', 'format': 'json', 'formatversion': '2'}
 		intro_response = requests.get(base_url + folder_url + api_call , params=intro_options)
 		wkdata_intro = intro_response.json()
 
 		wkpage_title = wkdata_intro['parse']['title']
 		wkintro = wkdata_intro['parse']['text']
-
+		#print(intro_response.url)
+		
 		# ========================
 		#fetch events
 		
@@ -51,14 +52,12 @@ class had(object):
 
 		response_upevents = requests.get(base_url + folder_url + api_call , params=upevents_options)
 		wkdata_upevents = response_upevents.json()
-
+		print(response_upevents.url)
 		# past events
 
 		options_pasteve = {'action': 'query', 'generator': 'categorymembers', 'gcmtitle': 'Category:Events', 'format': 'json', 'formatversion': '2'}
 		response_pasteve = requests.get(base_url + folder_url + api_call, params=options_pasteve)
 		wkdata_pasteve = response_pasteve.json()
-
-		#print(response_pasteve.url)
 
 		# ========
 
@@ -81,8 +80,8 @@ class had(object):
 					break
 				last_continue = result['continue']
 
-		ohhh = query(request = response_pasteve.url)
-		print(ohhh.json())
+		#ohhh = query(request = response_pasteve.url)
+		#print(ohhh.json())
 		# ========
 
 		date_pastevents = "[[OnDate::<" + today + "]]"
@@ -135,7 +134,7 @@ class had(object):
 		wikibodytext = wikidata['parse']['text']
 		
 		wikimeta = wikidata['parse']['links']
-		wikidate = wikimeta[4]['title']
+		wikidate = wikimeta[1]['title']
 
 		# fix rel-links to be abs-ones
 		soup = BeautifulSoup(wikibodytext, 'html.parser')

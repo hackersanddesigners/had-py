@@ -3,34 +3,34 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1.0">
-		<link rel="stylesheet" type="text/css" href="assets/style.css"/>
+		<link rel="stylesheet" type="text/css" href="assets/dist/css/style.css"/>
 		<title>{{title }}</title>
 	</head>
 
-	<body>
+	<body class="pa-2">
 		<nav>
 		</nav>
-		<h1>{{ title }}</h1>
+		<h1 class="ft-sans ft-1 blue">{{ title }}</h1>
 		{{ intro|safe }}
 
-		<h2>Upcoming</h2>
+		<h2 class="ft-sans ft-1 blue">Upcoming</h2>
 		<ul>
 		{% for up_events in up_event_list['query']['results'].items() %}
-			<li>
-				{{ up_events[1]['printouts']['OnDate'][0]['fulltext'] }}
-				<a href="/{{ up_events[1]['printouts']['NameOfEvent'][0]['fulltext'] }}">
+			<li class="mb-2">
+				<h2 class="ft-sans ft-1 black mb-0">{{ up_events[1]['printouts']['OnDate'][0]['fulltext'] }}</h2>
+				<a href="/{{ up_events[1]['printouts']['NameOfEvent'][0]['fulltext'] }}" class="ft-serif ft-2">
 					{{ up_events[1]['printouts']['NameOfEvent'][0]['fulltext'] }}
 				</a>
 			</li>
 		{% endfor %}
 		</ul>
 
-		<h2>Archive</h2>
+		<h2 class="ft-sans ft-1 blue">Archive</h2>
 		<ul>
 		{% for past_events in past_event_list['query']['results'].items() %}
-			<li>
-				{{ past_events[1]['printouts']['OnDate'][0]['fulltext'] }}
-				<a href="/{{ past_events[1]['printouts']['NameOfEvent'][0]['fulltext'] }}">
+			<li class="mb-2">
+				<h2 class="ft-sans ft-1 black mb-0">{{ past_events[1]['printouts']['OnDate'][0]['fulltext'] }}</h2>
+				<a href="/{{ past_events[1]['printouts']['NameOfEvent'][0]['fulltext'] }}" class="ft-serif ft-2">
 					{{ past_events[1]['printouts']['NameOfEvent'][0]['fulltext'] }}
 				</a>
 			</li>
