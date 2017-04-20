@@ -35,12 +35,11 @@ class had(object):
 
 		wkpage_title = wkdata_intro['parse']['title']
 		wkintro = wkdata_intro['parse']['text']
-		#print(intro_response.url)
 		
 		# ========================
 		#fetch events
 		
-		category_events = "[[Category:Events]]"
+		category_events = "[[Category:Event]]"
 		filters_events = "|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
 		today = datetime.date.today()
 		today = today.strftime('%Y/%m/%d')
@@ -52,10 +51,10 @@ class had(object):
 
 		response_upevents = requests.get(base_url + folder_url + api_call , params=upevents_options)
 		wkdata_upevents = response_upevents.json()
-		print(response_upevents.url)
+		#print(response_upevents.url)
 		# past events
 
-		options_pasteve = {'action': 'query', 'generator': 'categorymembers', 'gcmtitle': 'Category:Events', 'format': 'json', 'formatversion': '2'}
+		options_pasteve = {'action': 'query', 'generator': 'categorymembers', 'gcmtitle': 'Category:Event', 'format': 'json', 'formatversion': '2'}
 		response_pasteve = requests.get(base_url + folder_url + api_call, params=options_pasteve)
 		wkdata_pasteve = response_pasteve.json()
 
