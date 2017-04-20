@@ -24,11 +24,18 @@ class had(object):
 		])
 		
 	def on_home(self, request):
-		
-		#fetch intro
+
 		base_url = "http://wikidev.hackersanddesigners.nl/"
 		folder_url = "mediawiki/"
 		api_call =  "api.php?"
+
+		# fetch navigation
+
+		nav_options = {'action': 'ask', 'query': '[[Concept:+]]', 'format': 'json', 'formatversion': '2'}
+		response_nav = requests.get(base_url + folder_url + api_call , params=nav_options)
+		wkdata_nav = response_nav.json()
+
+		# fetch intro
 		intro_options = {'action': 'parse', 'page': 'Hackers_&_Designers', 'format': 'json', 'formatversion': '2'}
 		intro_response = requests.get(base_url + folder_url + api_call , params=intro_options)
 		wkdata_intro = intro_response.json()
@@ -37,7 +44,7 @@ class had(object):
 		wkintro = wkdata_intro['parse']['text']
 		
 		# ========================
-		#fetch events
+		# fetch events
 		
 		category_events = "[[Category:Event]]"
 		filters_events = "|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
@@ -108,7 +115,8 @@ class had(object):
 		
 		# ==========================
 		# build template
-		return self.render_template('index.html', 
+		return self.render_template('index.html',
+			nav=wkdata_nav,
 			title=wkpage_title,
 			intro=wkintro,
 			up_event_list=wkdata_upevents,
