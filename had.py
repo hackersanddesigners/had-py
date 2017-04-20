@@ -22,18 +22,22 @@ class had(object):
 			Rule('/', endpoint='home'),
 			Rule('/<pageid>', endpoint='article')
 		])
-		
-	def on_home(self, request):
 
+	def nav():
 		base_url = "http://wikidev.hackersanddesigners.nl/"
 		folder_url = "mediawiki/"
 		api_call =  "api.php?"
 
-		# fetch navigation
-
 		nav_options = {'action': 'ask', 'query': '[[Concept:+]]', 'format': 'json', 'formatversion': '2'}
 		response_nav = requests.get(base_url + folder_url + api_call , params=nav_options)
 		wkdata_nav = response_nav.json()
+
+		return wkdata_nav
+		
+	def on_home(self, request, wkdata_nav=nav()):
+		base_url = "http://wikidev.hackersanddesigners.nl/"
+		folder_url = "mediawiki/"
+		api_call =  "api.php?"
 
 		# fetch intro
 		intro_options = {'action': 'parse', 'page': 'Hackers_&_Designers', 'format': 'json', 'formatversion': '2'}
