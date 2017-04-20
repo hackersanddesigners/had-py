@@ -138,10 +138,19 @@ class had(object):
 		# fix rel-links to be abs-ones
 		soup = BeautifulSoup(wikibodytext, 'html.parser')
 
-		for a in soup.find_all('a', href=re.compile(r'(\/mediawiki\/.+)')):
-			rel_link = a.get('href')
-			print (rel_link)
+#		for a in soup.find_all('a', href=re.compile(r'(\/mediawiki\/.+)')):
+#			rel_link = a.get('href')
+#			print (rel_link)
 			#out_link = urljoin(base_url, rel_link)
+			#a['href'] = out_link
+
+		for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+			rel_link = a.get('href')
+			print(rel_link)
+			print('===')
+			#out_link = urljoin(base_url, rel_link)
+			#print(out_link)
+			#print('***')
 			#a['href'] = out_link
 
 		for img in soup.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
