@@ -20,7 +20,7 @@ class had(object):
 																 autoescape=True)
 		self.url_map = Map([
 			Rule('/', endpoint='home'),
-			Rule('/<pageid>', endpoint='article')
+			Rule('/<pageid>', endpoint='event')
 		])
 
 	def nav():
@@ -119,7 +119,7 @@ class had(object):
 			past_event_list=wkdata_pastevents
 		)
 
-	def on_article(self, request, pageid):
+	def on_event(self, request, pageid, wkdata_nav=nav()):
 		base_url = "http://wikidev.hackersanddesigners.nl/"
 		folder_url = "mediawiki/"
 		api_call =  "api.php?"
@@ -178,7 +178,8 @@ class had(object):
 		wkbodytext = soup
 
 		#build template
-		return self.render_template('article.html',
+		return self.render_template('event.html',
+			nav=wkdata_nav,
 			title=wktitle,
 			date=wkdate,
 			bodytext=wkbodytext
