@@ -10,7 +10,7 @@
 	<body class="pa-2">
 		<nav>
 			{% for item in nav['query']['results'].items() %}
-			<a href="/{{ item[1]['fulltext'] }}<">{{ item[1]['fulltext'] }}</a>
+			<a href="/{{ item[1]['fulltext']|replace("Concept:", "") }}<">{{ item[1]['fulltext']|replace("Concept:", "")}}</a>
 			{% endfor %}
 		</nav>
 		<h1 class="ft-sans ft-1 blue">{{ title }}</h1>
