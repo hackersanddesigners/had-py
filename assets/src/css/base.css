@@ -1,0 +1,23 @@
+/* Base */
+
+html {
+	width: 100%;
+	font-size: var(--font-size__small);
+	line-height: var(--font-lh__small);
+	font-family: var(--font-serif);
+	color: var(--color-main);
+	-webkit-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+}
+
+body {
+	background-color: var(--color-bg);
+	-webkit-overflow-scrolling: touch;
+	-ms-overflow-style: none;
+}
+
+img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
