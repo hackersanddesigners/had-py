@@ -59,7 +59,6 @@ class had(object):
 
 		response_upevents = requests.get(base_url + folder_url + api_call , params=upevents_options)
 		wkdata_upevents = response_upevents.json()
-		print(response_upevents.url)
 	
 		# past events
 		options_pasteve = {'action': 'query', 'generator': 'categorymembers', 'gcmtitle': 'Category:Event', 'format': 'json', 'formatversion': '2'}
@@ -128,7 +127,6 @@ class had(object):
 		page_options = {'action': 'parse', 'page': pageid, 'format': 'json', 'formatversion': '2'}
 		response_content = requests.get(base_url + folder_url + api_call, params=page_options)
 		wkdata = response_content.json()
-		print(wkdata)
 
 		wktitle = wkdata['parse']['title']
 		wkbodytext = wkdata['parse']['text']
