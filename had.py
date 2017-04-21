@@ -40,12 +40,27 @@ class had(object):
 		api_call =  "api.php?"
 
 		# fetch intro
-		intro_options = {'action': 'parse', 'page': 'Hackers_&_Designers', 'format': 'json', 'formatversion': '2'}
+		intro_options = {'action': 'parse', 'pageid': '29', 'format': 'json', 'formatversion': '2'}
 		intro_response = requests.get(base_url + folder_url + api_call , params=intro_options)
 		wkdata_intro = intro_response.json()
 
 		wkpage_title = wkdata_intro['parse']['title']
 		wkintro = wkdata_intro['parse']['text']
+
+		# fix rel-links to be abs-ones
+		soup = BeautifulSoup(wkintro, 'html.parser')
+
+		for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+			rel_link = a.get('href')
+			out_link = urljoin(base_url, rel_link)
+			a['href'] = out_link
+
+		for img in soup.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+			rel_link = img.get('src')
+			out_link = urljoin(base_url, rel_link)
+			img['src'] = out_link
+	
+		wkintro = soup
 		
 		# fetch events
 		category_events = "[[Category:Event]]"
@@ -53,18 +68,11 @@ class had(object):
 		today = datetime.date.today()
 		today = today.strftime('%Y/%m/%d')
 
-		# upcoming events
-		date_upevents = "[[OnDate::>" + today + "]]"
-		upevents_options = {'action': 'ask', 'query': category_events + date_upevents + filters_events, 'format': 'json', 'formatversion': '2'}
-
-		response_upevents = requests.get(base_url + folder_url + api_call , params=upevents_options)
-		wkdata_upevents = response_upevents.json()
+		options_allevents = {'action': 'query', 'generator': 'categorymembers', 'gcmtitle': 'Category:Event', 'format': 'json', 'formatversion': '2'}
+		response_allevents = requests.get(base_url + folder_url + api_call, params=options_allevents)
+		wkdata_allevents = response_allevents.json()
+		print(response_allevents.url)
 	
-		# past events
-		options_pasteve = {'action': 'query', 'generator': 'categorymembers', 'gcmtitle': 'Category:Event', 'format': 'json', 'formatversion': '2'}
-		response_pasteve = requests.get(base_url + folder_url + api_call, params=options_pasteve)
-		wkdata_pasteve = response_pasteve.json()
-
 		# + + + eeeeeeh not sure
 		def query(request):
 			request['action'] = 'query'
@@ -85,29 +93,21 @@ class had(object):
 					break
 				last_continue = result['continue']
 
-		# ========
+		# ==========================
+
+		# upcoming events
+		date_upevents = "[[OnDate::>" + today + "]]"
+		upevents_options = {'action': 'ask', 'query': category_events + date_upevents + filters_events, 'format': 'json', 'formatversion': '2'}
+		response_upevents = requests.get(base_url + folder_url + api_call , params=upevents_options)
+		wkdata_upevents = response_upevents.json()
+		
+		# past events
 		date_pastevents = "[[OnDate::<" + today + "]]"
 		options_pastevents = {'action': 'ask', 'query': category_events + date_pastevents + filters_events, 'format': 'json', 'formatversion': '2'}
 
 		response_pastevents = requests.get(base_url + folder_url + api_call , params=options_pastevents)
 		wkdata_pastevents = response_pastevents.json()
 
-		# =========================
-		# fix rel-links to be abs-ones
-		soup = BeautifulSoup(wkintro, 'html.parser')
-
-		for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-			rel_link = a.get('href')
-			out_link = urljoin(base_url, rel_link)
-			a['href'] = out_link
-
-		for img in soup.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-			rel_link = img.get('src')
-			out_link = urljoin(base_url, rel_link)
-			img['src'] = out_link
-
-		wkintro = soup
-		
 		# ==========================
 		# build template
 		return self.render_template('index.html',
@@ -127,6 +127,8 @@ class had(object):
 		page_options = {'action': 'parse', 'page': pageid, 'format': 'json', 'formatversion': '2'}
 		response_content = requests.get(base_url + folder_url + api_call, params=page_options)
 		wkdata = response_content.json()
+		print(response_content.url)
+		print(wkdata)
 
 		wktitle = wkdata['parse']['title']
 		wkbodytext = wkdata['parse']['text']
