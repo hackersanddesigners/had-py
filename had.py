@@ -23,6 +23,8 @@ class had(object):
 			Rule('/<pageid>', endpoint='event')
 		])
 
+	# ===========
+	# nav
 	def nav():
 		base_url = "http://wikidev.hackersanddesigners.nl/"
 		folder_url = "mediawiki/"
@@ -33,7 +35,9 @@ class had(object):
 		wkdata_nav = response_nav.json()
 
 		return wkdata_nav
-		
+	
+	# ==========
+	# home	
 	def on_home(self, request, wkdata_nav=nav()):
 		base_url = "http://wikidev.hackersanddesigners.nl/"
 		folder_url = "mediawiki/"
@@ -62,19 +66,29 @@ class had(object):
 	
 		wkintro = soup
 		
-		# fetch events
+		# events
 		category_events = "[[Category:Event]]"
 		filters_events = "|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
 		today = datetime.date.today()
 		today = today.strftime('%Y/%m/%d')
 
-		options_allevents = {'action': 'query', 'generator': 'categorymembers', 'gcmtitle': 'Category:Event', 'format': 'json', 'formatversion': '2'}
+		options_allevents = {'action': 'query', 'generator': 'categorymembers', 'gcmtitle': 'Category:Event', 'format': 'json', 'formatversion': '2', 'continue': ''}
 		response_allevents = requests.get(base_url + folder_url + api_call, params=options_allevents)
 		wkdata_allevents = response_allevents.json()
 		print(response_allevents.url)
-	
+
+		def pageid(self):
+			list_event_pageid= []
+			for item in wkdata_allevents['query']['pages']:
+				event_pageid = {
+					"pageid": item['pageid']
+				}	
+			return event_pageid
+
+		print(pageid(wkdata_allevents))
+
 		# + + + eeeeeeh not sure
-		def query(request):
+		def wkdata_allevents(request):
 			request['action'] = 'query'
 			request['format'] = 'json'
 			last_continue = {'continue': ''}
@@ -124,7 +138,7 @@ class had(object):
 		api_call =  "api.php?"
 
 		# fetch page-content
-		page_options = {'action': 'parse', 'page': pageid, 'format': 'json', 'formatversion': '2'}
+		page_options = {'action': 'parse', 'pageid': pageid, 'format': 'json', 'formatversion': '2'}
 		response_content = requests.get(base_url + folder_url + api_call, params=page_options)
 		wkdata = response_content.json()
 		print(response_content.url)
