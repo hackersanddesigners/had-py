@@ -11,147 +11,126 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin, quote
 from jinja2 import Environment, FileSystemLoader
 
-
 class had(object):
 
-	def __init__(self):
-		template_path = os.path.join(os.path.dirname(__file__), 'templates')
-		self.jinja_env = Environment(loader=FileSystemLoader(template_path),
+  def __init__(self):
+    template_path = os.path.join(os.path.dirname(__file__), 'templates')
+    self.jinja_env = Environment(loader=FileSystemLoader(template_path),
 																 autoescape=True)
-		self.url_map = Map([
-			Rule('/', endpoint='home'),
-			Rule('/<pageid>', endpoint='event')
-		])
+    self.url_map = Map([
+      Rule('/', endpoint='home'),
+      Rule('/<pageid>', endpoint='event')
+    ])
 
-	# ===========
-	# nav
-	def nav():
-		base_url = "http://wikidev.hackersanddesigners.nl/"
-		folder_url = "mediawiki/"
-		api_call =  "api.php?"
+  # ===========
+  # nav
+  def nav():
+    base_url = "http://wikidev.hackersanddesigners.nl/"
+    folder_url = "mediawiki/"
+    api_call =  "api.php?"
 
-		nav_options = {'action': 'ask', 'query': '[[Concept:+]]', 'format': 'json', 'formatversion': '2'}
-		response_nav = requests.get(base_url + folder_url + api_call , params=nav_options)
-		wkdata_nav = response_nav.json()
+    nav_options = {'action': 'ask', 'query': '[[Concept:+]]', 'format': 'json', 'formatversion': '2'}
+    response_nav = requests.get(base_url + folder_url + api_call , params=nav_options)
+    wkdata_nav = response_nav.json()
 
-		return wkdata_nav
-	
-	# ==========
-	# home	
-	def on_home(self, request, wkdata_nav=nav()):
-		base_url = "http://wikidev.hackersanddesigners.nl/"
-		folder_url = "mediawiki/"
-		api_call =  "api.php?"
+    return wkdata_nav
 
-		# fetch intro
-		intro_options = {'action': 'parse', 'pageid': '29', 'format': 'json', 'formatversion': '2'}
-		intro_response = requests.get(base_url + folder_url + api_call , params=intro_options)
-		wkdata_intro = intro_response.json()
+  # ==========
+  # home	
+  def on_home(self, request, wkdata_nav=nav()):
+    base_url = "http://wikidev.hackersanddesigners.nl/"
+    folder_url = "mediawiki/"
+    api_call =  "api.php?"
 
-		wkpage_title = wkdata_intro['parse']['title']
-		wkintro = wkdata_intro['parse']['text']
+    # fetch intro
+    intro_options = {'action': 'parse', 'pageid': '29', 'format': 'json', 'formatversion': '2'}
+    intro_response = requests.get(base_url + folder_url + api_call , params=intro_options)
+    wkdata_intro = intro_response.json()
 
-		# fix rel-links to be abs-ones
-		soup = BeautifulSoup(wkintro, 'html.parser')
+    wkpage_title = wkdata_intro['parse']['title']
+    wkintro = wkdata_intro['parse']['text']
 
-		for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-			rel_link = a.get('href')
-			out_link = urljoin(base_url, rel_link)
-			a['href'] = out_link
+    # fix rel-links to be abs-ones
+    soup = BeautifulSoup(wkintro, 'html.parser')
 
-		for img in soup.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-			rel_link = img.get('src')
-			out_link = urljoin(base_url, rel_link)
-			img['src'] = out_link
-	
-		wkintro = soup
-		
-		# events
-		category_events = "[[Category:Event]]"
-		filters_events = "|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
-		today = datetime.date.today()
-		today = today.strftime('%Y/%m/%d')
+    for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+      rel_link = a.get('href')
+      out_link = urljoin(base_url, rel_link)
+      a['href'] = out_link
 
-		options_allevents = {'action': 'query', 'generator': 'categorymembers', 'gcmtitle': 'Category:Event', 'format': 'json', 'formatversion': '2', 'continue': ''}
-		response_allevents = requests.get(base_url + folder_url + api_call, params=options_allevents)
-		wkdata_allevents = response_allevents.json()
-		print(response_allevents.url)
+    for img in soup.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+      rel_link = img.get('src')
+      out_link = urljoin(base_url, rel_link)
+      img['src'] = out_link
 
-		def pageid(self):
-			list_event_pageid= []
-			for item in wkdata_allevents['query']['pages']:
-				event_pageid = {
-					"pageid": item['pageid']
-				}	
-			return event_pageid
+    wkintro = soup
 
-		print(pageid(wkdata_allevents))
+    # events
+    category_events = "[[Category:Event]]"
+    filters_events = "|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
+    today = datetime.date.today()
+    today = today.strftime('%Y/%m/%d')
 
-		# + + + eeeeeeh not sure
-		def wkdata_allevents(request):
-			request['action'] = 'query'
-			request['format'] = 'json'
-			last_continue = {'continue': ''}
-			while True:
-				req = request.copy()
-				req.update(last_continue)
-				
-				result = requests.get(base_url + folder_url + api_call, params=req).json()
-				if 'error' in result:
-					raise Error(result['error'])
-				if 'warnings' in result:
-					print(result['warnings'])
-				if 'query' in result:
-					yield result['query']
-				if 'continue' not in result:
-					break
-				last_continue = result['continue']
+    options_allevents = {'action': 'query', 'generator': 'categorymembers', 'gcmtitle': 'Category:Event', 'format': 'json', 'formatversion': '2'}
+    response_allevents = requests.get(base_url + folder_url + api_call, params=options_allevents)
+    wkdata_allevents = response_allevents.json()
+    print(response_allevents.url)
+    ev_pages = wkdata_allevents['query']['pages']
+    print(ev_pages)
 
-		# ==========================
 
-		# upcoming events
-		date_upevents = "[[OnDate::>" + today + "]]"
-		upevents_options = {'action': 'ask', 'query': category_events + date_upevents + filters_events, 'format': 'json', 'formatversion': '2'}
-		response_upevents = requests.get(base_url + folder_url + api_call , params=upevents_options)
-		wkdata_upevents = response_upevents.json()
-		
+    ev_pageid_list = []
+    for dict in ev_pages:
+      ev_list = list(dict.items())
+      ev_list = ev_list[0][1]
+      ev_pageid_list.append(ev_list)
+
+    print(ev_pageid_list)
+
+    # ==========================
+    # upcoming events
+    date_upevents = "[[OnDate::>" + today + "]]"
+    upevents_options = {'action': 'ask', 'query': category_events + date_upevents + filters_events, 'format': 'json', 'formatversion': '2'}
+    response_upevents = requests.get(base_url + folder_url + api_call , params=upevents_options)
+    wkdata_upevents = response_upevents.json()
+
 		# past events
-		date_pastevents = "[[OnDate::<" + today + "]]"
-		options_pastevents = {'action': 'ask', 'query': category_events + date_pastevents + filters_events, 'format': 'json', 'formatversion': '2'}
+    date_pastevents = "[[OnDate::<" + today + "]]"
+    options_pastevents = {'action': 'ask', 'query': category_events + date_pastevents + filters_events, 'format': 'json', 'formatversion': '2'}
 
-		response_pastevents = requests.get(base_url + folder_url + api_call , params=options_pastevents)
-		wkdata_pastevents = response_pastevents.json()
+    response_pastevents = requests.get(base_url + folder_url + api_call , params=options_pastevents)
+    wkdata_pastevents = response_pastevents.json()
 
-		# ==========================
-		# build template
-		return self.render_template('index.html',
-			nav=wkdata_nav,
-			title=wkpage_title,
-			intro=wkintro,
-			up_event_list=wkdata_upevents,
-			past_event_list=wkdata_pastevents
-		)
+    # ==========================
+    # build template
+    return self.render_template('index.html',
+                                nav=wkdata_nav,
+                                title=wkpage_title,
+                                intro=wkintro,
+                                up_event_list=wkdata_upevents,
+                                past_event_list=wkdata_pastevents
+                                )
 
-	def on_event(self, request, pageid, wkdata_nav=nav()):
-		base_url = "http://wikidev.hackersanddesigners.nl/"
-		folder_url = "mediawiki/"
-		api_call =  "api.php?"
+  def on_event(self, request, pageid, wkdata_nav=nav()):
+    base_url = "http://wikidev.hackersanddesigners.nl/"
+    folder_url = "mediawiki/"
+    api_call =  "api.php?"
 
-		# fetch page-content
-		page_options = {'action': 'parse', 'pageid': pageid, 'format': 'json', 'formatversion': '2'}
-		response_content = requests.get(base_url + folder_url + api_call, params=page_options)
-		wkdata = response_content.json()
-		print(response_content.url)
-		print(wkdata)
+    # fetch page-content
+    page_options = {'action': 'parse', 'pageid': pageid, 'format': 'json', 'formatversion': '2'}
+    response_content = requests.get(base_url + folder_url + api_call, params=page_options)
+    wkdata = response_content.json()
+    #print(response_content.url)
+    #print(wkdata)
 
-		wktitle = wkdata['parse']['title']
-		wkbodytext = wkdata['parse']['text']
-		
-		wkmeta = wkdata['parse']['links']
-		wkdate = wkmeta[1]['title']
+    wktitle = wkdata['parse']['title']
+    wkbodytext = wkdata['parse']['text']
 
-		# fix rel-links to be abs-ones
-		soup = BeautifulSoup(wkbodytext, 'html.parser')
+    wkmeta = wkdata['parse']['links']
+    wkdate = wkmeta[1]['title']
+
+    # fix rel-links to be abs-ones
+    soup = BeautifulSoup(wkbodytext, 'html.parser')
 
 #		for a in soup.find_all('a', href=re.compile(r'(\/mediawiki\/.+)')):
 #			rel_link = a.get('href')
@@ -159,84 +138,82 @@ class had(object):
 			#out_link = urljoin(base_url, rel_link)
 			#a['href'] = out_link
 
-		for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-			rel_link = a.get('href')
-			print(rel_link)
-			print('===')
-			#out_link = urljoin(base_url, rel_link)
-			#print(out_link)
-			#print('***')
-			#a['href'] = out_link
+    for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+      rel_link = a.get('href')
+      print(rel_link)
+      print('===')
+      #out_link = urljoin(base_url, rel_link)
+      #print(out_link)
+      #print('***')
+      #a['href'] = out_link
 
-		for img in soup.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-			src_rel_link = img.get('src')
-			srcset_rel_link = img.get('srcset')
-			if (src_rel_link):
-				out_link = urljoin(base_url, src_rel_link)
-				img['src'] = out_link
-			if (srcset_rel_link):
-				srcset_list = re.split(r'[,]\s*', srcset_rel_link)
-				srcset_lu = srcset_list
-				srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
-				srcset_s = ', '.join(srcset_lu)
-				img['srcset'] = srcset_s
-			
-			# get rid of <a>s wrapping <img>s
-			a_img = img.find_parent("a")
-			a_img.unwrap()
+    for img in soup.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+      src_rel_link = img.get('src')
+      srcset_rel_link = img.get('srcset')
+      if (src_rel_link):
+        out_link = urljoin(base_url, src_rel_link)
+        img['src'] = out_link
+      if (srcset_rel_link):
+        srcset_list = re.split(r'[,]\s*', srcset_rel_link)
+        srcset_lu = srcset_list
+        srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
+        srcset_s = ', '.join(srcset_lu)
+        img['srcset'] = srcset_s
 
-		# delete wiki infobox
-		infobox = soup.find('table')
-		infobox.decompose()
+      # get rid of <a>s wrapping <img>s
+      a_img = img.find_parent("a")
+      a_img.unwrap()
 
-		wkbodytext = soup
+      # delete wiki infobox
+      infobox = soup.find('table')
+      infobox.decompose()
 
-		#build template
-		return self.render_template('event.html',
-			nav=wkdata_nav,
-			title=wktitle,
-			date=wkdate,
-			bodytext=wkbodytext
-		)
+    wkbodytext = soup
 
-	def error_404(self):
-		response = self.render_template('404.html')
-		response.status_code = 404
-		return response
+    #build template
+    return self.render_template('event.html',
+                                nav=wkdata_nav,
+                                title=wktitle,
+                                date=wkdate,
+                                bodytext=wkbodytext
+                                )
 
-	def render_template(self, template_name, **context):
-		t = self.jinja_env.get_template(template_name)
-		return Response(t.render(context), mimetype='text/html')
+  def error_404(self):
+    response = self.render_template('404.html')
+    response.status_code = 404
+    return response
 
-	def dispatch_request(self, request):
-		adapter = self.url_map.bind_to_environ(request.environ)
-		try:
-			endpoint, values = adapter.match()
-			return getattr(self, 'on_' + endpoint)(request, **values)
-		except NotFound as e:
-			return self.error_404()
-		except HTTPException as e:
-			return e
+  def render_template(self, template_name, **context):
+    t = self.jinja_env.get_template(template_name)
+    return Response(t.render(context), mimetype='text/html')
 
-	def wsgi_app(self, environ, start_response):
-		request = Request(environ)
-		response = self.dispatch_request(request)
-		return response(environ, start_response)
+  def dispatch_request(self, request):
+    adapter = self.url_map.bind_to_environ(request.environ)
+    try:
+      endpoint, values = adapter.match()
+      return getattr(self, 'on_' + endpoint)(request, **values)
+    except NotFound as e:
+      return self.error_404()
+    except HTTPException as e:
+      return e
 
-	def __call__(self, environ, start_response):
-		return self.wsgi_app(environ, start_response)
+  def wsgi_app(self, environ, start_response):
+    request = Request(environ)
+    response = self.dispatch_request(request)
+    return response(environ, start_response)
 
-	
+  def __call__(self, environ, start_response):
+    return self.wsgi_app(environ, start_response)
+
 def create_app(with_assets=True):
-	app = had()
-	if with_assets:
-		app.wsgi_app = SharedDataMiddleware(app.wsgi_app, {
-			'/assets': os.path.join(os.path.dirname(__file__), 'assets')
-		})
-	return app
-	
+  app = had()
+  if with_assets:
+    app.wsgi_app = SharedDataMiddleware(app.wsgi_app, {
+      '/assets': os.path.join(os.path.dirname(__file__), 'assets')
+    })
+  return app
+
 if __name__ == '__main__':
 	from werkzeug.serving import run_simple
 	app = create_app()
 	run_simple('127.0.0.1', 5000, app, use_debugger=True, use_reloader=True)
-
