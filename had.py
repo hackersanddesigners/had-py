@@ -19,7 +19,8 @@ class had(object):
 																 autoescape=True)
     self.url_map = Map([
       Rule('/', endpoint='home'),
-      Rule('/<page_title>', endpoint='event')
+      Rule('/<page_title>', endpoint='section'),
+      Rule('/events/<page_title>', endpoint='event')
     ])
 
   # ===========
@@ -113,6 +114,27 @@ class had(object):
                                 up_event_list=wkdata_upevents,
                                 past_event_list=wkdata_pastevents
                                 )
+
+  def on_section(self, request, page_title, wkdata_nav=nav()):
+    base_url = "http://wikidev.hackersanddesigners.nl/"
+    folder_url = "mediawiki/"
+    api_call =  "api.php?"
+
+    # fetch page-content
+    page_options = {'action': 'parse', 'page': 'Concept:' + page_title, 'format': 'json', 'formatversion': '2'}
+    response_content = requests.get(base_url + folder_url + api_call, params=page_options)
+    wkdata = response_content.json()
+    print(response_content.url)
+    print(wkdata)
+
+    wktitle = wkdata['parse']['title']
+
+    #build template
+    return self.render_template('section.html',
+                                nav=wkdata_nav,
+                                title=wktitle,
+                                )
+
 
   def on_event(self, request, page_title, wkdata_nav=nav()):
     base_url = "http://wikidev.hackersanddesigners.nl/"
