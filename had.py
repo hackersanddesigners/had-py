@@ -33,6 +33,7 @@ class had(object):
     nav_options = {'action': 'ask', 'query': '[[Concept:+]]', 'format': 'json', 'formatversion': '2'}
     response_nav = requests.get(base_url + folder_url + api_call , params=nav_options)
     wkdata_nav = response_nav.json()
+    print(response_nav.url)
 
     return wkdata_nav
 
@@ -121,18 +122,21 @@ class had(object):
     api_call =  "api.php?"
 
     # fetch page-content
-    page_options = {'action': 'parse', 'page': 'Concept:' + page_title, 'format': 'json', 'formatversion': '2'}
-    response_content = requests.get(base_url + folder_url + api_call, params=page_options)
-    wkdata = response_content.json()
-    print(response_content.url)
-    print(wkdata)
-
-    wktitle = wkdata['parse']['title']
+    page_head_options = {'action': 'parse', 'page': 'Concept:' + page_title, 'format': 'json', 'formatversion': '2'}
+    response_head = requests.get(base_url + folder_url + api_call, params=page_head_options)
+    wkdata_head = response_head.json()
+    wk_title = wkdata_head['parse']['title']
+    
+    # fetch page-content
+    page_content_options = {'action': 'ask', 'query': '[[Concept:' + page_title + ']]', 'format': 'json', 'formatversion': '2'}
+    response_content = requests.get(base_url + folder_url + api_call, params=page_content_options)
+    wkdata_content = response_content.json()
 
     #build template
     return self.render_template('section.html',
                                 nav=wkdata_nav,
-                                title=wktitle,
+                                title=wk_title,
+                                wkdata=wkdata_content
                                 )
 
 

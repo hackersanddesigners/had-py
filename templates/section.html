@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1.0">
-		<link rel="stylesheet" type="text/css" href="assets/src/css/style.css"/>
-		<title>{{ title|replace("Concept:", "") }}</title>
+    <link rel="stylesheet" type="text/css" href="assets/src/css/style.css"/>
+    <title>{{ title|replace("Concept:", "") }}</title>
 	</head>
 
 	<body class="pa-2">
@@ -13,6 +13,15 @@
 			<a href="/{{ item[1]['fulltext']|replace("Concept:", "") }}">{{ item[1]['fulltext']|replace("Concept:", "") }}</a>
       {% endfor %}
     </nav>
-    <h2 class="ft-serif ft-2">{{ title|replace("Concept:", "") }}</h2>
+    <h2 class="ft-serif ft-2">
+      {{ title|replace("Concept:", "") }}
+    </h2>
+    <ul>
+    {% for item in wkdata['query']['results'].items() %}
+    <li>
+      <a href="/events/{{ item[1]['fulltext']|replace(" ", "_") }}">{{ item[1]['fulltext'] }}</a>
+    </li>
+    {% endfor %}
+    </ul>
 	</body>
 </html>
