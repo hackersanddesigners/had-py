@@ -19,7 +19,7 @@ class had(object):
 																 autoescape=True)
     self.url_map = Map([
       Rule('/', endpoint='home'),
-      Rule('/<pageid>', endpoint='event')
+      Rule('/<page_title>', endpoint='event')
     ])
 
   # ===========
@@ -74,17 +74,14 @@ class had(object):
     options_allevents = {'action': 'query', 'generator': 'categorymembers', 'gcmtitle': 'Category:Event', 'format': 'json', 'formatversion': '2'}
     response_allevents = requests.get(base_url + folder_url + api_call, params=options_allevents)
     wkdata_allevents = response_allevents.json()
-    print(response_allevents.url)
-    ev_pages = wkdata_allevents['query']['pages']
-    print(ev_pages)
 
+    ev_pages = wkdata_allevents['query']['pages']
 
     ev_pageid_list = []
     for dict in ev_pages:
       ev_list = list(dict.items())
       ev_list = ev_list[0][1]
       ev_pageid_list.append(ev_list)
-
     print(ev_pageid_list)
 
     # ==========================
@@ -93,6 +90,12 @@ class had(object):
     upevents_options = {'action': 'ask', 'query': category_events + date_upevents + filters_events, 'format': 'json', 'formatversion': '2'}
     response_upevents = requests.get(base_url + folder_url + api_call , params=upevents_options)
     wkdata_upevents = response_upevents.json()
+    for item in wkdata_upevents['query']['results'].items():
+      print('---')
+      print(item)
+      print('---')
+    #wkdata_upevents.append(ev_pageid_list[0])
+    #print(wkdata_upevents_l)
 
 		# past events
     date_pastevents = "[[OnDate::<" + today + "]]"
@@ -111,17 +114,17 @@ class had(object):
                                 past_event_list=wkdata_pastevents
                                 )
 
-  def on_event(self, request, pageid, wkdata_nav=nav()):
+  def on_event(self, request, page_title, wkdata_nav=nav()):
     base_url = "http://wikidev.hackersanddesigners.nl/"
     folder_url = "mediawiki/"
     api_call =  "api.php?"
 
     # fetch page-content
-    page_options = {'action': 'parse', 'pageid': pageid, 'format': 'json', 'formatversion': '2'}
+    page_options = {'action': 'parse', 'page': page_title, 'format': 'json', 'formatversion': '2'}
     response_content = requests.get(base_url + folder_url + api_call, params=page_options)
     wkdata = response_content.json()
-    #print(response_content.url)
-    #print(wkdata)
+    print(response_content.url)
+    print(wkdata)
 
     wktitle = wkdata['parse']['title']
     wkbodytext = wkdata['parse']['text']
@@ -164,9 +167,9 @@ class had(object):
       a_img = img.find_parent("a")
       a_img.unwrap()
 
-      # delete wiki infobox
-      infobox = soup.find('table')
-      infobox.decompose()
+    # delete wiki infobox
+    infobox = soup.find('table')
+    infobox.decompose()
 
     wkbodytext = soup
 
