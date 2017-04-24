@@ -12,7 +12,6 @@
 			{% for item in nav['query']['results'].items() %}
 			<a href="/{{ item[1]['fulltext']|replace("Concept:", "") }}">{{ item[1]['fulltext']|replace("Concept:", "") }}</a>
 			{% endfor %}
-		<h1 class="ft-sans ft-1 mb-0">{{ date }}</h1>
 		<h2 class="ft-serif ft-2">{{ title }}</h2>
 			{{ bodytext|safe }}
 	</body>

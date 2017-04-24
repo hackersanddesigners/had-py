@@ -8,7 +8,7 @@
 	</head>
 
 	<body class="pa-2">
-		<nav>
+		<nav class="mb-2">
 			{% for item in nav['query']['results'].items() %}
 			<a href="/{{ item[1]['fulltext']|replace("Concept:", "") }}">{{ item[1]['fulltext']|replace("Concept:", "")}}</a>
 			{% endfor %}
@@ -21,11 +21,12 @@
 		{% for up_events in up_event_list['query']['results'].items() %}
 			<li class="mb-2">
 				<h2 class="ft-sans ft-1 black mb-0">{{ up_events[1]['printouts']['OnDate'][0]['fulltext'] }}</h2>
-				<a href="/events/{{ up_events[1]['printouts']['NameOfEvent'][0]['fulltext']|replace(" ", "_") }}" class="ft-serif ft-2">
+        <a href="/events/{{ up_events[1]['printouts']['NameOfEvent'][0]['fulltext']|replace("&", "and")|replace(" ", "_") }}" class="ft-serif ft-2">
 					{{ up_events[1]['printouts']['NameOfEvent'][0]['fulltext'] }}
-				</a>
+        </a>
+        <p>{{ up_events[1]['printouts']['intro_text']|safe }}🐟<</p>
 			</li>
-		{% endfor %}
+      {% endfor %}
 		</ul>
 
 		<h2 class="ft-sans ft-1 blue">Archive</h2>
@@ -33,9 +34,10 @@
 		{% for past_events in past_event_list['query']['results'].items() %}
 			<li class="mb-2">
 				<h2 class="ft-sans ft-1 black mb-0">{{ past_events[1]['printouts']['OnDate'][0]['fulltext'] }}</h2>
-				<a href="/events/{{ past_events[1]['printouts']['NameOfEvent'][0]['fulltext']|replace(" ", "_") }}" class="ft-serif ft-2">
+				<a href="/events/{{ past_events[1]['printouts']['NameOfEvent'][0]['fulltext']|replace("&", "and")|replace(" ", "_") }}" class="ft-serif ft-2">
 					{{ past_events[1]['printouts']['NameOfEvent'][0]['fulltext'] }}
-				</a>
+        </a>
+        <p>{{ past_events[1]['printouts']['intro_text']|safe }}🐟</p>
 			</li>
 		{% endfor %}
 		</ul>

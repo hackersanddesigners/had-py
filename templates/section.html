@@ -8,7 +8,7 @@
 	</head>
 
 	<body class="pa-2">
-		<nav>
+		<nav class="mb-2">
 			{% for item in nav['query']['results'].items() %}
 			<a href="/{{ item[1]['fulltext']|replace("Concept:", "") }}">{{ item[1]['fulltext']|replace("Concept:", "") }}</a>
       {% endfor %}

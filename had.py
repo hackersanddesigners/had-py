@@ -53,19 +53,19 @@ class had(object):
     wkintro = wkdata_intro['parse']['text']
 
     # fix rel-links to be abs-ones
-    soup = BeautifulSoup(wkintro, 'html.parser')
+    soup_wkintro = BeautifulSoup(wkintro, 'html.parser')
 
-    for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+    for a in soup_wkintro.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
       rel_link = a.get('href')
       out_link = urljoin(base_url, rel_link)
       a['href'] = out_link
 
-    for img in soup.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+    for img in soup_wkintro.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
       rel_link = img.get('src')
       out_link = urljoin(base_url, rel_link)
       img['src'] = out_link
 
-    wkintro = soup
+    wkintro = soup_wkintro
 
     # events
     category_events = "[[Category:Event]]"
@@ -73,38 +73,63 @@ class had(object):
     today = datetime.date.today()
     today = today.strftime('%Y/%m/%d')
 
+    # attempt to get all event pages recursively (failing atm)
     options_allevents = {'action': 'query', 'generator': 'categorymembers', 'gcmtitle': 'Category:Event', 'format': 'json', 'formatversion': '2'}
     response_allevents = requests.get(base_url + folder_url + api_call, params=options_allevents)
     wkdata_allevents = response_allevents.json()
 
+    # get `pageid` and put it in a list
     ev_pages = wkdata_allevents['query']['pages']
-
     ev_pageid_list = []
     for dict in ev_pages:
       ev_list = list(dict.items())
       ev_list = ev_list[0][1]
       ev_pageid_list.append(ev_list)
-    print(ev_pageid_list)
+    #print(ev_pageid_list)
 
-    # ==========================
+    # ===============
     # upcoming events
     date_upevents = "[[OnDate::>" + today + "]]"
     upevents_options = {'action': 'ask', 'query': category_events + date_upevents + filters_events, 'format': 'json', 'formatversion': '2'}
     response_upevents = requests.get(base_url + folder_url + api_call , params=upevents_options)
     wkdata_upevents = response_upevents.json()
-    for item in wkdata_upevents['query']['results'].items():
-      print('---')
-      print(item)
-      print('---')
-    #wkdata_upevents.append(ev_pageid_list[0])
-    #print(wkdata_upevents_l)
 
-		# past events
+    for item in wkdata_upevents['query']['results'].items(): 
+      upevents_title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
+      
+      upevents_introtext_options = {'action': 'parse', 'page': upevents_title, 'format': 'json', 'formatversion': '2'}
+      response_introtext_upevents = requests.get(base_url + folder_url + api_call , params=upevents_introtext_options)
+      wkdata_introtext_upevents = response_introtext_upevents.json()
+
+      wkdata_text_upevents = wkdata_introtext_upevents['parse']['text']
+
+      soup_wk_introtext = BeautifulSoup(wkdata_text_upevents, 'html.parser')
+      p_intro = soup_wk_introtext.p
+
+      # add custom `intro_text` dict to `wkdata_upevents`
+      item[1]['printouts']['intro_text'] = p_intro
+
+    # past events
     date_pastevents = "[[OnDate::<" + today + "]]"
     options_pastevents = {'action': 'ask', 'query': category_events + date_pastevents + filters_events, 'format': 'json', 'formatversion': '2'}
-
     response_pastevents = requests.get(base_url + folder_url + api_call , params=options_pastevents)
     wkdata_pastevents = response_pastevents.json()
+
+    for item in wkdata_pastevents['query']['results'].items(): 
+      pastevents_title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
+      pastevents_title = re.sub( r'\&', "and", pastevents_title)
+
+      pastevents_introtext_options = {'action': 'parse', 'page': pastevents_title, 'format': 'json', 'formatversion': '2'}
+      response_introtext_pastevents = requests.get(base_url + folder_url + api_call , params=pastevents_introtext_options)
+      wkdata_introtext_pastevents = response_introtext_pastevents.json()
+      print(response_introtext_pastevents.url)
+
+      wkdata_text_pastevents = wkdata_introtext_pastevents['parse']['text']
+      soup_wk_introtext = BeautifulSoup(wkdata_text_pastevents, 'html.parser')
+      p_intro = soup_wk_introtext.p
+
+      # add custom `intro_text` dict to `wkdata_upevents`
+      item[1]['printouts']['intro_text'] = p_intro
 
     # ==========================
     # build template
@@ -139,7 +164,6 @@ class had(object):
                                 wkdata=wkdata_content
                                 )
 
-
   def on_event(self, request, page_title, wkdata_nav=nav()):
     base_url = "http://wikidev.hackersanddesigners.nl/"
     folder_url = "mediawiki/"
@@ -159,15 +183,15 @@ class had(object):
     wkdate = wkmeta[1]['title']
 
     # fix rel-links to be abs-ones
-    soup = BeautifulSoup(wkbodytext, 'html.parser')
+    soup_bodytext = BeautifulSoup(wkbodytext, 'html.parser')
 
-#		for a in soup.find_all('a', href=re.compile(r'(\/mediawiki\/.+)')):
+#		for a in soup_bodytext.find_all('a', href=re.compile(r'(\/mediawiki\/.+)')):
 #			rel_link = a.get('href')
 #			print (rel_link)
 			#out_link = urljoin(base_url, rel_link)
 			#a['href'] = out_link
 
-    for a in soup.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+    for a in soup_bodytext.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
       rel_link = a.get('href')
       print(rel_link)
       print('===')
@@ -176,7 +200,7 @@ class had(object):
       #print('***')
       #a['href'] = out_link
 
-    for img in soup.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+    for img in soup_bodytext.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
       src_rel_link = img.get('src')
       srcset_rel_link = img.get('srcset')
       if (src_rel_link):
@@ -194,16 +218,17 @@ class had(object):
       a_img.unwrap()
 
     # delete wiki infobox
-    infobox = soup.find('table')
+    infobox = soup_bodytext.find('table')
     infobox.decompose()
 
-    wkbodytext = soup
+    wkbodytext = soup_bodytext
 
     #build template
     return self.render_template('event.html',
+                                #wkdata=data,
                                 nav=wkdata_nav,
                                 title=wktitle,
-                                date=wkdate,
+                                #date=wkdate,
                                 bodytext=wkbodytext
                                 )
 
