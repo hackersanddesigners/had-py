@@ -117,7 +117,6 @@ class had(object):
 
     for item in wkdata_pastevents['query']['results'].items(): 
       pastevents_title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
-      pastevents_title = re.sub( r'\&', "and", pastevents_title)
 
       pastevents_introtext_options = {'action': 'parse', 'page': pastevents_title, 'format': 'json', 'formatversion': '2'}
       response_introtext_pastevents = requests.get(base_url + folder_url + api_call , params=pastevents_introtext_options)
