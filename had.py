@@ -20,7 +20,6 @@ class had(object):
     self.url_map = Map([
       Rule('/', endpoint='home'),
       Rule('/<page_title>', endpoint='section'),
-      Rule('/Events/<page_title>', endpoint='event'),
       Rule('/<section_title>/<page_title>', endpoint='article')
     ])
 
