@@ -185,7 +185,11 @@ class had(object):
     wkbodytext = wkdata['parse']['text']
 
     wkmeta = wkdata['parse']['links']
-    #wkdate = wkmeta[1]['title']
+    
+    if not wkmeta:
+      wkdate = wkmeta[1]['title']
+    else:
+      print('😅')
 
     # fetch page-metadata
     # category_events = "[[Category:Event]]"
@@ -203,7 +207,6 @@ class had(object):
     #   wk_peopleorgs.append(item)
 
     # print(wk_peopleorgs)
-
 
     # fix rel-links to be abs-ones
     soup_bodytext = BeautifulSoup(wkbodytext, 'html.parser')
@@ -236,8 +239,8 @@ class had(object):
       a_img.unwrap()
 
     # delete wiki infobox
-    infobox = soup_bodytext.find('table')
-    infobox.decompose()
+    # infobox = soup_bodytext.find('table')
+    # infobox.decompose()
 
     wkbodytext = soup_bodytext
 
