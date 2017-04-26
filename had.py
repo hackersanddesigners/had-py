@@ -115,20 +115,20 @@ class had(object):
     response_pastevents = requests.get(base_url + folder_url + api_call , params=options_pastevents)
     wkdata_pastevents = response_pastevents.json()
 
-    for item in wkdata_pastevents['query']['results'].items(): 
-      pastevents_title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
+    # for item in wkdata_pastevents['query']['results'].items(): 
+      # pastevents_title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
 
-      pastevents_introtext_options = {'action': 'parse', 'page': pastevents_title, 'format': 'json', 'formatversion': '2'}
-      response_introtext_pastevents = requests.get(base_url + folder_url + api_call , params=pastevents_introtext_options)
-      wkdata_introtext_pastevents = response_introtext_pastevents.json()
-      print(response_introtext_pastevents.url)
+      # pastevents_introtext_options = {'action': 'parse', 'page': pastevents_title, 'format': 'json', 'formatversion': '2'}
+      # response_introtext_pastevents = requests.get(base_url + folder_url + api_call , params=pastevents_introtext_options)
+      # wkdata_introtext_pastevents = response_introtext_pastevents.json()
+      # print(response_introtext_pastevents.url)
 
-      wkdata_text_pastevents = wkdata_introtext_pastevents['parse']['text']
-      soup_wk_introtext = BeautifulSoup(wkdata_text_pastevents, 'html.parser')
-      p_intro = soup_wk_introtext.p
+      # wkdata_text_pastevents = wkdata_introtext_pastevents['parse']['text']
+      # soup_wk_introtext = BeautifulSoup(wkdata_text_pastevents, 'html.parser')
+      # p_intro = soup_wk_introtext.p
 
-      # add custom `intro_text` dict to `wkdata_upevents`
-      item[1]['printouts']['intro_text'] = p_intro
+      # # add custom `intro_text` dict to `wkdata_upevents`
+      # item[1]['printouts']['intro_text'] = p_intro
 
     # ==========================
     # build template
