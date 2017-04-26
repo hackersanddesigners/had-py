@@ -168,7 +168,9 @@ class had(object):
                                 wkdata=wkdata_content
                                 )
 
-  def on_event(self, request, page_title, wkdata_nav=nav()):
+  # ===========
+  # article
+  def on_article(self, request, page_title, section_title, wkdata_nav=nav()):
     base_url = "http://wikidev.hackersanddesigners.nl/"
     folder_url = "mediawiki/"
     api_call =  "api.php?"
@@ -202,74 +204,19 @@ class had(object):
 
     # print(wk_peopleorgs)
 
+
     # fix rel-links to be abs-ones
     soup_bodytext = BeautifulSoup(wkbodytext, 'html.parser')
 
     for a in soup_bodytext.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
       rel_link = a.get('href')
       rel_link = rel_link.rsplit('/', 1)
-      a['href'] = '/' + rel_link[1]
+      a['href'] = rel_link[1]
 
       # check if `wk_peopleorgs` are present in `wkdata`
       # if (name in wkbodytext for name in wk_peopleorgs):
         # if yes, then add `people-orgs/` before the last uri containing peopleorgs
         # a['href'] = '/peopleorgs/' + rel_link[1]
-
-    for img in soup_bodytext.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-      src_rel_link = img.get('src')
-      srcset_rel_link = img.get('srcset')
-      if (src_rel_link):
-        out_link = urljoin(base_url, src_rel_link)
-        img['src'] = out_link
-      if (srcset_rel_link):
-        srcset_list = re.split(r'[,]\s*', srcset_rel_link)
-        srcset_lu = srcset_list
-        srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
-        srcset_s = ', '.join(srcset_lu)
-        img['srcset'] = srcset_s
-
-      # get rid of <a>s wrapping <img>s
-      a_img = img.find_parent("a")
-      a_img.unwrap()
-
-    # delete wiki infobox
-    infobox = soup_bodytext.find('table')
-    infobox.decompose()
-
-    wkbodytext = soup_bodytext
-
-    #build template
-    return self.render_template('event.html',
-                                nav=wkdata_nav,
-                                title=wktitle,
-                                # date=wkdate,
-                                bodytext=wkbodytext
-                                )
-
-  def on_article(self, request, page_title, section_title, wkdata_nav=nav()):
-    base_url = "http://wikidev.hackersanddesigners.nl/"
-    folder_url = "mediawiki/"
-    api_call =  "api.php?"
-
-    # fetch page-content
-    page_options = {'action': 'parse', 'page': page_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-    response_content = requests.get(base_url + folder_url + api_call, params=page_options)
-    wkdata = response_content.json()
-    print(response_content.url)
-    
-    wktitle = wkdata['parse']['title']
-    wkbodytext = wkdata['parse']['text']
-
-    wkmeta = wkdata['parse']['links']
-    #wkdate = wkmeta[1]['title']
-
-    # fix rel-links to be abs-ones
-    soup_bodytext = BeautifulSoup(wkbodytext, 'html.parser')
-
-    for a in soup_bodytext.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-      rel_link = a.get('href')
-      rel_link = rel_link.rsplit('/', 1)
-      a['href'] = '/' + rel_link[1]
 
     for img in soup_bodytext.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
       src_rel_link = img.get('src')
