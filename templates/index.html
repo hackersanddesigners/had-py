@@ -20,7 +20,7 @@
 		<ul>
 		{% for up_events in up_event_list['query']['results'].items() %}
 			<li class="mb-2">
-				<h2 class="ft-sans ft-1 black mb-0">{{ up_events[1]['printouts']['OnDate'][0]['fulltext'] }}</h2>
+				<h2 class="ft-sans ft-1 black mb-0">{{ up_events[1]['printouts']['OnDate'][0]['fulltext']|replace("/", ".")|replace("-", "——") }}</h2>
         <a href="/events/{{ up_events[1]['printouts']['NameOfEvent'][0]['fulltext']|replace(" ", "_") }}" class="ft-serif ft-2">
 					{{ up_events[1]['printouts']['NameOfEvent'][0]['fulltext'] }}
         </a>
@@ -33,7 +33,7 @@
 		<ul>
 		{% for past_events in past_event_list['query']['results'].items() %}
 			<li class="mb-2">
-				<h2 class="ft-sans ft-1 black mb-0">{{ past_events[1]['printouts']['OnDate'][0]['fulltext'] }}</h2>
+				<h2 class="ft-sans ft-1 black mb-0">{{ past_events[1]['printouts']['OnDate'][0]['fulltext']|replace("/", ".")|replace("-", "——") }}</h2>
 				<a href="/events/{{ past_events[1]['printouts']['NameOfEvent'][0]['fulltext']|replace(" ", "_") }}" class="ft-serif ft-2">
 					{{ past_events[1]['printouts']['NameOfEvent'][0]['fulltext'] }}
         </a>
