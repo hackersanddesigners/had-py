@@ -32,13 +32,13 @@ class had(object):
 
     nav_options = {'action': 'ask', 'query': '[[Concept:+]]', 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
     response_nav = requests.get(base_url + folder_url + api_call , params=nav_options)
-    wkdata_nav = response_nav.json()
+    wk_nav = response_nav.json()
 
-    return wkdata_nav
+    return wk_nav
 
   # ==========
   # home	
-  def on_home(self, request, wkdata_nav=nav()):
+  def on_home(self, request, wk_nav=nav()):
     base_url = "http://wikidev.hackersanddesigners.nl/"
     folder_url = "mediawiki/"
     api_call =  "api.php?"
@@ -48,23 +48,23 @@ class had(object):
     intro_response = requests.get(base_url + folder_url + api_call , params=intro_options)
     wkdata_intro = intro_response.json()
 
-    wkpage_title = wkdata_intro['parse']['title']
-    wkintro = wkdata_intro['parse']['text']
+    wk_title = wkdata_intro['parse']['title']
+    wk_intro = wkdata_intro['parse']['text']
 
     # fix rel-links to be abs-ones
-    soup_wkintro = BeautifulSoup(wkintro, 'html.parser')
+    soup_wk_intro = BeautifulSoup(wk_intro, 'html.parser')
 
-    for a in soup_wkintro.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+    for a in soup_wk_intro.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
       rel_link = a.get('href')
       out_link = urljoin(base_url, rel_link)
       a['href'] = out_link
 
-    for img in soup_wkintro.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+    for img in soup_wk_intro.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
       rel_link = img.get('src')
       out_link = urljoin(base_url, rel_link)
       img['src'] = out_link
 
-    wkintro = soup_wkintro
+    wk_intro = soup_wk_intro
 
     # events
     category_events = "[[Category:Event]]"
@@ -131,14 +131,14 @@ class had(object):
     # ==========================
     # build template
     return self.render_template('index.html',
-                                nav=wkdata_nav,
-                                title=wkpage_title,
-                                intro=wkintro,
+                                nav=wk_nav,
+                                title=wk_title,
+                                intro=wk_intro,
                                 up_event_list=wkdata_upevents,
                                 past_event_list=wkdata_pastevents
                                 )
 
-  def on_section(self, request, page_title, wkdata_nav=nav()):
+  def on_section(self, request, page_title, wk_nav=nav()):
     base_url = "http://wikidev.hackersanddesigners.nl/"
     folder_url = "mediawiki/"
     api_call =  "api.php?"
@@ -163,14 +163,14 @@ class had(object):
 
     #build template
     return self.render_template('section.html',
-                                nav=wkdata_nav,
+                                nav=wk_nav,
                                 title=wk_title,
                                 wkdata=wkdata_content
                                 )
 
   # ===========
   # article
-  def on_article(self, request, page_title, section_title, wkdata_nav=nav()):
+  def on_article(self, request, page_title, section_title, wk_nav=nav()):
     base_url = "http://wikidev.hackersanddesigners.nl/"
     folder_url = "mediawiki/"
     api_call =  "api.php?"
@@ -239,17 +239,18 @@ class had(object):
       a_img.unwrap()
 
     # delete wiki infobox
-    # infobox = soup_bodytext.find('table')
-    # infobox.decompose()
-
-    wkbodytext = soup_bodytext
+    infobox = soup_bodytext.find('table')
+    if infobox:
+      infobox.decompose()
+    
+    wk_bodytext = soup_bodytext
 
     #build template
     return self.render_template('article.html',
-                                nav=wkdata_nav,
-                                title=wktitle,
-                                # date=wkdate,
-                                bodytext=wkbodytext
+                                nav=wk_nav,
+                                title=wk_title,
+                                date=wk_date,
+                                bodytext=wk_bodytext
                                 )
 
   def error_404(self):
