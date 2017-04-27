@@ -1,0 +1,10 @@
+{% extends "article.html" %}
+{% block meta %}
+<ul>
+  <li>eee</li>
+  <li>{{ date[0] }}</li>
+  <li>{{ time[0] }}</li>
+  <li>{{ peopleorgs|join(', ') }}</li>
+  <li>{{ place[0] }}</li>
+</ul>
+{% endblock %}
