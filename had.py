@@ -25,21 +25,36 @@ class had(object):
     ])
 
   # ===========
-  # nav
-  def nav():
+  # navigation
+
+  def nav_main():
     base_url = "http://wikidev.hackersanddesigners.nl/"
     folder_url = "mediawiki/"
     api_call =  "api.php?"
+    
+    filters_nav_main = "|?MainNavigation|order=descending"
+    nav_main_options = {'action': 'ask', 'query': '[[Concept:MainNavigation]]' + filters_nav_main, 'format': 'json', 'formatversion': '2'}
+    response_nav_main = requests.get(base_url + folder_url + api_call , params=nav_main_options)
+    wk_nav_main = response_nav_main.json()
+    return wk_nav_main
 
-    nav_options = {'action': 'ask', 'query': '[[Concept:+]]', 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-    response_nav = requests.get(base_url + folder_url + api_call , params=nav_options)
-    wk_nav = response_nav.json()
-
-    return wk_nav
+  def nav_sections():
+    base_url = "http://wikidev.hackersanddesigners.nl/"
+    folder_url = "mediawiki/"
+    api_call =  "api.php?"
+    
+    nav_sections_options = {'action': 'ask', 'query': '[[Concept:+]]', 'format': 'json', 'formatversion': '2'}
+    response_nav_sections = requests.get(base_url + folder_url + api_call , params=nav_sections_options)
+    wk_nav_sections = response_nav_sections.json()
+    
+    # delete MainNavigation concept from the dict
+    del wk_nav_sections['query']['results']['Concept:MainNavigation']
+    
+    return wk_nav_sections
 
   # ==========
   # home	
-  def on_home(self, request, wk_nav=nav()):
+  def on_home(self, request, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
     base_url = "http://wikidev.hackersanddesigners.nl/"
     folder_url = "mediawiki/"
     api_call =  "api.php?"
@@ -132,28 +147,30 @@ class had(object):
     # ==========================
     # build template
     return self.render_template('index.html',
-                                nav=wk_nav,
+                                nav_main=wk_nav_main,
+                                nav_sections=wk_nav_sections,
                                 title=wk_title,
                                 intro=wk_intro,
                                 up_event_list=wkdata_upevents,
                                 past_event_list=wkdata_pastevents
                                 )
 
-  def on_section(self, request, page_title, wk_nav=nav()):
+  def on_section(self, request, page_title, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
     base_url = "http://wikidev.hackersanddesigners.nl/"
     folder_url = "mediawiki/"
     api_call =  "api.php?"
 
     # fetch page-content
-    page_head_options = {'action': 'parse', 'page': 'Concept:' + page_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+    page_head_options = {'action': 'parse', 'page': 'Concept:' + page_title, 'format': 'json', 'formatversion': '2'}
     response_head = requests.get(base_url + folder_url + api_call, params=page_head_options)
     wkdata_head = response_head.json()
+    print(response_head.url)
     wk_title = wkdata_head['parse']['title']
     
     # fetch page-metadata
     category_events = "[[Category:Event]]"
     page_meta_filter = "|?PeopleOrganisations"
-    page_meta_options = {'action': 'browsebysubject', 'subject': page_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+    page_meta_options = {'action': 'browsebysubject', 'subject': page_title, 'format': 'json', 'formatversion': '2'}
     response_meta = requests.get(base_url + folder_url + api_call, params=page_meta_options)
     wkdata_meta = response_meta.json()
 
@@ -164,14 +181,15 @@ class had(object):
 
     #build template
     return self.render_template('section.html',
-                                nav=wk_nav,
+                                nav_main=wk_nav_main,
+                                nav_sections=wk_nav_sections,
                                 title=wk_title,
                                 wkdata=wkdata_content
                                 )
 
   # ===========
   # article
-  def on_article(self, request, page_title, section_title, wk_nav=nav()):
+  def on_article(self, request, page_title, section_title, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
     base_url = "http://wikidev.hackersanddesigners.nl/"
     folder_url = "mediawiki/"
     api_call =  "api.php?"
@@ -258,7 +276,8 @@ class had(object):
 
     #build template
     return self.render_template('article.html',
-                                nav=wk_nav,
+                                nav_main=wk_nav_main,
+                                nav_sections=wk_nav_sections,
                                 title=wk_title,
                                 date=wk_date,
                                 time=wk_time,

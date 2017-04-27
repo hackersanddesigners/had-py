@@ -9,7 +9,7 @@
 
 	<body class="pa-2">
 		<nav class="mb-2">
-			{% for item in nav['query']['results'].items() %}
+			{% for item in nav_sections['query']['results'].items() %}
 			<a href="/{{ item[1]['fulltext']|replace("Concept:", "")|replace(" ", "_") }}">{{ item[1]['fulltext']|replace("Concept:", "") }}</a>
       {% endfor %}
     </nav>
