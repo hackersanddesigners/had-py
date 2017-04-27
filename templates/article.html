@@ -13,8 +13,15 @@
 			<a href="/{{ item[1]['fulltext']|replace("Concept:", "") }}">{{ item[1]['fulltext']|replace("Concept:", "") }}</a>
       {% endfor %}
     </nav>
-    <h2 class="ft-sans ft-2">{{ date }}</h2>
-		<h2 class="ft-serif ft-2">{{ title }}</h2>
+    <h2 class="ft-serif ft-2">{{ title }}</h2>
+
+    <ul>
+      <li>{{ date[0] }}</li>
+      <li>{{ time[0] }}</li>
+      <li>{{ peopleorgs|join(', ') }}</li>
+      <li>{{ place[0] }}</li>
+    </ul>
+
 			{{ bodytext|safe }}
 	</body>
 </html>
