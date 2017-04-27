@@ -185,37 +185,43 @@ class had(object):
     wk_bodytext = wk_data['parse']['text']
 
     # fetch page-metadata for Event
-    category_events = "[[Category:Event]]"
-    page_meta_filter = "|?PeopleOrganisations"
-    page_meta_options = {'action': 'browsebysubject', 'subject': page_title, 'format': 'json', 'formatversion': '2'}
-    response_meta = requests.get(base_url + folder_url + api_call, params=page_meta_options)
-    wkdata_meta = response_meta.json()
-    print(response_meta.url)
+    if wk_data['parse']['categories'][0]['category'] == 'Event':
+      category_events = "[[Category:Event]]"
+      page_meta_filter = "|?PeopleOrganisations"
+      page_meta_options = {'action': 'browsebysubject', 'subject': page_title, 'format': 'json', 'formatversion': '2'}
+      response_meta = requests.get(base_url + folder_url + api_call, params=page_meta_options)
+      wkdata_meta = response_meta.json()
 
-    def extract_metadata(query):
-      list = []
-      for item in query:
-        str = item['item']
-        # strip out weird hash at the end (see why https://www.semantic-mediawiki.org/wiki/Ask_API#BrowseBySubject)
-        item = re.sub(r'#\d#', '', str).replace('_', ' ')
-        list.append(item)
-      return list
+      def extract_metadata(query):
+        list = []
+        for item in query:
+          str = item['item']
+          # strip out weird hash at the end (see why https://www.semantic-mediawiki.org/wiki/Ask_API#BrowseBySubject)
+          item = re.sub(r'#\d#', '', str).replace('_', ' ')
+          list.append(item)
+        return list
 
-    wk_date = wkdata_meta['query']['data'][1]['dataitem']
-    wk_date = extract_metadata(wk_date)
-    print(wk_date)
+      wk_date = wkdata_meta['query']['data'][1]['dataitem']
+      wk_date = extract_metadata(wk_date)
+      print(wk_date)
 
-    wk_peopleorgs = wkdata_meta['query']['data'][2]['dataitem']
-    wk_peopleorgs = extract_metadata(wk_peopleorgs)
-    print(wk_peopleorgs)
+      wk_peopleorgs = wkdata_meta['query']['data'][2]['dataitem']
+      wk_peopleorgs = extract_metadata(wk_peopleorgs)
+      print(wk_peopleorgs)
 
-    wk_time = wkdata_meta['query']['data'][4]['dataitem']
-    wk_time = extract_metadata(wk_time)
-    print(wk_time)
+      wk_time = wkdata_meta['query']['data'][4]['dataitem']
+      wk_time = extract_metadata(wk_time)
+      print(wk_time)
 
-    wk_place = wkdata_meta['query']['data'][6]['dataitem']
-    wk_place = extract_metadata(wk_place)
-    print(wk_place)
+      wk_place = wkdata_meta['query']['data'][6]['dataitem']
+      wk_place = extract_metadata(wk_place)
+      print(wk_place)
+    
+    else:
+      wk_date = None
+      wk_peopleorgs = None
+      wk_time = None
+      wk_place = None
 
     # fix rel-links to be abs-ones
     soup_bodytext = BeautifulSoup(wk_bodytext, 'html.parser')

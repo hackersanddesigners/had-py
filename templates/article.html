@@ -16,10 +16,10 @@
     <h2 class="ft-serif ft-2">{{ title }}</h2>
 
     <ul>
-      <li>{{ date[0] }}</li>
-      <li>{{ time[0] }}</li>
-      <li>{{ peopleorgs|join(', ') }}</li>
-      <li>{{ place[0] }}</li>
+      {% if date %}<li>{{ date[0] }}</li>{% endif %}
+      {% if time %}<li>{{ time[0] }}</li>{% endif %}
+      {% if peopleorgs %}<li>{{ peopleorgs|join(', ') }}</li>{% endif%}
+      {% if place %}<li>{{ place[0] }}</li>{% endif %}
     </ul>
 
 			{{ bodytext|safe }}
