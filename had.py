@@ -178,48 +178,23 @@ class had(object):
     # fetch page-content
     page_options = {'action': 'parse', 'page': page_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
     response_content = requests.get(base_url + folder_url + api_call, params=page_options)
-    wkdata = response_content.json()
+    wk_data = response_content.json()
     print(response_content.url)
     
-    wktitle = wkdata['parse']['title']
-    wkbodytext = wkdata['parse']['text']
+    wk_title = wk_data['parse']['title']
+    wk_bodytext = wk_data['parse']['text']
 
-    wkmeta = wkdata['parse']['links']
-    
-    if not wkmeta:
-      wkdate = wkmeta[1]['title']
-    else:
-      print('😅')
-
-    # fetch page-metadata
-    # category_events = "[[Category:Event]]"
-    # page_meta_filter = "|?PeopleOrganisations"
-    # page_meta_options = {'action': 'browsebysubject', 'subject': page_title, 'format': 'json', 'formatversion': '2'}
-    # response_meta = requests.get(base_url + folder_url + api_call, params=page_meta_options)
-    # wkdata_meta = response_meta.json()
-
-    # # extract values from `PeopleOrganisations`
-    # wk_peopleorgs = []
-    # for item in wkdata_meta['query']['data'][2]['dataitem']:
-    #   str = item['item']
-    #   # strip out weird hash at the end (see why https://www.semantic-mediawiki.org/wiki/Ask_API#BrowseBySubject)
-    #   item = re.sub(r'#\d#', '', str)
-    #   wk_peopleorgs.append(item)
-
-    # print(wk_peopleorgs)
+    wk_meta = wk_data['parse']['links']
+    if wk_meta:
+      wk_date = wk_meta[1]['title']
 
     # fix rel-links to be abs-ones
-    soup_bodytext = BeautifulSoup(wkbodytext, 'html.parser')
+    soup_bodytext = BeautifulSoup(wk_bodytext, 'html.parser')
 
     for a in soup_bodytext.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
       rel_link = a.get('href')
       rel_link = rel_link.rsplit('/', 1)
       a['href'] = rel_link[1]
-
-      # check if `wk_peopleorgs` are present in `wkdata`
-      # if (name in wkbodytext for name in wk_peopleorgs):
-        # if yes, then add `people-orgs/` before the last uri containing peopleorgs
-        # a['href'] = '/peopleorgs/' + rel_link[1]
 
     for img in soup_bodytext.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
       src_rel_link = img.get('src')
