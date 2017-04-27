@@ -17,6 +17,7 @@ class had(object):
     template_path = os.path.join(os.path.dirname(__file__), 'templates')
     self.jinja_env = Environment(loader=FileSystemLoader(template_path),
 																 autoescape=True)
+
     self.url_map = Map([
       Rule('/', endpoint='home'),
       Rule('/<page_title>', endpoint='section'),
