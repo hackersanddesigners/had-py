@@ -168,20 +168,35 @@ class had(object):
     page_head_options = {'action': 'parse', 'page': 'Concept:' + page_title, 'format': 'json', 'formatversion': '2'}
     response_head = requests.get(base_url + folder_url + api_call, params=page_head_options)
     wkdata_head = response_head.json()
-    print(response_head.url)
     wk_title = wkdata_head['parse']['title']
     
     # fetch page-metadata
-    category_events = "[[Category:Event]]"
-    page_meta_filter = "|?PeopleOrganisations"
-    page_meta_options = {'action': 'browsebysubject', 'subject': page_title, 'format': 'json', 'formatversion': '2'}
-    response_meta = requests.get(base_url + folder_url + api_call, params=page_meta_options)
-    wkdata_meta = response_meta.json()
+    # category_events = "[[Category:Event]]"
+    # page_meta_filter = "|?PeopleOrganisations"
+    # page_meta_options = {'action': 'browsebysubject', 'subject': page_title, 'format': 'json', 'formatversion': '2'}
+    # response_meta = requests.get(base_url + folder_url + api_call, params=page_meta_options)
+    # print(response_meta.url)
+    # wkdata_meta = response_meta.json()
 
     # fetch page-content
-    page_content_options = {'action': 'ask', 'query': '[[Concept:' + page_title + ']]', 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+    page_content_options = {'action': 'ask', 'query': '[[Concept:' + page_title + ']]', 'format': 'json', 'formatversion': '2'}
     response_content = requests.get(base_url + folder_url + api_call, params=page_content_options)
     wkdata_content = response_content.json()
+
+    for item in wkdata_content['query']['results'].items():
+      item_title = item[0]
+      
+      item_introtext_options = {'action': 'parse', 'page': item_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+      response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
+      wkdata_introtext_item = response_introtext_item.json()
+
+      wkdata_text_item = wkdata_introtext_item['parse']['text']
+
+      soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
+      p_intro = soup_wk_introtext.p
+
+      # add custom `intro_text` dict to `wkdata_upevents`
+      item[1]['intro_text'] = p_intro
 
     #build template
     return self.render_template('section.html',
