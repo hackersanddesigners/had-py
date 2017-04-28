@@ -80,6 +80,10 @@ class had(object):
       out_link = urljoin(base_url, rel_link)
       img['src'] = out_link
 
+    # get rid of <a>s wrapping <img>s
+      a_img = img.find_parent("a")
+      a_img.unwrap()
+
     wk_intro = soup_wk_intro
 
     # events
