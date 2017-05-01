@@ -179,30 +179,31 @@ class had(object):
     def bg_cb(sess, resp):
       resp.data = resp.json()
 
-    response_content = session.get(base_url + folder_url + api_call + 'action=ask&query=[[Concept:' + section_title + ']]&format=json&formatversion=2', background_callback=bg_cb)
+    response_content = session.get(base_url + folder_url + api_call, params=page_content_options, background_callback=bg_cb)
     wkdata_content = response_content.result()
     wkdata_content = wkdata_content.data
 
-    # for item in wkdata_content['query']['results'].items():
-      # item_title = item[0]
+    for item in wkdata_content['query']['results'].items():
+      item_title = item[0]
       
-      # item_introtext_options = {'action': 'parse', 'page': item_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+      item_introtext_options = {'action': 'parse', 'page': item_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
       
       # response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
       # wkdata_introtext_item = response_introtext_item.json()
       
-      # session_p = FuturesSession()
-      # response_introtext_item = session_p.get(base_url + folder_url + api_call , params=item_introtext_options)
-      # wkdata_introtext_item = response_introtext_item.result()
-      # print(wkdata_introtext_item)
+      session_p = FuturesSession()
 
-      # wkdata_text_item = wkdata_introtext_item['parse']['text']
+      response_introtext_item = session_p.get(base_url + folder_url + api_call , params=item_introtext_options, background_callback=bg_cb)
+      wkdata_introtext_item = response_introtext_item.result()
+      wkdata_introtext_item = wkdata_introtext_item.data
 
-      # soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
-      # p_intro = soup_wk_introtext.p
+      wkdata_text_item = wkdata_introtext_item['parse']['text']
+
+      soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
+      p_intro = soup_wk_introtext.p
 
       # add custom `intro_text` dict to `wkdata_upevents`
-      # item[1]['intro_text'] = p_intro
+      item[1]['intro_text'] = p_intro
 
     # build template
     return self.render_template('section.html',
