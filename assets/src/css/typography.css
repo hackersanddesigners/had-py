@@ -30,6 +30,10 @@ a {
 	font-family: var(--font-serif);
 }
 
+.ft-italic {
+  font-style: italic;
+}
+
 .ft-1 {
 	font-size: var(--font-size__big);
 }

@@ -5,18 +5,19 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1.0">
 		<link rel="stylesheet" type="text/css" href="/assets/dist/css/style.min.css"/>
     <title>{% if "Concept:" in title %}{{ title|replace("Concept:", "") }}{% else %}{{ title }}{% endif %}</title>
-	</head>
+  </head>
+
 	<body class="pa-2">
     <nav class="mb-2">
       <div>
-        <a href="/" class="ft-sans ft-1 blue">H&D</a>
+        <a href="/" class="ft-sans ft-1 {% if title == 'Hackers and Designers' %}red{% else %} blue{% endif %}">H&D</a>
         {% for item in nav_main['query']['results'].items() %}
-			  <a href="/p/{{ item[0]|replace(" ", "_") }}" class="ft-sans ft-1 blue">{{ item[0] }}</a>
+        <a href="/p/{{ item[0]|replace(" ", "_") }}" class="ft-sans ft-1 {% if item[0] == title %}red{% else %} blue{% endif %}">{{ item[0] }}</a>
         {% endfor %}
       </div>
       <div>
 			  {% for item in nav_sections['query']['results'].items() %}
-			  <a href="/s/{{ item[1]['fulltext']|replace("Concept:", "")|replace(" ", "_") }}" class="ft-serif ft-2">{{ item[1]['fulltext']|replace("Concept:", "")}}</a>
+			  <a href="/s/{{ item[1]['fulltext']|replace("Concept:", "")|replace(" ", "_") }}" class="ft-serif ft-2 {% if item[0] == title %}ft-italic{% endif %}">{{ item[1]['fulltext']|replace("Concept:", "")}}</a>
 			  {% endfor %}
       </div>
     </nav>
