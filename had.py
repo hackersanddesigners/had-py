@@ -20,8 +20,9 @@ class had(object):
 
     self.url_map = Map([
       Rule('/', endpoint='home'),
-      Rule('/<page_title>', endpoint='section'),
-      Rule('/<section_title>/<page_title>', endpoint='article')
+      Rule('/p/<page_title>', endpoint='article'),
+      Rule('/s/<section_title>', endpoint='section'),
+      Rule('/s/<section_title>/p/<page_title>', endpoint='article')
     ])
 
   # ===========
