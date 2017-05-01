@@ -80,10 +80,6 @@ class had(object):
       out_link = urljoin(base_url, rel_link)
       img['src'] = out_link
 
-    # get rid of <a>s wrapping <img>s
-      a_img = img.find_parent("a")
-      a_img.unwrap()
-
     wk_intro = soup_wk_intro
 
     # events
@@ -133,22 +129,6 @@ class had(object):
     response_pastevents = requests.get(base_url + folder_url + api_call , params=options_pastevents)
     wkdata_pastevents = response_pastevents.json()
 
-    # for item in wkdata_pastevents['query']['results'].items(): 
-      # pastevents_title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
-
-      # pastevents_introtext_options = {'action': 'parse', 'page': pastevents_title, 'format': 'json', 'formatversion': '2'}
-      # response_introtext_pastevents = requests.get(base_url + folder_url + api_call , params=pastevents_introtext_options)
-      # wkdata_introtext_pastevents = response_introtext_pastevents.json()
-      # print(response_introtext_pastevents.url)
-
-      # wkdata_text_pastevents = wkdata_introtext_pastevents['parse']['text']
-      # soup_wk_introtext = BeautifulSoup(wkdata_text_pastevents, 'html.parser')
-      # p_intro = soup_wk_introtext.p
-
-      # # add custom `intro_text` dict to `wkdata_upevents`
-      # item[1]['printouts']['intro_text'] = p_intro
-
-    # ==========================
     # build template
     return self.render_template('index.html',
                                 nav_main=wk_nav_main,
@@ -159,13 +139,13 @@ class had(object):
                                 past_event_list=wkdata_pastevents
                                 )
 
-  def on_section(self, request, page_title, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
+  def on_section(self, request, section_title=None, page_title=None, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
     base_url = "http://wikidev.hackersanddesigners.nl/"
     folder_url = "mediawiki/"
     api_call =  "api.php?"
 
     # fetch page-content
-    page_head_options = {'action': 'parse', 'page': 'Concept:' + page_title, 'format': 'json', 'formatversion': '2'}
+    page_head_options = {'action': 'parse', 'page': 'Concept:' + section_title, 'format': 'json', 'formatversion': '2'}
     response_head = requests.get(base_url + folder_url + api_call, params=page_head_options)
     wkdata_head = response_head.json()
     wk_title = wkdata_head['parse']['title']
@@ -179,7 +159,7 @@ class had(object):
     # wkdata_meta = response_meta.json()
 
     # fetch page-content
-    page_content_options = {'action': 'ask', 'query': '[[Concept:' + page_title + ']]', 'format': 'json', 'formatversion': '2'}
+    page_content_options = {'action': 'ask', 'query': '[[Concept:' + section_title + ']]', 'format': 'json', 'formatversion': '2'}
     response_content = requests.get(base_url + folder_url + api_call, params=page_content_options)
     wkdata_content = response_content.json()
 
@@ -198,7 +178,7 @@ class had(object):
       # add custom `intro_text` dict to `wkdata_upevents`
       item[1]['intro_text'] = p_intro
 
-    #build template
+    # build template
     return self.render_template('section.html',
                                 nav_main=wk_nav_main,
                                 nav_sections=wk_nav_sections,
@@ -208,7 +188,7 @@ class had(object):
 
   # ===========
   # article
-  def on_article(self, request, page_title, section_title, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
+  def on_article(self, request, page_title=None, section_title=None, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
     base_url = "http://wikidev.hackersanddesigners.nl/"
     folder_url = "mediawiki/"
     api_call =  "api.php?"
@@ -241,19 +221,15 @@ class had(object):
 
       wk_date = wkdata_meta['query']['data'][1]['dataitem']
       wk_date = extract_metadata(wk_date)
-      print(wk_date)
 
       wk_peopleorgs = wkdata_meta['query']['data'][2]['dataitem']
       wk_peopleorgs = extract_metadata(wk_peopleorgs)
-      print(wk_peopleorgs)
 
       wk_time = wkdata_meta['query']['data'][4]['dataitem']
       wk_time = extract_metadata(wk_time)
-      print(wk_time)
 
       wk_place = wkdata_meta['query']['data'][6]['dataitem']
       wk_place = extract_metadata(wk_place)
-      print(wk_place)
     
     else:
       wk_date = None
@@ -293,7 +269,7 @@ class had(object):
     
     wk_bodytext = soup_bodytext
 
-    #build template
+    # build template
     return self.render_template('article.html',
                                 nav_main=wk_nav_main,
                                 nav_sections=wk_nav_sections,
