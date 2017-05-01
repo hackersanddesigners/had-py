@@ -5,6 +5,7 @@ from werkzeug.exceptions import HTTPException, NotFound
 from werkzeug.wsgi import SharedDataMiddleware
 from werkzeug.utils import redirect
 import requests
+from requests_futures.sessions import FuturesSession
 import datetime
 import re
 from bs4 import BeautifulSoup
@@ -170,23 +171,38 @@ class had(object):
 
     # fetch page-content
     page_content_options = {'action': 'ask', 'query': '[[Concept:' + section_title + ']]', 'format': 'json', 'formatversion': '2'}
-    response_content = requests.get(base_url + folder_url + api_call, params=page_content_options)
-    wkdata_content = response_content.json()
+    # response_content = requests.get(base_url + folder_url + api_call, params=page_content_options)
+    # wkdata_content = response_content.json()
 
-    for item in wkdata_content['query']['results'].items():
-      item_title = item[0]
+    session = FuturesSession()
+
+    def bg_cb(sess, resp):
+      resp.data = resp.json()
+
+    response_content = session.get(base_url + folder_url + api_call + 'action=ask&query=[[Concept:' + section_title + ']]&format=json&formatversion=2', background_callback=bg_cb)
+    wkdata_content = response_content.result()
+    wkdata_content = wkdata_content.data
+
+    # for item in wkdata_content['query']['results'].items():
+      # item_title = item[0]
       
-      item_introtext_options = {'action': 'parse', 'page': item_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-      response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
-      wkdata_introtext_item = response_introtext_item.json()
+      # item_introtext_options = {'action': 'parse', 'page': item_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+      
+      # response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
+      # wkdata_introtext_item = response_introtext_item.json()
+      
+      # session_p = FuturesSession()
+      # response_introtext_item = session_p.get(base_url + folder_url + api_call , params=item_introtext_options)
+      # wkdata_introtext_item = response_introtext_item.result()
+      # print(wkdata_introtext_item)
 
-      wkdata_text_item = wkdata_introtext_item['parse']['text']
+      # wkdata_text_item = wkdata_introtext_item['parse']['text']
 
-      soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
-      p_intro = soup_wk_introtext.p
+      # soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
+      # p_intro = soup_wk_introtext.p
 
       # add custom `intro_text` dict to `wkdata_upevents`
-      item[1]['intro_text'] = p_intro
+      # item[1]['intro_text'] = p_intro
 
     # build template
     return self.render_template('section.html',
