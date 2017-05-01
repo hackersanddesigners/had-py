@@ -19,7 +19,7 @@
     <ul>
     {% for item in wkdata['query']['results'].items() %}
     <li>
-      <a href="/{{ title|replace("Concept:", "")|replace(" ", "_") }}/{{ item[1]['fulltext']|replace(" ", "_") }}">{{ item[1]['fulltext'] }}</a>
+      <a href="/s/{{ title|replace("Concept:", "")|replace(" ", "_") }}/p/{{ item[1]['fulltext']|replace(" ", "_") }}">{{ item[1]['fulltext'] }}</a>
       {% if item[1]['intro_text'] %}{{ item[1]['intro_text']|safe }}{% endif %}
     </li>
     {% endfor %}

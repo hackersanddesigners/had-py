@@ -12,13 +12,13 @@
       <div>
         <a href="/" class="ft-sans ft-1 blue">H&D</a>
         {% for item in nav_main['query']['results'].items() %}
-			  <a href="/{{ item[0]|replace(" ", "_") }}" class="ft-sans ft-1 blue">{{ item[0] }}</a>
+			  <a href="/p/{{ item[0]|replace(" ", "_") }}" class="ft-sans ft-1 blue">{{ item[0] }}</a>
         {% endfor %}
       </div>
 
       <div>
 			  {% for item in nav_sections['query']['results'].items() %}
-			  <a href="/{{ item[1]['fulltext']|replace("Concept:", "")|replace(" ", "_") }}" class="ft-serif ft-2">{{ item[1]['fulltext']|replace("Concept:", "")}}</a>
+			  <a href="/s/{{ item[1]['fulltext']|replace("Concept:", "")|replace(" ", "_") }}" class="ft-serif ft-2">{{ item[1]['fulltext']|replace("Concept:", "")}}</a>
 			  {% endfor %}
       </div>
 		</nav>
@@ -30,7 +30,7 @@
 		{% for up_events in up_event_list['query']['results'].items() %}
 			<li class="mb-2">
 				<h2 class="ft-sans ft-1 black mb-0">{{ up_events[1]['printouts']['OnDate'][0]['fulltext']|replace("/", ".")|replace("-", "——") }}</h2>
-        <a href="/events/{{ up_events[1]['printouts']['NameOfEvent'][0]['fulltext']|replace(" ", "_") }}" class="ft-serif ft-2">
+        <a href="/s/Events/{{ up_events[1]['printouts']['NameOfEvent'][0]['fulltext']|replace(" ", "_") }}" class="ft-serif ft-2">
 					{{ up_events[1]['printouts']['NameOfEvent'][0]['fulltext'] }}
         </a>
         <p>{{ up_events[1]['printouts']['intro_text']|safe }}</p>
@@ -43,7 +43,7 @@
 		{% for past_events in past_event_list['query']['results'].items() %}
 			<li class="mb-2">
 				<h2 class="ft-sans ft-1 black mb-0">{{ past_events[1]['printouts']['OnDate'][0]['fulltext']|replace("/", ".")|replace("-", "——") }}</h2>
-				<a href="/events/{{ past_events[1]['printouts']['NameOfEvent'][0]['fulltext']|replace(" ", "_") }}" class="ft-serif ft-2">
+				<a href="/s/Events/{{ past_events[1]['printouts']['NameOfEvent'][0]['fulltext']|replace(" ", "_") }}" class="ft-serif ft-2">
 					{{ past_events[1]['printouts']['NameOfEvent'][0]['fulltext'] }}
         </a>
         <p>{{ past_events[1]['printouts']['intro_text']|safe }}</p>
