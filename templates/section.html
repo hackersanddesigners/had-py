@@ -1,28 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/assets/dist/css/style.min.css"/>
-    <title>{{ title|replace("Concept:", "") }}</title>
-	</head>
+{% include 'header.html' %}
 
-	<body class="pa-2">
-		<nav class="mb-2">
-			{% for item in nav_sections['query']['results'].items() %}
-			<a href="/{{ item[1]['fulltext']|replace("Concept:", "")|replace(" ", "_") }}">{{ item[1]['fulltext']|replace("Concept:", "") }}</a>
-      {% endfor %}
-    </nav>
-    <h2 class="ft-serif ft-2">
-      {{ title|replace("Concept:", "") }}
-    </h2>
-    <ul>
+  <ul>
     {% for item in wkdata['query']['results'].items() %}
     <li>
       <a href="/s/{{ title|replace("Concept:", "")|replace(" ", "_") }}/p/{{ item[1]['fulltext']|replace(" ", "_") }}">{{ item[1]['fulltext'] }}</a>
       {% if item[1]['intro_text'] %}{{ item[1]['intro_text']|safe }}{% endif %}
     </li>
     {% endfor %}
-    </ul>
-	</body>
-</html>
+  </ul>
+
+{% include 'footer.html' %}
