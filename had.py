@@ -81,6 +81,15 @@ class had(object):
       out_link = urljoin(base_url, rel_link)
       img['src'] = out_link
 
+    # delete wiki infobox
+    infobox = soup_wk_intro.find('table')
+    if infobox:
+      infobox.decompose()
+
+    # get rid of <a>s wrapping <img>s
+      a_img = img.find_parent("a")
+      a_img.unwrap()
+
     wk_intro = soup_wk_intro
 
     # events
@@ -131,7 +140,7 @@ class had(object):
     wkdata_pastevents = response_pastevents.json()
 
     # build template
-    return self.render_template('index.html',
+    return self.render_template('intro.html',
                                 nav_main=wk_nav_main,
                                 nav_sections=wk_nav_sections,
                                 title=wk_title,
