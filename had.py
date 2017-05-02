@@ -171,39 +171,52 @@ class had(object):
 
     # fetch page-content
     page_content_options = {'action': 'ask', 'query': '[[Concept:' + section_title + ']]', 'format': 'json', 'formatversion': '2'}
-    # response_content = requests.get(base_url + folder_url + api_call, params=page_content_options)
-    # wkdata_content = response_content.json()
+    response_content = requests.get(base_url + folder_url + api_call, params=page_content_options)
+    wkdata_content = response_content.json()
 
-    session = FuturesSession()
+    # session = FuturesSession(max_workers=10)
 
-    def bg_cb(sess, resp):
-      resp.data = resp.json()
+    # def bg_cb(sess, resp):
+    #   resp.data = resp.json()
 
-    response_content = session.get(base_url + folder_url + api_call, params=page_content_options, background_callback=bg_cb)
-    wkdata_content = response_content.result()
-    wkdata_content = wkdata_content.data
+    # response_content = session.get(base_url + folder_url + api_call, params=page_content_options, background_callback=bg_cb)
+    # wkdata_content = response_content.result()
+    # wkdata_content = wkdata_content.data
 
     for item in wkdata_content['query']['results'].items():
       item_title = item[0]
       
       item_introtext_options = {'action': 'parse', 'page': item_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
       
-      # response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
-      # wkdata_introtext_item = response_introtext_item.json()
+      response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
+      wkdata_introtext_item = response_introtext_item.json()
       
-      session_p = FuturesSession()
+      # session_p = FuturesSession(max_workers=10)
 
-      response_introtext_item = session_p.get(base_url + folder_url + api_call , params=item_introtext_options, background_callback=bg_cb)
-      wkdata_introtext_item = response_introtext_item.result()
-      wkdata_introtext_item = wkdata_introtext_item.data
+      # response_introtext_item = session_p.get(base_url + folder_url + api_call , params=item_introtext_options, background_callback=bg_cb)
+      # wkdata_introtext_item = response_introtext_item.result()
+      # wkdata_introtext_item = wkdata_introtext_item.data
 
       wkdata_text_item = wkdata_introtext_item['parse']['text']
 
       soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
-      p_intro = soup_wk_introtext.p
+      if soup_wk_introtext.img:
+        img_intro = soup_wk_introtext.img
 
-      # add custom `intro_text` dict to `wkdata_upevents`
-      item[1]['intro_text'] = p_intro
+        src_rel_link = img_intro.get('src')
+        srcset_rel_link = img_intro.get('srcset')
+        if src_rel_link:
+          out_link = urljoin(base_url, src_rel_link)
+          img_intro['src'] = out_link
+        if srcset_rel_link:
+          srcset_list = re.split(r'[,]\s*', srcset_rel_link)
+          srcset_lu = srcset_list
+          srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
+          srcset_s = ', '.join(srcset_lu)
+          img_intro['srcset'] = srcset_s
+
+        # add custom `img_intro` dict to `wkdata_content`
+        item[1]['cover_img'] = img_intro
 
     # build template
     return self.render_template('section.html',
