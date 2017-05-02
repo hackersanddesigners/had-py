@@ -96,18 +96,7 @@ class had(object):
     
     # ======
     # events
-    category_events = "[[Category:Event]]"
-    filters_events = "|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
-    today = datetime.date.today()
-    today = today.strftime('%Y/%m/%d')
-
-    # attempt to get all event pages recursively (failing atm)
-    options_allevents = {'action': 'query', 'generator': 'categorymembers', 'gcmtitle': 'Category:Event', 'format': 'json', 'formatversion': '2'}
-    response_allevents = requests.get(base_url + folder_url + api_call, params=options_allevents)
-    wkdata_allevents = response_allevents.json()
-    # for result in wkdata_allevents['query']['pages']:
-    #   print(result)
-
+    
     def query(request):
       request['action'] = 'query'
       request['format'] = 'json'
@@ -135,10 +124,23 @@ class had(object):
       for list in result['pages']:
         event_list.append(list['title'])
 
-    print(len(event_list))
+    category_events = "[[Category:Event]]"
+    filters_events = "|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
+    today = datetime.date.today()
+    today = today.strftime('%Y/%m/%d')
+
+    # fetch event's metadata
+    for event_title in event_list:
+      category_events = "[[Category:Event]]"
+      # page_meta_options = {'action': 'browsebysubject', 'subject': event_title, 'format': 'json', 'formatversion': '2'}
+      page_meta_options = {'action': 'parse', 'page': event_title, 'format': 'json', 'formatversion': '2'}
+      response_meta = requests.get(base_url + folder_url + api_call, params=page_meta_options)
+      wkdata_meta = response_meta.json()
+      print(wkdata_meta)
 
     # ===============
     # upcoming events
+
     date_upevents = "[[OnDate::>" + today + "]]"
     upevents_options = {'action': 'ask', 'query': category_events + date_upevents + filters_events, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
     response_upevents = requests.get(base_url + folder_url + api_call , params=upevents_options)
@@ -186,55 +188,76 @@ class had(object):
     response_head = requests.get(base_url + folder_url + api_call, params=page_head_options)
     wkdata_head = response_head.json()
     wk_title = wkdata_head['parse']['title']
+
+    def query(request):
+      request['action'] = 'askargs'
+      request['format'] = 'json'
+      request['formatversion'] = '2'
+      lastContinue = {'query-continue-offset': ''}
+      while True:
+        # clone original request
+        req = request.copy()
+        # modify it with the values returned in the 'continue' section of the last result
+        req.update(lastContinue)
+        # call API
+        result = requests.get(base_url + folder_url + api_call, params=req).json()
+        if 'error' in result:
+          raise Error(result['error'])
+        if 'warnings' in result:
+          print(result['warnings'])
+        if 'query' in result:
+          yield result['query']
+        if 'continue' not in result:
+          break
+        lastContinue = result['continue']
     
-    # fetch page-metadata
-    # category_events = "[[Category:Event]]"
-    # page_meta_filter = "|?PeopleOrganisations"
-    # page_meta_options = {'action': 'browsebysubject', 'subject': page_title, 'format': 'json', 'formatversion': '2'}
-    # response_meta = requests.get(base_url + folder_url + api_call, params=page_meta_options)
-    # print(response_meta.url)
-    # wkdata_meta = response_meta.json()
+    # make section_items list by fetching item's title and img (if any)
+    for result in query({'conditions': 'Concept:' + section_title, 'printouts': 'Modification date'}):
+     
+      wk_section_items = []
+      for item in result['results'].items():
+        section_item_title = item[1]['fulltext']
+        wk_section_items.append(section_item_title)
 
-    # fetch page-content
-    page_content_options = {'action': 'ask', 'query': '[[Concept:' + section_title + ']]', 'format': 'json', 'formatversion': '2'}
-    response_content = requests.get(base_url + folder_url + api_call, params=page_content_options)
-    wkdata_content = response_content.json()
+        # fetch section item's content
+        item_introtext_options = {'action': 'parse', 'page': section_item_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+        response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
+        wkdata_introtext_item = response_introtext_item.json()
 
-    for item in wkdata_content['query']['results'].items():
-      item_title = item[0]
-      
-      item_introtext_options = {'action': 'parse', 'page': item_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-      
-      response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
-      wkdata_introtext_item = response_introtext_item.json()
-      
-      wkdata_text_item = wkdata_introtext_item['parse']['text']
+        wkdata_text_item = wkdata_introtext_item['parse']['text']
+        
+        # get section item's img
+        soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
+        if soup_wk_introtext.img:
+          cover_img = soup_wk_introtext.img
 
-      soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
-      if soup_wk_introtext.img:
-        cover_img = soup_wk_introtext.img
+          src_rel_link = cover_img.get('src')
+          srcset_rel_link = cover_img.get('srcset')
+          if src_rel_link:
+            out_link = urljoin(base_url, src_rel_link)
+            cover_img['src'] = out_link
+          if srcset_rel_link:
+            srcset_list = re.split(r'[,]\s*', srcset_rel_link)
+            srcset_lu = srcset_list
+            srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
+            srcset_s = ', '.join(srcset_lu)
+            cover_img['srcset'] = srcset_s
+        else:
+          cover_img = ''
 
-        src_rel_link = cover_img.get('src')
-        srcset_rel_link = cover_img.get('srcset')
-        if src_rel_link:
-          out_link = urljoin(base_url, src_rel_link)
-          cover_img['src'] = out_link
-        if srcset_rel_link:
-          srcset_list = re.split(r'[,]\s*', srcset_rel_link)
-          srcset_lu = srcset_list
-          srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
-          srcset_s = ', '.join(srcset_lu)
-          cover_img['srcset'] = srcset_s
+        # add `cover_img` to `wk_section_items`
+        wk_section_items.append(cover_img)
 
-        # add custom `img_intro` dict to `wkdata_content`
-        item[1]['cover_img'] = cover_img
+    # turn list into tuple w/ zip-zip
+    wk_section_items = list(zip(*[iter(wk_section_items)]*2))
+
 
     # build template
     return self.render_template('section.html',
                                 nav_main=wk_nav_main,
                                 nav_sections=wk_nav_sections,
                                 title=wk_title,
-                                wkdata=wkdata_content
+                                section_items=wk_section_items
                                 )
 
   # ===========

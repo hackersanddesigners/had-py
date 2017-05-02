@@ -1,12 +1,12 @@
 {% include 'header.html' %}
-
+  
   <ul>
-    {% for item in wkdata['query']['results'].items() %}
+  {% for item in section_items %}
     <li class="mb-2">
-      <a href="/s/{{ title|replace("Concept:", "")|replace(" ", "_") }}/p/{{ item[1]['fulltext']|replace(" ", "_") }}" class="mb-2">{{ item[1]['fulltext'] }}</a>
-      {% if item[1]['cover_img'] %}{{ item[1]['cover_img']|safe }}{% endif %}
+      <a href="{{ title|replace("Concept:", "")|replace(" ", "_") }}/p/{{ item[0]|replace(" ", "_") }}">{{ item[0] }}</a>
+      {{ item[1]|safe }}
     </li>
-    {% endfor %}
+  {% endfor %}
   </ul>
 
 {% include 'footer.html' %}
