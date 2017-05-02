@@ -2,8 +2,8 @@
 
   <ul>
     {% for item in wkdata['query']['results'].items() %}
-    <li>
-      <a href="/s/{{ title|replace("Concept:", "")|replace(" ", "_") }}/p/{{ item[1]['fulltext']|replace(" ", "_") }}">{{ item[1]['fulltext'] }}</a>
+    <li class="mb-2">
+      <a href="/s/{{ title|replace("Concept:", "")|replace(" ", "_") }}/p/{{ item[1]['fulltext']|replace(" ", "_") }}" class="mb-2">{{ item[1]['fulltext'] }}</a>
       {% if item[1]['cover_img'] %}{{ item[1]['cover_img']|safe }}{% endif %}
     </li>
     {% endfor %}

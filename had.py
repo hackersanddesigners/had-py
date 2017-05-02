@@ -207,32 +207,26 @@ class had(object):
       response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
       wkdata_introtext_item = response_introtext_item.json()
       
-      # session_p = FuturesSession(max_workers=10)
-
-      # response_introtext_item = session_p.get(base_url + folder_url + api_call , params=item_introtext_options, background_callback=bg_cb)
-      # wkdata_introtext_item = response_introtext_item.result()
-      # wkdata_introtext_item = wkdata_introtext_item.data
-
       wkdata_text_item = wkdata_introtext_item['parse']['text']
 
       soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
       if soup_wk_introtext.img:
-        img_intro = soup_wk_introtext.img
+        cover_img = soup_wk_introtext.img
 
-        src_rel_link = img_intro.get('src')
-        srcset_rel_link = img_intro.get('srcset')
+        src_rel_link = cover_img.get('src')
+        srcset_rel_link = cover_img.get('srcset')
         if src_rel_link:
           out_link = urljoin(base_url, src_rel_link)
-          img_intro['src'] = out_link
+          cover_img['src'] = out_link
         if srcset_rel_link:
           srcset_list = re.split(r'[,]\s*', srcset_rel_link)
           srcset_lu = srcset_list
           srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
           srcset_s = ', '.join(srcset_lu)
-          img_intro['srcset'] = srcset_s
+          cover_img['srcset'] = srcset_s
 
         # add custom `img_intro` dict to `wkdata_content`
-        item[1]['cover_img'] = img_intro
+        item[1]['cover_img'] = cover_img
 
     # build template
     return self.render_template('section.html',
