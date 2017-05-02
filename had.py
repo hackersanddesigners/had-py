@@ -92,7 +92,8 @@ class had(object):
       a_img.unwrap()
 
     wk_intro = soup_wk_intro
-
+    
+    # ======
     # events
     category_events = "[[Category:Event]]"
     filters_events = "|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
@@ -100,17 +101,40 @@ class had(object):
     today = today.strftime('%Y/%m/%d')
 
     # attempt to get all event pages recursively (failing atm)
-    options_allevents = {'action': 'query', 'generator': 'categorymembers', 'gcmtitle': 'Category:Event', 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+    options_allevents = {'action': 'query', 'generator': 'categorymembers', 'gcmtitle': 'Category:Event', 'format': 'json', 'formatversion': '2'}
     response_allevents = requests.get(base_url + folder_url + api_call, params=options_allevents)
     wkdata_allevents = response_allevents.json()
+    # for result in wkdata_allevents['query']['pages']:
+    #   print(result)
 
-    # get `pageid` and put it in a list
-    ev_pages = wkdata_allevents['query']['pages']
-    ev_pageid_list = []
-    for dict in ev_pages:
-      ev_list = list(dict.items())
-      ev_list = ev_list[0][1]
-      ev_pageid_list.append(ev_list)
+    def query(request):
+      request['action'] = 'query'
+      request['format'] = 'json'
+      request['formatversion'] = '2'
+      lastContinue = {'continue': ''}
+      while True:
+        # clone original request
+        req = request.copy()
+        # modify it with the values returned in the 'continue' section of the last result
+        req.update(lastContinue)
+        # call API
+        result = requests.get(base_url + folder_url + api_call, params=req).json()
+        if 'error' in result:
+          raise Error(result['error'])
+        if 'warnings' in result:
+          print(result['warnings'])
+        if 'query' in result:
+          yield result['query']
+        if 'continue' not in result:
+          break
+        lastContinue = result['continue']
+    
+    event_list = []
+    for result in query({'generator': 'categorymembers', 'gcmtitle': 'Category:Event'}):
+      for list in result['pages']:
+        event_list.append(list['title'])
+
+    print(len(event_list))
 
     # ===============
     # upcoming events
@@ -134,6 +158,7 @@ class had(object):
       # add custom `intro_text` dict to `wkdata_upevents`
       item[1]['printouts']['intro_text'] = p_intro
 
+    # ===========
     # past events
     date_pastevents = "[[OnDate::<" + today + "]]"
     options_pastevents = {'action': 'ask', 'query': category_events + date_pastevents + filters_events, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
@@ -173,15 +198,6 @@ class had(object):
     page_content_options = {'action': 'ask', 'query': '[[Concept:' + section_title + ']]', 'format': 'json', 'formatversion': '2'}
     response_content = requests.get(base_url + folder_url + api_call, params=page_content_options)
     wkdata_content = response_content.json()
-
-    # session = FuturesSession(max_workers=10)
-
-    # def bg_cb(sess, resp):
-    #   resp.data = resp.json()
-
-    # response_content = session.get(base_url + folder_url + api_call, params=page_content_options, background_callback=bg_cb)
-    # wkdata_content = response_content.result()
-    # wkdata_content = wkdata_content.data
 
     for item in wkdata_content['query']['results'].items():
       item_title = item[0]
