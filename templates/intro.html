@@ -1,10 +1,7 @@
 {% include 'header.html' %}
 
-{% block intro %}
   {{ intro|safe }}
-{% endblock %}
 
-{% block upcoming_events %}
 	<h2 class="ft-sans ft-1 blue">Upcoming</h2>
 	<ul>
 	  {% for up_events in up_event_list['query']['results'].items() %}
@@ -17,9 +14,7 @@
 		</li>
     {% endfor %}
 	</ul>
-{% endblock %}
 
-{% block past_events %}
 	<ul>
 	{% for past_events in past_event_list['query']['results'].items() %}
 		<li class="mb-2">
@@ -31,6 +26,5 @@
 		</li>
 	{% endfor %}
 </ul>
-{% endblock %}
 
 {% include 'footer.html' %}
