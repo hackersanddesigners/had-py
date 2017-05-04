@@ -156,34 +156,41 @@ class had(object):
 
     # ===============
     # upcoming events
-    # wkdata_upevents = []
-    # for result in query({'conditions': 'Category:Event|OnDate::>' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc'}):
-    #   wkdata_upevents.append(result)
-    #   for item in result['results'].items():
-    #     upevents_title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
 
-    #     upevents_introtext_options = {'action': 'parse', 'page': upevents_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-    #     response_introtext_upevents = requests.get(base_url + folder_url + api_call , params=upevents_introtext_options)
-    #     wkdata_introtext_upevents = response_introtext_upevents.json()
+    wkdata_upevents = []
+    for result in query({'conditions': 'Category:Event|OnDate::>' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=asc'}):
+      for item in result['results'].items():
+        title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
+        wkdata_upevents.append(title)
+        
+        date = item[1]['printouts']['OnDate'][0]['fulltext']
+        wkdata_upevents.append(date)
 
-    #     wkdata_text_upevents = wkdata_introtext_upevents['parse']['text']
+        upevents_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+        response_introtext_upevents = requests.get(base_url + folder_url + api_call , params=upevents_introtext_options)
+        wkdata_introtext_upevents = response_introtext_upevents.json()
 
-    #     soup_wk_introtext = BeautifulSoup(wkdata_text_upevents, 'html.parser')
-    #     p_intro = soup_wk_introtext.p
+        text = wkdata_introtext_upevents['parse']['text']
 
-    #     # add custom `intro_text` dict to `wkdata_upevents`
-    #     item[1]['printouts']['intro_text'] = p_intro
+        soup_wk_introtext = BeautifulSoup(text, 'html.parser')
+        p_intro = str(soup_wk_introtext.p)
+        wkdata_upevents.append(p_intro)
+    
+    wkdata_upevents = list(zip(*[iter(wkdata_upevents)]*3))
+    print(wkdata_upevents)
 
     # ===========
     # past events
     wkdata_pastevents = []
     for result in query({'conditions': 'Category:Event|OnDate::<' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc'}):
-      for item in result['result']:
-        wkdata_pastevents.append(item)
-
-    print(wkdata_pastevents)
+      for item in result['results'].items():
+        title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
+        wkdata_pastevents.append(title)
+        date = item[1]['printouts']['OnDate'][0]['fulltext']
+        wkdata_pastevents.append(date)
+    
+    wkdata_pastevents = list(zip(*[iter(wkdata_pastevents)]*2))
    
-
     # build template
     return self.render_template('intro.html',
                                 nav_main=wk_nav_main,
