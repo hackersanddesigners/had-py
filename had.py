@@ -209,10 +209,10 @@ class had(object):
     page_head_options = {'action': 'parse', 'page': 'Concept:' + section_title, 'format': 'json', 'formatversion': '2'}
     response_head = requests.get(base_url + folder_url + api_call, params=page_head_options)
     wkdata_head = response_head.json()
-    print(response_head.url)
-    wk_title = wkdata_head['parse']['title']
-    wk_intro = wkdata_head['parse']['text']
     
+    wk_title = wkdata_head['parse']['title']
+   
+    wk_intro = wkdata_head['parse']['text']
     soup_wk_intro = BeautifulSoup(wk_intro, 'html.parser')
     intro = soup_wk_intro.find('p')
     wk_intro = intro
@@ -240,7 +240,7 @@ class had(object):
         lastContinue = result['continue']
     
     # make section_items list by fetching item's title and img (if any)
-    for result in query({'conditions': 'Concept:' + section_title, 'printouts': 'Modification date'}):
+    for result in query({'conditions': 'Concept:' + section_title, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc'}):
      
       wk_section_items = []
       for item in result['results'].items():
