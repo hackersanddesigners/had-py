@@ -17,8 +17,34 @@ class had(object):
 
   def __init__(self):
     template_path = os.path.join(os.path.dirname(__file__), 'templates')
-    self.jinja_env = Environment(loader=FileSystemLoader(template_path),
-																 autoescape=True)
+    self.jinja_env = Environment(loader=FileSystemLoader(template_path), autoescape=True)
+    
+    def dateformat(value, format='%d.%m.%Y'):
+      item = re.search(r'(.*)-(.*)', value)
+      if item:
+        date_start = item.group(1)
+        date_start = datetime.datetime.strptime(date_start, '%Y/%m/%d')
+        date_start = date_start.strftime(format)
+
+        date_end = item.group(2)
+        date_end = datetime.datetime.strptime(date_end, '%Y/%m/%d')
+        date_end = date_end.strftime(format)
+
+        multi_date = date_start, date_end
+        multi_date = '——'.join(multi_date)
+        return multi_date
+      else:
+        single_date = datetime.datetime.strptime(value, '%Y/%m/%d')
+        single_date = single_date.strftime(format)
+        return single_date
+
+    self.jinja_env.filters['dateformat'] = dateformat
+
+    def datetimeformat(value, format='%d/%m/%Y'):
+        value = datetime.datetime.strptime(value, '%Y/%m/%d')
+        return value.strftime(format)
+
+    self.jinja_env.filters['datetimeformat'] = datetimeformat
 
     self.url_map = Map([
       Rule('/', endpoint='home'),
@@ -294,16 +320,19 @@ class had(object):
       wkdata_meta = response_meta.json()
 
       def extract_metadata(query):
-        list = []
+        item_list = []
         for item in query:
           str = item['item']
           # strip out weird hash at the end (see why https://www.semantic-mediawiki.org/wiki/Ask_API#BrowseBySubject)
           item = re.sub(r'#\d#', '', str).replace('_', ' ')
-          list.append(item)
-        return list
+          item_list.append(item)
+        return item_list
 
       wk_date = wkdata_meta['query']['data'][1]['dataitem']
       wk_date = extract_metadata(wk_date)
+      wk_date_str = ''.join(wk_date)
+      wk_date = datetime.datetime.strptime(wk_date_str, '%Y/%m/%d').strftime('%d/%m/%Y')
+      print(wk_date)
 
       wk_peopleorgs = wkdata_meta['query']['data'][2]['dataitem']
       wk_peopleorgs = extract_metadata(wk_peopleorgs)
@@ -326,7 +355,7 @@ class had(object):
     # for a in soup_bodytext.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z1-9+.-]*:|//))')):
     for a in soup_bodytext.find_all('a', href=re.compile(r'/mediawiki/*')):
       rel_link = a.get('href')
-      print(rel_link)
+      # print(rel_link)
       rel_link = rel_link.rsplit('/', 1)
       a['href'] = rel_link[1]
 
