@@ -323,8 +323,10 @@ class had(object):
     # fix rel-links to be abs-ones
     soup_bodytext = BeautifulSoup(wk_bodytext, 'html.parser')
 
-    for a in soup_bodytext.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+    # for a in soup_bodytext.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z1-9+.-]*:|//))')):
+    for a in soup_bodytext.find_all('a', href=re.compile(r'/mediawiki/*')):
       rel_link = a.get('href')
+      print(rel_link)
       rel_link = rel_link.rsplit('/', 1)
       a['href'] = rel_link[1]
 
