@@ -8,6 +8,8 @@ import requests
 from requests_futures.sessions import FuturesSession
 import pprint
 import datetime
+from dateutil.parser import parse
+from collections import OrderedDict
 import re
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, quote
@@ -97,40 +99,11 @@ class had(object):
     # ======
     # events
     
-    def query(request):
-      request['action'] = 'query'
-      request['format'] = 'json'
-      request['formatversion'] = '2'
-      lastContinue = {'continue': ''}
-      while True:
-        # clone original request
-        req = request.copy()
-        # modify it with the values returned in the 'continue' section of the last result
-        req.update(lastContinue)
-        # call API
-        result = requests.get(base_url + folder_url + api_call, params=req).json()
-        if 'error' in result:
-          raise Error(result['error'])
-        if 'warnings' in result:
-          print(result['warnings'])
-        if 'query' in result:
-          yield result['query']
-        if 'continue' not in result:
-          break
-        lastContinue = result['continue']
-    
-    event_title_list = []
-    for result in query({'generator': 'categorymembers', 'gcmtitle': 'Category:Event'}):
-      for item in result['pages']:
-        event_title_list.append(item['title'])
-    
-    # print(event_title_list)
-
     # def query(request):
-    #   request['action'] = 'askargs'
+    #   request['action'] = 'query'
     #   request['format'] = 'json'
     #   request['formatversion'] = '2'
-    #   lastContinue = {'query-continue-offset': ''}
+    #   lastContinue = {'continue': ''}
     #   while True:
     #     # clone original request
     #     req = request.copy()
@@ -148,18 +121,48 @@ class had(object):
     #       break
     #     lastContinue = result['continue']
     
-    # category_events = "[[Category:Event]]"
-    # filters_events = "|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
-    # today = datetime.date.today()
-    # today = today.strftime('%Y/%m/%d')
-
     # event_title_list = []
-    # for result in query({'conditions': 'Category:Event', 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc'}):
-    #   print(result)
-    #   for item in result['results']:
-    #     event_title_list.append(item)
+    # for result in query({'generator': 'categorymembers', 'gcmtitle': 'Category:Event'}):
+    #   for item in result['pages']:
+    #     event_title_list.append(item['title'])
     
     # print(event_title_list)
+
+    def query(request):
+      request['action'] = 'askargs'
+      request['format'] = 'json'
+      request['formatversion'] = '2'
+      lastContinue = {}
+      while True:
+        # clone original request
+        req = request.copy()
+        # modify it with the values returned in the 'continue' section of the last result
+        req.update(lastContinue)
+        # call API
+        result = requests.get(base_url + folder_url + api_call, params=req).json()
+        if 'error' in result:
+          raise Error(result['error'])
+        if 'warnings' in result:
+          print(result['warnings'])
+        if 'query' in result:
+          yield result['query']
+        if 'query-continue-offset' not in result:
+          break
+        lastContinue = result['query-continue-offset']
+    
+    event_title_list = []
+    for result in query({'conditions': 'Category:Event', 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc'}):
+      print(result)
+      # for item in result['results']:
+        # event_title_list.append(item)
+    
+    # print(event_title_list)
+
+    t_options = {'action': 'askargs', 'conditions': 'Category:Event', 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc', 'format': 'json', 'formatversion': '2'}
+    t_response = requests.get(base_url + folder_url + api_call , params=t_options)
+    wkdata_t = t_response.json()
+    print('t_response.url')
+    print(t_response.url)
 
     # fetch event's metadata
     event_list = []
@@ -183,8 +186,9 @@ class had(object):
           dt = item['dataitem'][0]['item']
           dt = re.sub(r'#\d#', '', dt)
           event_item.append(dt)
-    
+
       event_list.append(event_item)
+      print('+++++++++')
       print(event_list)
 
     # ===============
