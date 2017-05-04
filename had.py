@@ -19,8 +19,28 @@ class had(object):
 
   def __init__(self):
     template_path = os.path.join(os.path.dirname(__file__), 'templates')
-    self.jinja_env = Environment(loader=FileSystemLoader(template_path),
-																 autoescape=True)
+    self.jinja_env = Environment(loader=FileSystemLoader(template_path), autoescape=True)
+    
+    def dateformat(value, format='%d.%m.%Y'):
+      item = re.search(r'(.*)-(.*)', value)
+      if item:
+        date_start = item.group(1)
+        date_start = datetime.datetime.strptime(date_start, '%Y/%m/%d')
+        date_start = date_start.strftime(format)
+
+        date_end = item.group(2)
+        date_end = datetime.datetime.strptime(date_end, '%Y/%m/%d')
+        date_end = date_end.strftime(format)
+
+        multi_date = date_start, date_end
+        multi_date = '——'.join(multi_date)
+        return multi_date
+      else:
+        single_date = datetime.datetime.strptime(value, '%Y/%m/%d')
+        single_date = single_date.strftime(format)
+        return single_date
+
+    self.jinja_env.filters['dateformat'] = dateformat
 
     self.url_map = Map([
       Rule('/', endpoint='home'),
@@ -91,8 +111,8 @@ class had(object):
       infobox.decompose()
 
     # get rid of <a>s wrapping <img>s
-      a_img = img.find_parent("a")
-      a_img.unwrap()
+    a_img = img.find_parent("a")
+    a_img.unwrap()
 
     wk_intro = soup_wk_intro
     
@@ -190,6 +210,11 @@ class had(object):
       event_list.append(event_item)
       print('+++++++++')
       print(event_list)
+    
+    category_events = "[[Category:Event]]"
+    filters_events = "|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
+    today = datetime.date.today()
+    today = today.strftime('%Y/%m/%d')
 
     # ===============
     # upcoming events
@@ -240,7 +265,13 @@ class had(object):
     page_head_options = {'action': 'parse', 'page': 'Concept:' + section_title, 'format': 'json', 'formatversion': '2'}
     response_head = requests.get(base_url + folder_url + api_call, params=page_head_options)
     wkdata_head = response_head.json()
+    
     wk_title = wkdata_head['parse']['title']
+   
+    wk_intro = wkdata_head['parse']['text']
+    soup_wk_intro = BeautifulSoup(wk_intro, 'html.parser')
+    intro = soup_wk_intro.find('p')
+    wk_intro = intro
 
     def query(request):
       request['action'] = 'askargs'
@@ -265,7 +296,7 @@ class had(object):
         lastContinue = result['continue']
     
     # make section_items list by fetching item's title and img (if any)
-    for result in query({'conditions': 'Concept:' + section_title, 'printouts': 'Modification date'}):
+    for result in query({'conditions': 'Concept:' + section_title, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc'}):
      
       wk_section_items = []
       for item in result['results'].items():
@@ -310,6 +341,7 @@ class had(object):
                                 nav_main=wk_nav_main,
                                 nav_sections=wk_nav_sections,
                                 title=wk_title,
+                                intro=wk_intro,
                                 section_items=wk_section_items
                                 )
 
@@ -338,17 +370,17 @@ class had(object):
       wkdata_meta = response_meta.json()
 
       def extract_metadata(query):
-        list = []
+        item_list = []
         for item in query:
           str = item['item']
           # strip out weird hash at the end (see why https://www.semantic-mediawiki.org/wiki/Ask_API#BrowseBySubject)
           item = re.sub(r'#\d#', '', str).replace('_', ' ')
-          list.append(item)
-        return list
+          item_list.append(item)
+        return item_list
 
       wk_date = wkdata_meta['query']['data'][1]['dataitem']
       wk_date = extract_metadata(wk_date)
-
+      
       wk_peopleorgs = wkdata_meta['query']['data'][2]['dataitem']
       wk_peopleorgs = extract_metadata(wk_peopleorgs)
 
@@ -367,8 +399,10 @@ class had(object):
     # fix rel-links to be abs-ones
     soup_bodytext = BeautifulSoup(wk_bodytext, 'html.parser')
 
-    for a in soup_bodytext.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+    # for a in soup_bodytext.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z1-9+.-]*:|//))')):
+    for a in soup_bodytext.find_all('a', href=re.compile(r'/mediawiki/*')):
       rel_link = a.get('href')
+      # print(rel_link)
       rel_link = rel_link.rsplit('/', 1)
       a['href'] = rel_link[1]
 
