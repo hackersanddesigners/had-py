@@ -8,6 +8,8 @@ import requests
 from requests_futures.sessions import FuturesSession
 import pprint
 import datetime
+from dateutil.parser import parse
+from collections import OrderedDict
 import re
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, quote
@@ -109,86 +111,48 @@ class had(object):
       infobox.decompose()
 
     # get rid of <a>s wrapping <img>s
-      a_img = img.find_parent("a")
-      a_img.unwrap()
+    a_img = img.find_parent("a")
+    a_img.unwrap()
 
     wk_intro = soup_wk_intro
     
     # ======
     # events
-
-    def query(request):
-      request['action'] = 'askargs'
-      request['format'] = 'json'
-      request['formatversion'] = '2'
-      lastContinue = {'query-continue-offset': ''}
-      while True:
-        # clone original request
-        req = request.copy()
-        # modify it with the values returned in the 'continue' section of the last result
-        req.update(lastContinue)
-        # call API
-        result = requests.get(base_url + folder_url + api_call, params=req).json()
-        if 'error' in result:
-          raise Error(result['error'])
-        if 'warnings' in result:
-          print(result['warnings'])
-        if 'query' in result:
-          yield result['query']
-        if 'continue' not in result:
-          break
-        lastContinue = result['continue']
     
     category_events = "[[Category:Event]]"
     filters_events = "|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
     today = datetime.date.today()
     today = today.strftime('%Y/%m/%d')
 
-    event_list = []
-    for result in query({'conditions': 'Category:Event', 'printouts': 'NameOfEvent|OnDate|Venue|Time'}):
-      for item in result['results']:
-        event_list.append(item)
-    
-    print(event_list)
-
-    # fetch event's metadata
-    for event_title in event_list:
-      category_events = "[[Category:Event]]"
-      # page_meta_options = {'action': 'browsebysubject', 'subject': event_title, 'format': 'json', 'formatversion': '2'}
-      page_meta_options = {'action': 'parse', 'page': event_title, 'format': 'json', 'formatversion': '2'}
-      response_meta = requests.get(base_url + folder_url + api_call, params=page_meta_options)
-      wkdata_meta = response_meta.json()
-      print(wkdata_meta)
-
     # ===============
     # upcoming events
 
-    # date_upevents = "[[OnDate::>" + today + "]]"
-    # upevents_options = {'action': 'ask', 'query': category_events + date_upevents + filters_events, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-    # response_upevents = requests.get(base_url + folder_url + api_call , params=upevents_options)
-    # wkdata_upevents = response_upevents.json()
+    date_upevents = "[[OnDate::>" + today + "]]"
+    upevents_options = {'action': 'ask', 'query': category_events + date_upevents + filters_events, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+    response_upevents = requests.get(base_url + folder_url + api_call , params=upevents_options)
+    wkdata_upevents = response_upevents.json()
 
-    # for item in wkdata_upevents['query']['results'].items(): 
-    #   upevents_title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
+    for item in wkdata_upevents['query']['results'].items(): 
+      upevents_title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
       
-    #   upevents_introtext_options = {'action': 'parse', 'page': upevents_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-    #   response_introtext_upevents = requests.get(base_url + folder_url + api_call , params=upevents_introtext_options)
-    #   wkdata_introtext_upevents = response_introtext_upevents.json()
+      upevents_introtext_options = {'action': 'parse', 'page': upevents_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+      response_introtext_upevents = requests.get(base_url + folder_url + api_call , params=upevents_introtext_options)
+      wkdata_introtext_upevents = response_introtext_upevents.json()
 
-    #   wkdata_text_upevents = wkdata_introtext_upevents['parse']['text']
+      wkdata_text_upevents = wkdata_introtext_upevents['parse']['text']
 
-    #   soup_wk_introtext = BeautifulSoup(wkdata_text_upevents, 'html.parser')
-    #   p_intro = soup_wk_introtext.p
+      soup_wk_introtext = BeautifulSoup(wkdata_text_upevents, 'html.parser')
+      p_intro = soup_wk_introtext.p
 
-    #   # add custom `intro_text` dict to `wkdata_upevents`
-    #   item[1]['printouts']['intro_text'] = p_intro
+      # add custom `intro_text` dict to `wkdata_upevents`
+      item[1]['printouts']['intro_text'] = p_intro
 
     # ===========
     # past events
-    # date_pastevents = "[[OnDate::<" + today + "]]"
-    # options_pastevents = {'action': 'ask', 'query': category_events + date_pastevents + filters_events, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-    # response_pastevents = requests.get(base_url + folder_url + api_call , params=options_pastevents)
-    # wkdata_pastevents = response_pastevents.json()
+    date_pastevents = "[[OnDate::<" + today + "]]"
+    options_pastevents = {'action': 'ask', 'query': category_events + date_pastevents + filters_events, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+    response_pastevents = requests.get(base_url + folder_url + api_call , params=options_pastevents)
+    wkdata_pastevents = response_pastevents.json()
 
     # build template
     return self.render_template('intro.html',
@@ -196,8 +160,8 @@ class had(object):
                                 nav_sections=wk_nav_sections,
                                 title=wk_title,
                                 intro=wk_intro,
-                                # up_event_list=wkdata_upevents,
-                                # past_event_list=wkdata_pastevents
+                                up_event_list=wkdata_upevents,
+                                past_event_list=wkdata_pastevents
                                 )
 
   def on_section(self, request, section_title=None, page_title=None, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
