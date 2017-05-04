@@ -40,12 +40,6 @@ class had(object):
 
     self.jinja_env.filters['dateformat'] = dateformat
 
-    def datetimeformat(value, format='%d/%m/%Y'):
-        value = datetime.datetime.strptime(value, '%Y/%m/%d')
-        return value.strftime(format)
-
-    self.jinja_env.filters['datetimeformat'] = datetimeformat
-
     self.url_map = Map([
       Rule('/', endpoint='home'),
       Rule('/p/<page_title>', endpoint='article'),
@@ -330,10 +324,7 @@ class had(object):
 
       wk_date = wkdata_meta['query']['data'][1]['dataitem']
       wk_date = extract_metadata(wk_date)
-      wk_date_str = ''.join(wk_date)
-      wk_date = datetime.datetime.strptime(wk_date_str, '%Y/%m/%d').strftime('%d/%m/%Y')
-      print(wk_date)
-
+      
       wk_peopleorgs = wkdata_meta['query']['data'][2]['dataitem']
       wk_peopleorgs = extract_metadata(wk_peopleorgs)
 
