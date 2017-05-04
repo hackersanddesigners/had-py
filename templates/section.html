@@ -1,5 +1,7 @@
 {% include 'header.html' %}
-  
+
+  {{ intro|safe }}
+
   <ul>
   {% for item in section_items %}
     <li class="mb-2">

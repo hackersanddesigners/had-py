@@ -189,7 +189,13 @@ class had(object):
     page_head_options = {'action': 'parse', 'page': 'Concept:' + section_title, 'format': 'json', 'formatversion': '2'}
     response_head = requests.get(base_url + folder_url + api_call, params=page_head_options)
     wkdata_head = response_head.json()
+    print(response_head.url)
     wk_title = wkdata_head['parse']['title']
+    wk_intro = wkdata_head['parse']['text']
+    
+    soup_wk_intro = BeautifulSoup(wk_intro, 'html.parser')
+    intro = soup_wk_intro.find('p')
+    wk_intro = intro
 
     def query(request):
       request['action'] = 'askargs'
@@ -259,6 +265,7 @@ class had(object):
                                 nav_main=wk_nav_main,
                                 nav_sections=wk_nav_sections,
                                 title=wk_title,
+                                intro=wk_intro,
                                 section_items=wk_section_items
                                 )
 
