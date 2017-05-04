@@ -115,49 +115,29 @@ class had(object):
     a_img.unwrap()
 
     wk_intro = soup_wk_intro
-    
-    # ======
-    # events
-    
-    # def query(request):
-    #   request['action'] = 'query'
-    #   request['format'] = 'json'
-    #   request['formatversion'] = '2'
-    #   lastContinue = {'continue': ''}
-    #   while True:
-    #     # clone original request
-    #     req = request.copy()
-    #     # modify it with the values returned in the 'continue' section of the last result
-    #     req.update(lastContinue)
-    #     # call API
-    #     result = requests.get(base_url + folder_url + api_call, params=req).json()
-    #     if 'error' in result:
-    #       raise Error(result['error'])
-    #     if 'warnings' in result:
-    #       print(result['warnings'])
-    #     if 'query' in result:
-    #       yield result['query']
-    #     if 'continue' not in result:
-    #       break
-    #     lastContinue = result['continue']
-    
-    # event_title_list = []
-    # for result in query({'generator': 'categorymembers', 'gcmtitle': 'Category:Event'}):
-    #   for item in result['pages']:
-    #     event_title_list.append(item['title'])
-    
-    # print(event_title_list)
 
+    # ===========
+    # events list
+
+    # recursively fetch all pages using `askargs`
     def query(request):
       request['action'] = 'askargs'
       request['format'] = 'json'
       request['formatversion'] = '2'
-      lastContinue = {}
+      lastContinue = ''
       while True:
         # clone original request
         req = request.copy()
         # modify it with the values returned in the 'continue' section of the last result
-        req.update(lastContinue)
+        parameters = req['parameters']
+        offset = '|offset='
+        continue_offset = [parameters, offset, str(lastContinue)]
+        continue_offset = ''.join(continue_offset)
+
+        bella = {'parameters': continue_offset}
+        req.update(bella)
+        # print(bella)
+        
         # call API
         result = requests.get(base_url + folder_url + api_call, params=req).json()
         if 'error' in result:
@@ -170,81 +150,39 @@ class had(object):
           break
         lastContinue = result['query-continue-offset']
     
-    event_title_list = []
-    for result in query({'conditions': 'Category:Event', 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc'}):
-      print(result)
-      # for item in result['results']:
-        # event_title_list.append(item)
-    
-    # print(event_title_list)
-
-    t_options = {'action': 'askargs', 'conditions': 'Category:Event', 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc', 'format': 'json', 'formatversion': '2'}
-    t_response = requests.get(base_url + folder_url + api_call , params=t_options)
-    wkdata_t = t_response.json()
-    print('t_response.url')
-    print(t_response.url)
-
-    # fetch event's metadata
-    event_list = []
-   
-    for event_title in event_title_list:
-      category_events = "[[Category:Event]]"
-      page_meta_options = {'action': 'browsebysubject', 'subject': event_title, 'format': 'json', 'formatversion': '2'}
-      response_meta = requests.get(base_url + folder_url + api_call, params=page_meta_options)
-      wkdata_meta = response_meta.json()
-      
-      event_item = []
-      # print('===')
-      for item in wkdata_meta['query']['data']:
-        if 'NameOfEvent' in item['property']:
-          # event_tl = {'Title': item['dataitem'][0]['item']}
-          tt = item['dataitem'][0]['item']
-          tt = re.sub(r'#\d#', '', tt)
-          event_item.append(tt)
-        if 'OnDate' in item['property']:
-          # event_dt = {'OnDate': item['dataitem'][0]['item']}
-          dt = item['dataitem'][0]['item']
-          dt = re.sub(r'#\d#', '', dt)
-          event_item.append(dt)
-
-      event_list.append(event_item)
-      print('+++++++++')
-      print(event_list)
-    
-    category_events = "[[Category:Event]]"
     filters_events = "|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
     today = datetime.date.today()
     today = today.strftime('%Y/%m/%d')
 
     # ===============
     # upcoming events
+    # wkdata_upevents = []
+    # for result in query({'conditions': 'Category:Event|OnDate::>' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc'}):
+    #   wkdata_upevents.append(result)
+    #   for item in result['results'].items():
+    #     upevents_title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
 
-    date_upevents = "[[OnDate::>" + today + "]]"
-    upevents_options = {'action': 'ask', 'query': category_events + date_upevents + filters_events, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-    response_upevents = requests.get(base_url + folder_url + api_call , params=upevents_options)
-    wkdata_upevents = response_upevents.json()
+    #     upevents_introtext_options = {'action': 'parse', 'page': upevents_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+    #     response_introtext_upevents = requests.get(base_url + folder_url + api_call , params=upevents_introtext_options)
+    #     wkdata_introtext_upevents = response_introtext_upevents.json()
 
-    for item in wkdata_upevents['query']['results'].items(): 
-      upevents_title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
-      
-      upevents_introtext_options = {'action': 'parse', 'page': upevents_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-      response_introtext_upevents = requests.get(base_url + folder_url + api_call , params=upevents_introtext_options)
-      wkdata_introtext_upevents = response_introtext_upevents.json()
+    #     wkdata_text_upevents = wkdata_introtext_upevents['parse']['text']
 
-      wkdata_text_upevents = wkdata_introtext_upevents['parse']['text']
+    #     soup_wk_introtext = BeautifulSoup(wkdata_text_upevents, 'html.parser')
+    #     p_intro = soup_wk_introtext.p
 
-      soup_wk_introtext = BeautifulSoup(wkdata_text_upevents, 'html.parser')
-      p_intro = soup_wk_introtext.p
-
-      # add custom `intro_text` dict to `wkdata_upevents`
-      item[1]['printouts']['intro_text'] = p_intro
+    #     # add custom `intro_text` dict to `wkdata_upevents`
+    #     item[1]['printouts']['intro_text'] = p_intro
 
     # ===========
     # past events
-    date_pastevents = "[[OnDate::<" + today + "]]"
-    options_pastevents = {'action': 'ask', 'query': category_events + date_pastevents + filters_events, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-    response_pastevents = requests.get(base_url + folder_url + api_call , params=options_pastevents)
-    wkdata_pastevents = response_pastevents.json()
+    wkdata_pastevents = []
+    for result in query({'conditions': 'Category:Event|OnDate::<' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc'}):
+      for item in result['result']:
+        wkdata_pastevents.append(item)
+
+    print(wkdata_pastevents)
+   
 
     # build template
     return self.render_template('intro.html',

@@ -2,13 +2,9 @@
 
   {{ intro|safe }}
 
-<<<<<<< HEAD
-  {{ event_list }}
-	
-=======
 	<h2 class="ft-sans ft-1 blue">Upcoming</h2>
 	<ul>
-	  {% for up_events in up_event_list['query']['results'].items() %}
+	  {% for up_events in up_event_list[0]['results'].items() %}
 		<li class="mb-2">
 			<h2 class="ft-sans ft-1 black mb-0">{{ up_events[1]['printouts']['OnDate'][0]['fulltext']|dateformat }}</h2>
       <a href="/s/Events/p/{{ up_events[1]['printouts']['NameOfEvent'][0]['fulltext']|replace(" ", "_") }}" class="ft-serif ft-2">
@@ -21,7 +17,7 @@
 
   <h2 class="ft-sans ft-1 blue">Past Events</h2>
 	<ul>
-	{% for past_events in past_event_list['query']['results'].items() %}
+	{% for past_events in past_event_list[0]['results'].items() %}
 		<li class="mb-2">
 			<h2 class="ft-sans ft-1 black mb-0">{{ past_events[1]['printouts']['OnDate'][0]['fulltext']|dateformat }}</h2>
 			<a href="/s/Events/p/{{ past_events[1]['printouts']['NameOfEvent'][0]['fulltext']|replace(" ", "_") }}" class="ft-serif ft-2">
@@ -32,5 +28,4 @@
 	{% endfor %}
 </ul>
 
->>>>>>> master
 {% include 'footer.html' %}
