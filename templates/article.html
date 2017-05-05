@@ -2,14 +2,12 @@
 
   <h2 class="ft-serif ft-2">{{ title }}</h2>
 
-  {% if meta %}
   <ul>
-    {% if meta[0] %}<li>{{ meta[0] }}</li>{% endif %}
-    {% if meta[1] %}<li>{{ meta[1] }}</li>{% endif %}
-    {% if meta[2] %}<li>{{ meta[2] }}</li>{% endif%}
-    {% if meta[3] %}<li>{{ meta[3]|join(', ') }}</li>{% endif %}
+    {% if date %}<li>{{ date[0] }}</li>{% endif %}
+    {% if time %}<li>{{ time[0] }}</li>{% endif %}
+    {% if place %}<li>{{ place[0] }}</li>{% endif%}
+    {% if peopleorgs %}<li>{{ peopleorgs|join(', ') }}</li>{% endif %}
   </ul>
-  {% endif %}
 
   {{ bodytext|safe }}
 

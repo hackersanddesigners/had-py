@@ -333,25 +333,20 @@ class had(object):
 
       wk_date = wkdata_meta['query']['data'][1]['dataitem']
       wk_date = extract_metadata(wk_date)
-      wk_date = ''.join(wk_date)
       
       wk_time = wkdata_meta['query']['data'][4]['dataitem']
       wk_time = extract_metadata(wk_time)
-      wk_time = ''.join(wk_time)
 
       wk_place = wkdata_meta['query']['data'][6]['dataitem']
       wk_place = extract_metadata(wk_place)
-      wk_place = ''.join(wk_place)
 
       wk_peopleorgs = wkdata_meta['query']['data'][2]['dataitem']
       wk_peopleorgs = extract_metadata(wk_peopleorgs)
-
-      wk_meta = wk_date, wk_time, wk_place, wk_peopleorgs
-
+    
     else:
       wk_date = None
-      wk_peopleorgs = None
       wk_time = None
+      wk_peopleorgs = None
       wk_place = None
 
     # fix rel-links to be abs-ones
@@ -392,7 +387,10 @@ class had(object):
                                 nav_main=wk_nav_main,
                                 nav_sections=wk_nav_sections,
                                 title=wk_title,
-                                meta=wk_meta,
+                                date=wk_date,
+                                time=wk_time,
+                                peopleorgs=wk_peopleorgs,
+                                place=wk_place,
                                 bodytext=wk_bodytext
                                 )
 
