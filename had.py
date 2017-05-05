@@ -251,14 +251,14 @@ class had(object):
         if item[1]['printouts']['NameOfEvent']:
           title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
           wk_section_items.append(title)
-          date = item[1]['printouts']['OnDate'][0]['fulltext']
-          wk_section_items.append(date)
         else:
           title = item[1]['fulltext']
           wk_section_items.append(title)
           date = ''
           wk_section_items.append(date)
-
+        if item[1]['printouts']['OnDate']:
+          date = item[1]['printouts']['OnDate'][0]['fulltext']
+          wk_section_items.append(date)
 
         # fetch section item's content
         item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
