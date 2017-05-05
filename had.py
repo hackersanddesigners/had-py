@@ -214,16 +214,23 @@ class had(object):
     intro = soup_wk_intro.find('p')
     wk_intro = intro
 
+    # recursively fetch all pages using `askargs`
     def query(request):
       request['action'] = 'askargs'
       request['format'] = 'json'
       request['formatversion'] = '2'
-      lastContinue = {'query-continue-offset': ''}
+      lastContinue = ''
       while True:
         # clone original request
         req = request.copy()
-        # modify it with the values returned in the 'continue' section of the last result
-        req.update(lastContinue)
+        # modify it with the values returned in the 'query-continue-offset' section of the last result
+        parameters = req['parameters']
+        continue_offset = [parameters, '|offset=', str(lastContinue)]
+        continue_offset = ''.join(continue_offset)
+
+        parameters = {'parameters': continue_offset}
+        req.update(parameters)
+        
         # call API
         result = requests.get(base_url + folder_url + api_call, params=req).json()
         if 'error' in result:
@@ -232,25 +239,27 @@ class had(object):
           print(result['warnings'])
         if 'query' in result:
           yield result['query']
-        if 'continue' not in result:
+        if 'query-continue-offset' not in result:
           break
-        lastContinue = result['continue']
-    
+        lastContinue = result['query-continue-offset']
+
     # make section_items list by fetching item's title and img (if any)
-    for result in query({'conditions': 'Concept:' + section_title, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc'}):
+    wk_section_items = []
+    for result in query({'conditions': 'Concept:' + section_title, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=asc'}):
      
-      wk_section_items = []
       for item in result['results'].items():
-        section_item_title = item[1]['fulltext']
-        wk_section_items.append(section_item_title)
+        title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
+        wk_section_items.append(title)
+        
+        date = item[1]['printouts']['OnDate'][0]['fulltext']
+        wk_section_items.append(date)
 
         # fetch section item's content
-        item_introtext_options = {'action': 'parse', 'page': section_item_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+        item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
         response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
         wkdata_introtext_item = response_introtext_item.json()
 
         wkdata_text_item = wkdata_introtext_item['parse']['text']
-        
         # get section item's img
         soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
         if soup_wk_introtext.img:
@@ -273,9 +282,7 @@ class had(object):
         # add `cover_img` to `wk_section_items`
         wk_section_items.append(cover_img)
 
-    # turn list into tuple w/ zip-zip
-    wk_section_items = list(zip(*[iter(wk_section_items)]*2))
-
+    wk_section_items = list(zip(*[iter(wk_section_items)]*3))
 
     # build template
     return self.render_template('section.html',
