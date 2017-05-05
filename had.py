@@ -20,7 +20,8 @@ class had(object):
   def __init__(self):
     template_path = os.path.join(os.path.dirname(__file__), 'templates')
     self.jinja_env = Environment(loader=FileSystemLoader(template_path), autoescape=True)
-    
+    # --------------------
+    # jinja custom filters
     def dateformat(value, format='%d.%m.%Y'):
       item = re.search(r'(.*)-(.*)', value)
       if item:
@@ -41,7 +42,8 @@ class had(object):
         return single_date
 
     self.jinja_env.filters['dateformat'] = dateformat
-
+    # -------
+    # Routing
     self.url_map = Map([
       Rule('/', endpoint='home'),
       Rule('/p/<page_title>', endpoint='article'),
@@ -51,7 +53,6 @@ class had(object):
 
   # ===========
   # navigation
-
   def nav_main():
     base_url = "http://wikidev.hackersanddesigners.nl/"
     folder_url = "mediawiki/"
@@ -71,7 +72,7 @@ class had(object):
     nav_sections_options = {'action': 'ask', 'query': '[[Concept:+]]', 'format': 'json', 'formatversion': '2'}
     response_nav_sections = requests.get(base_url + folder_url + api_call , params=nav_sections_options)
     wk_nav_sections = response_nav_sections.json()
-    
+
     # delete MainNavigation concept from the dict
     del wk_nav_sections['query']['results']['Concept:MainNavigation']
     
@@ -128,15 +129,13 @@ class had(object):
       while True:
         # clone original request
         req = request.copy()
-        # modify it with the values returned in the 'continue' section of the last result
+        # modify it with the values returned in the 'query-continue-offset' section of the last result
         parameters = req['parameters']
-        offset = '|offset='
-        continue_offset = [parameters, offset, str(lastContinue)]
+        continue_offset = [parameters, '|offset=', str(lastContinue)]
         continue_offset = ''.join(continue_offset)
 
-        bella = {'parameters': continue_offset}
-        req.update(bella)
-        # print(bella)
+        parameters = {'parameters': continue_offset}
+        req.update(parameters)
         
         # call API
         result = requests.get(base_url + folder_url + api_call, params=req).json()
@@ -150,13 +149,11 @@ class had(object):
           break
         lastContinue = result['query-continue-offset']
     
-    filters_events = "|?NameOfEvent|?OnDate|?Venue|?Time|sort=OnDate|order=descending"
+    # -------------------------------
     today = datetime.date.today()
     today = today.strftime('%Y/%m/%d')
 
-    # ===============
     # upcoming events
-
     wkdata_upevents = []
     for result in query({'conditions': 'Category:Event|OnDate::>' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=asc'}):
       for item in result['results'].items():
@@ -177,7 +174,6 @@ class had(object):
         wkdata_upevents.append(p_intro)
     
     wkdata_upevents = list(zip(*[iter(wkdata_upevents)]*3))
-    print(wkdata_upevents)
 
     # ===========
     # past events
