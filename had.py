@@ -58,7 +58,7 @@ class had(object):
     folder_url = "mediawiki/"
     api_call =  "api.php?"
     
-    filters_nav_main = "|?MainNavigation|order=descending"
+    filters_nav_main = "|?MainNavigation|order=desc"
     nav_main_options = {'action': 'ask', 'query': '[[Concept:MainNavigation]]' + filters_nav_main, 'format': 'json', 'formatversion': '2'}
     response_nav_main = requests.get(base_url + folder_url + api_call , params=nav_main_options)
     wk_nav_main = response_nav_main.json()
@@ -245,14 +245,20 @@ class had(object):
 
     # make section_items list by fetching item's title and img (if any)
     wk_section_items = []
-    for result in query({'conditions': 'Concept:' + section_title, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=asc'}):
-     
+    for result in query({'conditions': 'Concept:' + section_title, 'printouts': 'Modification date|NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=Modification date|OnDate|order=desc'}):
+
       for item in result['results'].items():
-        title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
-        wk_section_items.append(title)
-        
-        date = item[1]['printouts']['OnDate'][0]['fulltext']
-        wk_section_items.append(date)
+        if item[1]['printouts']['NameOfEvent']:
+          title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
+          wk_section_items.append(title)
+          date = item[1]['printouts']['OnDate'][0]['fulltext']
+          wk_section_items.append(date)
+        else:
+          title = item[1]['fulltext']
+          wk_section_items.append(title)
+          date = ''
+          wk_section_items.append(date)
+
 
         # fetch section item's content
         item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}

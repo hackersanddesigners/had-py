@@ -5,9 +5,9 @@
   <ul>
   {% for item in section_items %}
     <li class="mb-2">
-      <h2 class="ft-sans ft-1 black mb-0">{{ item[1]|dateformat }}</h2>
-      <a href="{{ title|replace("Concept:", "")|replace(" ", "_") }}/p/{{ item[0]|replace(" ", "_") }}">{{ item[0] }}</a>
-      {{ item[2]|safe }}
+      {% if item[1] %}{{ item[1]|dateformat }}{% endif %}
+      <h2>{{ item[0] }}</h2>
+      {% if item[2] %}{{ item[2]|safe }}{% endif %}
     </li>
   {% endfor %}
   </ul>
