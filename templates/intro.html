@@ -4,21 +4,21 @@
 
 	<h2 class="ft-sans ft-1 blue">Upcoming</h2>
 	<ul>
-	  {% for up_events in up_event_list %}
+	  {% for up_event in up_event_list %}
 		<li class="mb-2">
-      <h2 class="ft-sans ft-1 black mb-0">{{ up_events[1]|dateformat }}</h2>
-      <a href="">{{ up_events[0] }}</a>
-      {{ up_events[2]|safe }}
+      <h2 class="ft-sans ft-1 black mb-0">{{ up_event[1]|dateformat }}</h2>
+      <a href="/s/Events/p/{{ up_event[0]|replace(' ', '_') }}">{{ up_event[0] }}</a>
+      {{ up_event[2]|safe }}
 		</li>
     {% endfor %}
 	</ul>
 
   <h2 class="ft-sans ft-1 blue">Past Events</h2>
 	<ul>
-	{% for past_events in past_event_list %}
+	{% for past_event in past_event_list %}
 		<li class="mb-2">
-      <h2 class="ft-sans ft-1 black mb-0">{{ past_events[1]|dateformat }}</h2>
-      <a href="">{{ past_events[0] }}</a>
+      <h2 class="ft-sans ft-1 black mb-0">{{ past_event[1]|dateformat }}</h2>
+      <a href="/s/Events/p/{{ past_event[0]|replace(' ', '_') }}">{{ past_event[0] }}</a>
 		</li>
 	{% endfor %}
 </ul>

@@ -40,8 +40,8 @@ class had(object):
         single_date = datetime.datetime.strptime(value, '%Y/%m/%d')
         single_date = single_date.strftime(format)
         return single_date
-
     self.jinja_env.filters['dateformat'] = dateformat
+
     # -------
     # Routing
     self.url_map = Map([
@@ -254,7 +254,7 @@ class had(object):
         else:
           title = item[1]['fulltext']
           wk_section_items.append(title)
-          date = ''
+          date = None
           wk_section_items.append(date)
         if item[1]['printouts']['OnDate']:
           date = item[1]['printouts']['OnDate'][0]['fulltext']
@@ -283,7 +283,7 @@ class had(object):
             srcset_s = ', '.join(srcset_lu)
             cover_img['srcset'] = srcset_s
         else:
-          cover_img = ''
+          cover_img = None
 
         # add `cover_img` to `wk_section_items`
         wk_section_items.append(cover_img)
@@ -310,13 +310,12 @@ class had(object):
     page_options = {'action': 'parse', 'page': page_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
     response_content = requests.get(base_url + folder_url + api_call, params=page_options)
     wk_data = response_content.json()
-    print(response_content.url)
     
     wk_title = wk_data['parse']['title']
     wk_bodytext = wk_data['parse']['text']
 
     # fetch page-metadata for Event
-    if wk_data['parse']['categories'][0]['category'] == 'Event':
+    if 'Event' in wk_data['parse']['categories'][0]['category']:
       category_events = "[[Category:Event]]"
       page_meta_filter = "|?PeopleOrganisations"
       page_meta_options = {'action': 'browsebysubject', 'subject': page_title, 'format': 'json', 'formatversion': '2'}
@@ -334,16 +333,21 @@ class had(object):
 
       wk_date = wkdata_meta['query']['data'][1]['dataitem']
       wk_date = extract_metadata(wk_date)
+      wk_date = ''.join(wk_date)
       
-      wk_peopleorgs = wkdata_meta['query']['data'][2]['dataitem']
-      wk_peopleorgs = extract_metadata(wk_peopleorgs)
-
       wk_time = wkdata_meta['query']['data'][4]['dataitem']
       wk_time = extract_metadata(wk_time)
+      wk_time = ''.join(wk_time)
 
       wk_place = wkdata_meta['query']['data'][6]['dataitem']
       wk_place = extract_metadata(wk_place)
-    
+      wk_place = ''.join(wk_place)
+
+      wk_peopleorgs = wkdata_meta['query']['data'][2]['dataitem']
+      wk_peopleorgs = extract_metadata(wk_peopleorgs)
+
+      wk_meta = wk_date, wk_time, wk_place, wk_peopleorgs
+
     else:
       wk_date = None
       wk_peopleorgs = None
@@ -356,7 +360,6 @@ class had(object):
     # for a in soup_bodytext.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z1-9+.-]*:|//))')):
     for a in soup_bodytext.find_all('a', href=re.compile(r'/mediawiki/*')):
       rel_link = a.get('href')
-      # print(rel_link)
       rel_link = rel_link.rsplit('/', 1)
       a['href'] = rel_link[1]
 
@@ -389,10 +392,7 @@ class had(object):
                                 nav_main=wk_nav_main,
                                 nav_sections=wk_nav_sections,
                                 title=wk_title,
-                                date=wk_date,
-                                time=wk_time,
-                                peopleorgs=wk_peopleorgs,
-                                place=wk_place,
+                                meta=wk_meta,
                                 bodytext=wk_bodytext
                                 )
 
