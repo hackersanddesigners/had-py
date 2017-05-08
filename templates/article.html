@@ -1,13 +1,14 @@
 {% include 'header.html' %}
 
-  <h2 class="ft-serif ft-2">{{ title }}</h2>
+  
+  <h1 class="ft-sans ft-1 mg-t--2">{% if date %}{{ date[0]|dateformat }}{% endif %}</h1>
+  <h2 class="ft-serif ft-2 mg-b--2">{{ title }}</h2>
 
-  <ul>
-    {% if date %}<li>{{ date[0] }}</li>{% endif %}
-    {% if time %}<li>{{ time[0] }}</li>{% endif %}
-    {% if place %}<li>{{ place[0] }}</li>{% endif%}
-    {% if peopleorgs %}<li>{{ peopleorgs|join(', ') }}</li>{% endif %}
-  </ul>
+  <!-- <ul> -->
+  <!--   {% if time %}<li>{{ time[0] }}</li>{% endif %} -->
+  <!--   {% if place %}<li>{{ place[0] }}</li>{% endif%} -->
+  <!--   {% if peopleorgs %}<li>{{ peopleorgs|join(', ') }}</li>{% endif %} -->
+  <!-- </ul> -->
 
   {{ bodytext|safe }}
 

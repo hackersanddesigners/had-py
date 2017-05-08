@@ -21,6 +21,7 @@
 
 	--baseline: calc(var(--font-size__small) * var(--font-lh--small));
 
-	--border-main: 0.12rem solid #223;
+	--border-main: 0.12rem solid var(--color-main);
+  --border-compl: 0.12rem solid var(--color-compl);
 	--border-bg: 0.12rem solid var(--color-bg);
 }

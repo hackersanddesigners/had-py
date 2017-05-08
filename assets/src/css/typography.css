@@ -6,6 +6,11 @@ h1, h2, h3 {
 	font-weight: normal;
 }
 
+h1, h2, h3 {
+  font-family: var(--font-sans);
+  font-size: var(--font-size__medium);
+}
+
 /* h1, h2, h3, */
 /* p+p, */
 /* ol, */
@@ -22,6 +27,11 @@ a {
 
 ul {
   list-style: none;
+}
+
+hr {
+  margin: var(--baseline) auto;
+  width: 30%;
 }
 
 /* components */
