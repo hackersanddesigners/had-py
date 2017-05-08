@@ -1,13 +1,13 @@
 {% include 'header.html' %}
   
-  <div class="mg-t--2 mg-b--3">
+  <div class="mg-v--2">
     {{ intro|safe }}
   </div>
 
 	<h2 class="ft-sans ft-1 blue mg-b--1">Upcoming</h2>
 	<ul>
 	  {% for up_event in up_event_list %}
-		<li class="mg-b--2">
+		<li class="mg-b--3">
       <h2 class="ft-sans ft-1 black">{{ up_event[1]|dateformat }}</h2>
       <a href="/s/Events/p/{{ up_event[0]|replace(' ', '_') }}" class="ft-2">{{ up_event[0] }}</a>
       {{ up_event[2]|safe }}

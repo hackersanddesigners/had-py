@@ -126,19 +126,19 @@
 	margin-top: var(--spacing-large);
 }
 
-.mr-0 {
+.mg-r--0 {
 	margin-right: var(--spacing-none);
 }
 
-.mr-1 {
+.mg-r--1 {
 	margin-right: var(--spacing-small);
 }
 
-.mr-2 {
+.mg-r--2 {
 	margin-right: var(--spacing-medium);
 }
 
-.mr-3 {
+.mg-r--3 {
 	margin-right: var(--spacing-large);
 }
 

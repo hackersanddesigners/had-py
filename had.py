@@ -277,6 +277,7 @@ class had(object):
         soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
         if soup_wk_introtext.img:
           cover_img = soup_wk_introtext.img
+          cover_img['class'] = 'mg-t--1'
 
           src_rel_link = cover_img.get('src')
           srcset_rel_link = cover_img.get('srcset')
