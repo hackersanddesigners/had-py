@@ -3,13 +3,12 @@
 :root {
 	--font-serif: Georgia;
 	--font-sans: Arial;
-
-	--font-size__small: 18px;
+  
+	--font-size__small: 21px;
   --font-lh--small: 1.35;
 
-	--font-size__medium: 22px;
-
-	--font-size__big: 32px;
+	--font-size__medium: calc(var(--font-size__small) * 1.35);
+	--font-size__big: calc(var(--font-size__small) * 2);
 
 	--spacing-none: 0;
 	--spacing-small: calc(var(--baseline) * 0.5);
@@ -22,6 +21,6 @@
 
 	--baseline: calc(var(--font-size__small) * var(--font-lh--small));
 
-	--border-main: 0.12rem solid #222;
+	--border-main: 0.12rem solid #223;
 	--border-bg: 0.12rem solid var(--color-bg);
 }

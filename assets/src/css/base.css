@@ -20,4 +20,5 @@ img {
 	display: block;
 	width: 100%;
 	height: auto;
+  /* margin: var(--baseline) 0; */
 }
