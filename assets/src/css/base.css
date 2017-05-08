@@ -2,8 +2,8 @@
 
 html {
 	width: 100%;
-	font-size: var(--font-size__small);
-	line-height: var(--font-lh__small);
+	font-size: var(--font-size--small);
+	line-height: var(--font-lh--small);
 	font-family: var(--font-serif);
 	color: var(--color-main);
 	-webkit-text-size-adjust: 100%;

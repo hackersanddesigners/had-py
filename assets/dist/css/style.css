@@ -48,9 +48,9 @@ hr {
 html {
 	width: 100%;
 	font-size: 21px;
-	font-size: var(--font-size__small);
-	line-height: var(--font-lh__small);
-	line-height: var(--font-lh__small);
+	font-size: var(--font-size--small);
+	line-height: 1.35;
+	line-height: var(--font-lh--small);
 	font-family: Georgia;
 	font-family: var(--font-serif);
 	color: #000000;
@@ -79,14 +79,14 @@ img {
 	--font-serif: Georgia;
 	--font-sans: Arial;
   
-	--font-size__small: 21px;
+	--font-size--small: 21px;
   --font-lh--small: 1.35;
 
-	--font-size__medium: 28.35px;
+	--font-size--medium: 28.35px;
 
-	--font-size__medium: calc(var(--font-size__small) * 1.35);
-	--font-size__big: 42px;
-	--font-size__big: calc(var(--font-size__small) * 2);
+	--font-size--medium: calc(var(--font-size--small) * 1.35);
+	--font-size--big: 42px;
+	--font-size--big: calc(var(--font-size--small) * 2);
 
 	--spacing-none: 0;
 	--spacing-small: 14.175px;
@@ -102,7 +102,7 @@ img {
 
 	--baseline: 28.35px;
 
-	--baseline: calc(var(--font-size__small) * var(--font-lh--small));
+	--baseline: calc(var(--font-size--small) * var(--font-lh--small));
 
 	--border-main: 0.12rem solid #000000;
 
@@ -341,11 +341,11 @@ h1, h2, h3 {
 	font-weight: normal;
 }
 
-h1, h2, h3 {
+article .h1, article > .h2, article .h3 {
   font-family: Arial;
   font-family: var(--font-sans);
   font-size: 28.35px;
-  font-size: var(--font-size__medium);
+  font-size: var(--font-size--medium);
 }
 
 /* h1, h2, h3, */
@@ -373,6 +373,15 @@ ul {
   list-style: none;
 }
 
+blockquote {
+  font-family: Arial;
+  font-family: var(--font-sans);
+  font-size: 28.35px;
+  font-size: var(--font-size--medium);
+  margin: 28.35px;
+  margin: var(--baseline);
+}
+
 hr {
   margin: 28.35px auto;
   margin: var(--baseline) auto;
@@ -397,17 +406,17 @@ hr {
 
 .ft-1 {
 	font-size: 42px;
-	font-size: var(--font-size__big);
+	font-size: var(--font-size--big);
 }
 
 .ft-2 {
 	font-size: 28.35px;
-	font-size: var(--font-size__medium);
+	font-size: var(--font-size--medium);
 }
 
 .ft-3 {
 	font-size: 21px;
-	font-size: var(--font-size__small);
+	font-size: var(--font-size--small);
 }
 
 /* borders */
@@ -449,10 +458,10 @@ img, .shadow {
 :root{
   --font-serif: Georgia;
   --font-sans: Arial;
-  --font-size__small: 21px;
+  --font-size--small: 21px;
   --font-lh--small: 1.35;
-  --font-size__medium: 28.35px;
-  --font-size__big: 42px;
+  --font-size--medium: 28.35px;
+  --font-size--big: 42px;
   --spacing-none: 0;
   --spacing-small: 14.175px;
   --spacing-medium: 28.35px;

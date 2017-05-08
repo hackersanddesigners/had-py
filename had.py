@@ -376,7 +376,7 @@ class had(object):
       a['href'] = rel_link[1]
 
     for img in soup_bodytext.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-      img['class'] = 'mg-t--2'
+      img['class'] = 'mg-t--1'
 
       src_rel_link = img.get('src')
       srcset_rel_link = img.get('srcset')
@@ -398,6 +398,9 @@ class had(object):
     infobox = soup_bodytext.find('table')
     if infobox:
       infobox.decompose()
+
+    for heading in soup_bodytext.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
+      heading['class'] = 'ft-sans ft-3 mg-b--1'
 
     for p in soup_bodytext.find_all('p'):
       p['class'] = 'mg-b--1'

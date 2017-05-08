@@ -6,9 +6,9 @@ h1, h2, h3 {
 	font-weight: normal;
 }
 
-h1, h2, h3 {
+article .h1, article > .h2, article .h3 {
   font-family: var(--font-sans);
-  font-size: var(--font-size__medium);
+  font-size: var(--font-size--medium);
 }
 
 /* h1, h2, h3, */
@@ -27,6 +27,12 @@ a {
 
 ul {
   list-style: none;
+}
+
+blockquote {
+  font-family: var(--font-sans);
+  font-size: var(--font-size--medium);
+  margin: var(--baseline);
 }
 
 hr {
@@ -49,15 +55,15 @@ hr {
 }
 
 .ft-1 {
-	font-size: var(--font-size__big);
+	font-size: var(--font-size--big);
 }
 
 .ft-2 {
-	font-size: var(--font-size__medium);
+	font-size: var(--font-size--medium);
 }
 
 .ft-3 {
-	font-size: var(--font-size__small);
+	font-size: var(--font-size--small);
 }
 
 /* borders */
