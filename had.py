@@ -204,7 +204,7 @@ class had(object):
     wkdata_pastevents = list(zip(*[iter(wkdata_pastevents)]*2))
    
     # build template
-    return self.render_template('intro.html',
+    return self.render_template('event_list.html',
                                 nav_main=wk_nav_main,
                                 nav_sections=wk_nav_sections,
                                 title=wk_title,
