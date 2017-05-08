@@ -314,7 +314,7 @@ class had(object):
     page_options = {'action': 'parse', 'page': page_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
     response_content = requests.get(base_url + folder_url + api_call, params=page_options)
     wk_data = response_content.json()
-    
+
     wk_title = wk_data['parse']['title']
     wk_bodytext = wk_data['parse']['text']
 
