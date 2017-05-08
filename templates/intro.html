@@ -1,10 +1,7 @@
-{% include 'header.html' %}
-  
-  <div class="mg-v--2">
-    {{ intro|safe }}
-  </div>
+{% extends 'base.html' %}
+{% block event_list %}
 
-	<h2 class="ft-sans ft-1 blue mg-b--1">Upcoming</h2>
+  <h2 class="ft-sans ft-1 blue mg-b--1">Upcoming</h2>
 	<ul>
 	  {% for up_event in up_event_list %}
 		<li class="mg-b--3">
@@ -23,6 +20,6 @@
       <a href="/s/Events/p/{{ past_event[0]|replace(' ', '_') }}" class="ft-2">{{ past_event[0] }}</a>
 		</li>
 	{% endfor %}
-</ul>
+  </ul>
 
-{% include 'footer.html' %}
+{% endblock %}

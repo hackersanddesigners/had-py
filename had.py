@@ -308,7 +308,7 @@ class had(object):
     wk_section_items = list(zip(*[iter(wk_section_items)]*3))
 
     # build template
-    return self.render_template('section.html',
+    return self.render_template('section_list.html',
                                 nav_main=wk_nav_main,
                                 nav_sections=wk_nav_sections,
                                 title=wk_title,
