@@ -68,9 +68,9 @@ body {
 
 img {
 	display: block;
-	width: 100%;
+	max-width: 100%;
 	height: auto;
-  /* margin: var(--baseline) 0; */
+  margin: 0 auto;
 }
 
 /* Variables */
@@ -92,7 +92,7 @@ img {
 	--spacing-small: 14.175px;
 	--spacing-small: calc(var(--baseline) * 0.5);
 	--spacing-medium: 28.35px;
-	--spacing-medium: calc(var(--baseline) * 1);
+	--spacing-medium: var(--baseline);
 	--spacing-large: 56.7px;
 	--spacing-large: calc(var(--baseline) * 2);
 
@@ -117,42 +117,49 @@ img {
 
 /* padding */
 
-.pa-0 {
+.pd-a--0 {
 	padding: 0;
 	padding: var(--spacing-none);
 }
 
-.pa-1 {
+.pd-a--1 {
 	padding: 14.175px;
 	padding: var(--spacing-small);
 }
 
-.pa-2 {
+.pd-a--2 {
 	padding: 28.35px;
 	padding: var(--spacing-medium);
 }
 
-.pa-3 {
+.pd-a--3 {
 	padding: 56.7px;
 	padding: var(--spacing-large);
 }
 
-.pt-0 {
+.pd-h--2 {
+  padding-right: 28.35px;
+  padding-right: var(--spacing-medium);
+  padding-left: 28.35px;
+  padding-left: var(--spacing-medium);
+}
+
+.pd-t--0 {
 	padding-top: 0;
 	padding-top: var(--spacing-none);
 }
 
-.pt-1 {
+.pd-t--1 {
 	padding-top: 14.175px;
 	padding-top: var(--spacing-small);
 }
 
-.pt-2 {
+.pd-t--2 {
 	padding-top: 28.35px;
 	padding-top: var(--spacing-medium);
 }
 
-.pt-3 {
+.pd-t--3 {
 	padding-top: 56.7px;
 	padding-top: var(--spacing-large);
 }
@@ -177,22 +184,22 @@ img {
 	padding-right: var(--spacing-large);
 }
 
-.pb-0 {
+.pd-b--0 {
 	padding-bottom: 0;
 	padding-bottom: var(--spacing-none);
 }
 
-.pb-1 {
+.pd-b--1 {
 	padding-bottom: 14.175px;
 	padding-bottom: var(--spacing-small);
 }
 
-.pb-2 {
+.pd-b--2 {
 	padding-bottom: 28.35px;
 	padding-bottom: var(--spacing-medium);
 }
 
-.pb-3 {
+.pd-b--3 {
 	padding-bottom: 56.7px;
 	padding-bottom: var(--spacing-large);
 }
@@ -337,30 +344,9 @@ img {
 
 /* Base */
 
-h1, h2, h3 {
+h1, h2, h3, h4, h5, h6 {
 	font-weight: normal;
 }
-
-article .h1, article > .h2, article .h3 {
-  font-family: Arial;
-  font-family: var(--font-sans);
-  font-size: 28.35px;
-  font-size: var(--font-size--medium);
-}
-
-/* h1, h2, h3, */
-
-/* p+p, */
-
-/* ol, */
-
-/* ul { */
-
-/* 	margin: 0 0 var(--baseline) 0; */
-
-/* 	padding: 0; */
-
-/* } */
 
 a {
 	color: inherit;
@@ -402,6 +388,10 @@ hr {
 
 .ft-italic {
   font-style: italic;
+}
+
+.ft-bold {
+  font-weight: 600;
 }
 
 .ft-1 {

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block article %}
 
-  <h1 class="ft-sans ft-1 mg-t--2">{% if date %}{{ date[0]|dateformat }}{% endif %}</h1>
+  {% if date %}<h1 class="ft-sans ft-1 mg-t--2">{{ date[0]|dateformat }}</h1>{% endif %}
   <h2 class="ft-serif ft-2 mg-b--2">{{ title }}</h2>
 
   <!-- <ul> -->

@@ -2,22 +2,9 @@
 
 /* Base */
 
-h1, h2, h3 {
+h1, h2, h3, h4, h5, h6 {
 	font-weight: normal;
 }
-
-article .h1, article > .h2, article .h3 {
-  font-family: var(--font-sans);
-  font-size: var(--font-size--medium);
-}
-
-/* h1, h2, h3, */
-/* p+p, */
-/* ol, */
-/* ul { */
-/* 	margin: 0 0 var(--baseline) 0; */
-/* 	padding: 0; */
-/* } */
 
 a {
 	color: inherit;
@@ -52,6 +39,10 @@ hr {
 
 .ft-italic {
   font-style: italic;
+}
+
+.ft-bold {
+  font-weight: 600;
 }
 
 .ft-1 {

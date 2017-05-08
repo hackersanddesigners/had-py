@@ -12,7 +12,7 @@
 
 	--spacing-none: 0;
 	--spacing-small: calc(var(--baseline) * 0.5);
-	--spacing-medium: calc(var(--baseline) * 1);
+	--spacing-medium: var(--baseline);
 	--spacing-large: calc(var(--baseline) * 2);
 
 	--color-main: #000000;
