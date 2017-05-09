@@ -1,5 +1,19 @@
 /* Typography */
 
+:root {
+	--font-serif: Georgia;
+	--font-sans: Arial;
+
+	--font-size--base: 18px;
+	--font-lh--base: 1.35;
+
+	--baseline: calc(var(--font-size--base) * var(--font-lh--base));
+
+	--border-main: 0.12rem solid var(--color-main);
+  --border-compl: 0.12rem solid var(--color-compl);
+	--border-bg: 0.12rem solid var(--color-bg);
+}
+
 /* Base */
 
 h1, h2, h3, h4, h5, h6 {

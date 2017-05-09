@@ -72,18 +72,9 @@ img {
   margin: 0 auto;
 }
 
-/* Variables */
+/** Spacing **/
 
 :root {
-	--font-serif: Georgia;
-	--font-sans: Arial;
-
-	--font-size--base: 18px;
-  --font-lh--base: 1.35;
-
-	/* --font-size--medium: calc(var(--font-size--base) * 1.35); */
-	/* --font-size--big: calc(var(--font-size--base) * 2); */
-
 	--spacing-none: 0;
 	--spacing-small: 12.15px;
 	--spacing-small: calc(var(--baseline) * 0.5);
@@ -91,25 +82,7 @@ img {
 	--spacing-medium: var(--baseline);
 	--spacing-large: 48.6px;
 	--spacing-large: calc(var(--baseline) * 2);
-
-	--color-main: #000000;
-	--color-compl: #0000ff;
-	--color-bg: #ffffff;
-
-	--baseline: 24.3px;
-
-	--baseline: calc(var(--font-size--base) * var(--font-lh--base));
-
-	--border-main: 0.12rem solid #000000;
-
-	--border-main: 0.12rem solid var(--color-main);
-  --border-compl: 0.12rem solid #0000ff;
-  --border-compl: 0.12rem solid var(--color-compl);
-	--border-bg: 0.12rem solid #ffffff;
-	--border-bg: 0.12rem solid var(--color-bg);
 }
-
-/** Spacing **/
 
 /* padding */
 
@@ -345,6 +318,26 @@ img {
 
 /* Typography */
 
+:root {
+	--font-serif: Georgia;
+	--font-sans: Arial;
+
+	--font-size--base: 18px;
+	--font-lh--base: 1.35;
+
+	--baseline: 24.3px;
+
+	--baseline: calc(var(--font-size--base) * var(--font-lh--base));
+
+	--border-main: 0.12rem solid #000000;
+
+	--border-main: 0.12rem solid var(--color-main);
+  --border-compl: 0.12rem solid #0000ff;
+  --border-compl: 0.12rem solid var(--color-compl);
+	--border-bg: 0.12rem solid #ffffff;
+	--border-bg: 0.12rem solid var(--color-bg);
+}
+
 /* Base */
 
 h1, h2, h3, h4, h5, h6 {
@@ -470,6 +463,12 @@ hr {
 
 /** Skin **/
 
+:root {
+	--color-main: #000000;
+	--color-compl: #0000ff;
+	--color-bg: #ffffff;
+}
+
 /* colours */
 
 .black {
@@ -493,19 +492,19 @@ img, .shadow {
 }
 
 :root{
-  --font-serif: Georgia;
-  --font-sans: Arial;
-  --font-size--base: 18px;
-  --font-lh--base: 1.35;
   --spacing-none: 0;
   --spacing-small: 12.15px;
   --spacing-medium: 24.3px;
   --spacing-large: 48.6px;
-  --color-main: #000000;
-  --color-compl: #0000ff;
-  --color-bg: #ffffff;
+  --font-serif: Georgia;
+  --font-sans: Arial;
+  --font-size--base: 18px;
+  --font-lh--base: 1.35;
   --baseline: 24.3px;
   --border-main: 0.12rem solid #000000;
   --border-compl: 0.12rem solid #0000ff;
   --border-bg: 0.12rem solid #ffffff;
+  --color-main: #000000;
+  --color-compl: #0000ff;
+  --color-bg: #ffffff;
 }

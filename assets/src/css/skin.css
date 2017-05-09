@@ -1,5 +1,11 @@
 /** Skin **/
 
+:root {
+	--color-main: #000000;
+	--color-compl: #0000ff;
+	--color-bg: #ffffff;
+}
+
 /* colours */
 
 .black {

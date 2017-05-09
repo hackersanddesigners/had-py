@@ -1,5 +1,12 @@
 /** Spacing **/
 
+:root {
+	--spacing-none: 0;
+	--spacing-small: calc(var(--baseline) * 0.5);
+	--spacing-medium: var(--baseline);
+	--spacing-large: calc(var(--baseline) * 2);
+}
+
 /* padding */
 
 .pd-a--0 {
