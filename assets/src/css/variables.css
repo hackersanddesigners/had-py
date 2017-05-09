@@ -3,12 +3,12 @@
 :root {
 	--font-serif: Georgia;
 	--font-sans: Arial;
-  
-	--font-size--small: 21px;
-  --font-lh--small: 1.35;
 
-	--font-size--medium: calc(var(--font-size--small) * 1.35);
-	--font-size--big: calc(var(--font-size--small) * 2);
+	--font-size--base: 18px;
+  --font-lh--base: 1.35;
+
+	/* --font-size--medium: calc(var(--font-size--base) * 1.35); */
+	/* --font-size--big: calc(var(--font-size--base) * 2); */
 
 	--spacing-none: 0;
 	--spacing-small: calc(var(--baseline) * 0.5);
@@ -19,7 +19,7 @@
 	--color-compl: #0000ff;
 	--color-bg: #ffffff;
 
-	--baseline: calc(var(--font-size--small) * var(--font-lh--small));
+	--baseline: calc(var(--font-size--base) * var(--font-lh--base));
 
 	--border-main: 0.12rem solid var(--color-main);
   --border-compl: 0.12rem solid var(--color-compl);

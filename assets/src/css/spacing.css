@@ -47,6 +47,12 @@
 	padding-right: var(--spacing-small);
 }
 
+@media screen and (min-width: 324px) {
+  .pd-r--1_s {
+    padding-right: var(--spacing-small);
+  }
+}
+
 .pd-r--2 {
 	padding-right: var(--spacing-medium);
 }

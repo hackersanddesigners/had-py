@@ -1,5 +1,20 @@
 /* Display */
 
+.flex-r {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.flex-sb {
+  justify-content: space-between;
+}
+
+@media screen and (min-width: 324px) {
+  .flex-st_s {
+    justify-content: flex-start;
+  }
+}
+
 .d-ib {
   display: inline-block;
 }

@@ -1,22 +1,22 @@
 {% extends 'base.html' %}
 {% block event_list %}
 
-  <h2 class="ft-sans ft-1 blue mg-b--1">Upcoming</h2>
+  <h2 class="ft-sans ft-3 blue mg-b--1">Upcoming</h2>
 	<ul>
 	  {% for up_event in up_event_list %}
-		<li class="mg-b--1">
-      <h2 class="ft-sans ft0 black">{{ up_event[1]|dateformat }}</h2>
+		<li class="mg-b--2">
+      <h2 class="ft-sans ft-3 black">{{ up_event[1]|dateformat }}</h2>
       <a href="/s/Events/p/{{ up_event[0]|replace(' ', '_') }}" class="ft-2">{{ up_event[0] }}</a>
       {{ up_event[2]|safe }}
 		</li>
     {% endfor %}
 	</ul>
 
-  <h2 class="ft-sans ft-1 blue mg-b--1">Archive</h2>
+  <h2 class="ft-sans ft-3 blue mg-b--1">Archive</h2>
 	<ul>
 	{% for past_event in past_event_list %}
 		<li class="mg-b--2">
-      <h2 class="ft-sans ft-1 black">{{ past_event[1]|dateformat }}</h2>
+      <h2 class="ft-sans ft-3 black">{{ past_event[1]|dateformat }}</h2>
       <a href="/s/Events/p/{{ past_event[0]|replace(' ', '_') }}" class="ft-2">{{ past_event[0] }}</a>
 		</li>
 	{% endfor %}
