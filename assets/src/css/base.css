@@ -2,10 +2,7 @@
 
 html {
 	width: 100%;
-	font-size: 18px;
-	line-height: var(--font-lh--small);
 	font-family: var(--font-serif);
-	color: var(--color-main);
 	-webkit-text-size-adjust: 100%;
 	-ms-text-size-adjust: 100%;
 }

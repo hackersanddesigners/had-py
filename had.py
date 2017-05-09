@@ -102,7 +102,7 @@ class had(object):
       a['href'] = out_link
     
     for img in soup_wk_intro.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-      img['class'] = 'mg-v--2'
+      img['class'] = 'mg-v--2 shadow'
 
       src_rel_link = img.get('src')
       srcset_rel_link = img.get('srcset')
@@ -286,7 +286,7 @@ class had(object):
         soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
         if soup_wk_introtext.img:
           cover_img = soup_wk_introtext.img
-          cover_img['class'] = 'mg-t--1'
+          cover_img['class'] = 'mg-t--1 shadow'
 
           src_rel_link = cover_img.get('src')
           srcset_rel_link = cover_img.get('srcset')
@@ -376,7 +376,7 @@ class had(object):
       a['href'] = rel_link[1]
 
     for img in soup_bodytext.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-      img['class'] = 'mg-t--1'
+      img['class'] = 'mg-t--1 shadow'
 
       src_rel_link = img.get('src')
       srcset_rel_link = img.get('srcset')

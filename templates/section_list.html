@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% block section_list %}
 
-  <ul class="flex-r flex-sb mg-t--1">
+  <ul class="flex-r flex-sb mg-t--2">
   {% for item in section_items %}
-    <li class="w--half_m w--third_w mg-b--2">
-      {% if item[1] %}<h2 class="ft-sans ft-3 black">{{ item[1]|dateformat }}</h2>{% endif %}
+    <li class="w--half_m w--third_w mg-b--3">
+      {% if item[1] %}<h2 class="ft-sans ft-3">{{ item[1]|dateformat }}</h2>{% endif %}
       <a href="{{ title|replace('Concept:', '')|replace(' ', '_') }}/p/{{ item[0]|replace(' ', '_') }}" class="ft-2">{{ item[0] }}</a>
       {% if item[2] %}{{ item[2]|safe }}{% endif %}
     </li>

@@ -9,9 +9,9 @@
 
 	--baseline: calc(var(--font-size--base) * var(--font-lh--base));
 
-	--border-main: 0.12rem solid var(--color-main);
-  --border-compl: 0.12rem solid var(--color-compl);
-	--border-bg: 0.12rem solid var(--color-bg);
+	--border-main: 0.15rem solid var(--color-main);
+  --border-compl: 0.15rem solid var(--color-compl);
+	--border-bg: 0.15rem solid var(--color-bg);
 }
 
 /* Base */
@@ -23,7 +23,7 @@ h1, h2, h3, h4, h5, h6 {
 a {
 	color: inherit;
 	text-decoration: none;
-  border-bottom: var(--border-main)
+  border-bottom: var(--border-main);
 }
 
 ul {
@@ -73,7 +73,7 @@ hr {
 
 @media screen and (min-width: 500px) {
   .ft-1 {
-	  font-size: 18px;
+	  font-size: 21px;
   }
 
   .ft-2 {
