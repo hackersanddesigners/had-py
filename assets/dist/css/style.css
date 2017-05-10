@@ -411,6 +411,12 @@ hr {
   }
 }
 
+/* align */
+
+.t-c {
+  text-align: center;
+}
+
 /* borders */
 
 .br-b--0 {
@@ -619,21 +625,19 @@ http://flickity.metafizzy.co
 }
 
 .flickity-prev-next-button .arrow {
-  fill: #333;
+  fill: #000000;
+  fill: var(--color-main);
 }
 
 /* ---- page dots ---- */
 
 .flickity-page-dots {
-  /* position: absolute; */
   position: relative;
   width: 100%;
-  /* bottom: -25px; */
   padding: 0;
   margin: 0;
   list-style: none;
   text-align: center;
-  /* line-height: 1; */
 }
 
 .flickity-rtl .flickity-page-dots { direction: rtl; }

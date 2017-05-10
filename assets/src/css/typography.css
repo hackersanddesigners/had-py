@@ -85,6 +85,12 @@ hr {
   }
 }
 
+/* align */
+
+.t-c {
+  text-align: center;
+}
+
 /* borders */
 
 .br-b--0 {
