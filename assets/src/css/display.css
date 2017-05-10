@@ -27,6 +27,12 @@
   }
 }
 
+/* ----- */
+
 .d-ib {
   display: inline-block;
+}
+
+.d-n {
+  display: none;
 }
