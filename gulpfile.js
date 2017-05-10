@@ -53,12 +53,12 @@ gulp.task('css', function(){
 });
 
 // Concatenate & Minify JSn
-/* gulp.task('scripts:collection', function() {
-	return gulp.src('assets/src/js/collection/*.js')
+
+gulp.task('scripts:article', function() {
+ 	return gulp.src('assets/src/js/article/*.js')
 	.pipe(jshint())
 	.pipe(jshint.reporter('default'))
-	.pipe(concat('collection.js'))
-	.pipe(gulp.dest('assets/dist/js/')) // non-minified js file
+
 	.pipe(rename({
 		suffix: '.min'
 	}))
@@ -68,8 +68,7 @@ gulp.task('css', function(){
 });
 
 // Scripts
-gulp.task('scripts', ['scripts:collection']);
-*/
+gulp.task('scripts', gulp.series('scripts:article'));
 
 gulp.task('browser-sync', gulp.series('css', function() {
 	browsersync.init({
@@ -81,8 +80,9 @@ gulp.task('browser-sync', gulp.series('css', function() {
 }));
 
 gulp.task('watch', ('browser-sync', function () {
-	gulp.watch('assets/src/css/*.css', gulp.series('css'));
+  gulp.watch('assets/src/css/*.css', gulp.series('css'));
+  gulp.watch('assets/src/js/**/*.js', gulp.series('scripts'));
 }));
 
 // Default Task
-gulp.task('default', gulp.series('clean', 'css', 'watch'));
+gulp.task('default', gulp.series('clean', 'css', 'scripts', 'watch'));

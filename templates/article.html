@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% block article_script %}
+  <script src="/assets/dist/js/flickity.min.js"></script>
+{% endblock %}
 {% block article %}
 
   {% if date %}<h1 class="ft-sans ft-3 mg-t--2">{{ date[0]|dateformat }}</h1>{% endif %}
