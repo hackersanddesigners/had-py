@@ -5,6 +5,18 @@
   flex-flow: row wrap;
 }
 
+.flex-c {
+  display: flex;
+  flex-flow: column wrap;
+}
+
+@media screen and (min-width: 640px) {
+  .flex-r_m {
+    display: flex;
+    flex-flow: row wrap;
+  }
+}
+
 .flex-sb {
   justify-content: space-between;
 }

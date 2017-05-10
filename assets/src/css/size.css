@@ -1,6 +1,6 @@
 /* Size */
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 640px) {
   .w--half_m {
     width: 47.5%;
   }
