@@ -431,6 +431,16 @@ hr {
   }
 }
 
+.gallery img {
+  height: 45vh;
+}
+
+.gallery-item {
+  width: 100%;
+  margin: 0 15% 0 0;
+  counter-increment: gallery-item;
+}
+
 /* Display */
 
 .flex-r {
@@ -615,14 +625,15 @@ http://flickity.metafizzy.co
 /* ---- page dots ---- */
 
 .flickity-page-dots {
-  position: absolute;
+  /* position: absolute; */
+  position: relative;
   width: 100%;
-  bottom: -25px;
+  /* bottom: -25px; */
   padding: 0;
   margin: 0;
   list-style: none;
   text-align: center;
-  line-height: 1;
+  /* line-height: 1; */
 }
 
 .flickity-rtl .flickity-page-dots { direction: rtl; }
@@ -632,14 +643,15 @@ http://flickity.metafizzy.co
   width: 10px;
   height: 10px;
   margin: 0 8px;
-  background: #333;
+  background: #000000;
+  background: var(--color-main);
   border-radius: 50%;
-  opacity: 0.25;
   cursor: pointer;
 }
 
 .flickity-page-dots .dot.is-selected {
-  opacity: 1;
+  background: #0000ff;
+  background: var(--color-compl);
 }
 
 :root{

@@ -11,3 +11,13 @@
     width: 30%;
   }
 }
+
+.gallery img {
+  height: 45vh;
+}
+
+.gallery-item {
+  width: 100%;
+  margin: 0 15% 0 0;
+  counter-increment: gallery-item;
+}
