@@ -49,10 +49,20 @@ gulp.task('css', function(){
 	}))
 	.pipe(gulp.dest('assets/dist/css'))
 	.pipe(browsersync.reload({stream: true}))
-	.pipe(notify({ message: 'CSS task complete' }));
 });
 
-// Concatenate & Minify JSn
+// Concatenate & Minify JS
+gulp.task('scripts:nav', function() {
+ 	return gulp.src('assets/src/js/nav/*.js')
+	.pipe(jshint())
+  .pipe(jshint.reporter('default'))
+  .pipe(concat('nav.js'))
+	.pipe(rename({
+		suffix: '.min'
+	}))
+	.pipe(uglify())
+	.pipe(gulp.dest('assets/dist/js/'))
+});
 
 gulp.task('scripts:article', function() {
  	return gulp.src('assets/src/js/article/*.js')
@@ -64,11 +74,10 @@ gulp.task('scripts:article', function() {
 	}))
 	.pipe(uglify())
 	.pipe(gulp.dest('assets/dist/js/'))
-	.pipe(notify({ message: 'Scripts task complete' }));
 });
 
 // Scripts
-gulp.task('scripts', gulp.series('scripts:article'));
+gulp.task('scripts', gulp.series('scripts:article', 'scripts:nav'));
 
 gulp.task('browser-sync', gulp.series('css', function() {
 	browsersync.init({

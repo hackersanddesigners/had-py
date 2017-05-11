@@ -1,0 +1,18 @@
+/* Position */
+
+.p-fx {
+  position: fixed;
+}
+
+.p-tl {
+  top: 0;
+  left: 0;
+}
+
+.z-1 {
+  z-index: 1;
+}
+
+.z-2 {
+  z-index: 2;
+}
