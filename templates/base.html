@@ -9,7 +9,7 @@
 
 	<body class="pd-a--2 ft-1">
     <nav class="nav mg-b--2">
-      <div class="flex-r flex-sb flex-st_s">
+      <div class="main-menu flex-r flex-sb flex-st_s">
         <a href="/" class="ft-sans ft-3 br-b--0 pd-r--1_s {% if title == 'Hackers and Designers' %}red{% else %} blue{% endif %}">H&D</a>
         {% for item in nav_main['query']['results'].items() %}
         <a href="/p/{{ item[0]|replace(" ", "_") }}" class="ft-sans ft-3 br-b--0{% if not loop.last %} pd-r--1_s{% endif %}{% if item[0] == title %} red{% else %} blue{% endif %}">{{ item[0] }}</a>

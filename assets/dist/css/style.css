@@ -435,6 +435,14 @@ hr {
   border-bottom: none;
 }
 
+.sm {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-color: #0000ff;
+  background-color: var(--color-compl);
+}
+
 /* Size */
 
 .w--full {
