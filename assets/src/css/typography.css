@@ -26,7 +26,7 @@ a {
   border-bottom: var(--border-main);
 }
 
-ul {
+.l-s--n {
   list-style: none;
 }
 
@@ -83,6 +83,15 @@ hr {
   .ft-3 {
 	  font-size: 42px;
   }
+}
+
+.li-em:before {
+  content: '\2014';
+  display: table-cell;
+  text-align: right;
+  padding: 0 calc(var(--baseline) * 0.5) 0 0;
+  margin: 0 0 0 -calc(var(--baseline) * 2);
+  width: var(--baseline);
 }
 
 /* align */

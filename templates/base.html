@@ -16,7 +16,7 @@
         <a href="/p/{{ item[0]|replace(" ", "_") }}" class="ft-sans ft-3 br-b--0{% if not loop.last %} pd-r--1_s{% endif %}{% if item[0] == title %} red{% else %} blue{% endif %}">{{ item[0] }}</a>
         {% endfor %}
       </div>
-      <div class="d-n">
+      <div class="">
 			  {% for item in nav_sections['query']['results'].items() %}
         <a href="/s/{{ item[1]['fulltext']|replace("Concept:", "")|replace(" ", "_") }}" class="ft-serif ft-2{% if not loop.last %} mg-r--1{% endif %}{% if item[0] == title %} ft-italic{% endif %}">{{ item[1]['fulltext']|replace("Concept:", "")}}</a>
 			  {% endfor %}

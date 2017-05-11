@@ -1,5 +1,7 @@
 /* Display */
 
+/* flex */
+
 .flex-r {
   display: flex;
   flex-flow: row wrap;
@@ -27,12 +29,20 @@
   }
 }
 
-/* ----- */
+/* display */
+
+.d-n {
+  display: none;
+}
 
 .d-ib {
   display: inline-block;
 }
 
-.d-n {
-  display: none;
+.d-tb {
+  display: table;
+}
+
+.d-tbr {
+  display: table-row;
 }
