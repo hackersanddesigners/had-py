@@ -12,7 +12,7 @@ var section_menu = document.querySelector('.section-menu')
 var sm = document.createElement('button')
 
 var threshold = nav.offsetHeight
-var trigger = threshold / 1.5
+var trigger = threshold / 2
 
 window.onscroll = function (event) {
   requestAnimationFrame(checkSticky)
@@ -38,7 +38,7 @@ function checkSticky() {
 
       main_menu.classList.remove('flex-r', 'flex-sb', 'flex-st_s')
       
-      nav_wrapper.classList.add('p-fx', 'p-tl', 'w--full', 'pd-a--2', 'z-2', 'bg-white')
+      nav_wrapper.classList.add('a-eio', 'p-fx', 'p-tl', 'w--full', 'pd-v--1', 'pd-h--2', 'z-2', 'bg-white')
       nav.classList.remove('mg-b--2')
 
       section_menu.classList.add('d-n')
@@ -46,7 +46,7 @@ function checkSticky() {
       mm_wrapper.appendChild(sm)
     }
   } else if (isSticky) {
-    nav.classList.remove('sticky', 'a-eio')
+    nav.classList.remove('sticky')
 
     sm = document.querySelector('.sm')
     mm_wrapper.removeChild(sm)

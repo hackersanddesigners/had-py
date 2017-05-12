@@ -17,14 +17,14 @@
       </div>
       <div class="section-menu">
 			  {% for item in nav_sections['query']['results'].items() %}
-        <a href="/s/{{ item[1]['fulltext']|replace("Concept:", "")|replace(" ", "_") }}" class="ft-serif ft-2{% if not loop.last %} mg-r--1{% endif %}{% if item[0] == title %} ft-italic{% endif %}">{{ item[1]['fulltext']|replace("Concept:", "")}}</a>
+        <a href="/s/{{ item[1]['fulltext']|replace("Concept:", "")|replace(" ", "_") }}" class="d-ib ft-serif ft-2{% if not loop.last %} mg-r--1 mg-b--05{% endif %}{% if item[0] == title %} ft-italic{% endif %}">{{ item[1]['fulltext']|replace("Concept:", "")}}</a>
 			  {% endfor %}
       </div>
     </nav>
     
     {% if intro %}
     <div class="mg-t--3">
-      {{ intro|safe }}
+      {{ intro|safe }} 
     </div>
     {% endif %}
 

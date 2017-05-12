@@ -26,6 +26,23 @@
 	box-shadow: 0px 0px 8px 8px rgba(67, 67, 67, 0.3);
 }
 
+/* animations */
+
+@keyframes fade {
+  0% { 
+    opacity: 0; 
+    background-color: var(--color-compl)
+  }
+  100% { 
+    opacity: 1;
+    background-color: var(--color-bg);
+  }
+}
+
+.a-eio {
+  animation: 0.24s fade ease-in;
+}
+
 /*! Flickity v2.0.5
 http://flickity.metafizzy.co
 ---------------------------------------------- */

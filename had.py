@@ -128,7 +128,7 @@ class had(object):
     # get rid of <a>s wrapping <img>s
     a_img = img.find_parent("a")
     a_img.unwrap()
-
+    
     wk_intro = soup_wk_intro
 
     # ===========
@@ -188,6 +188,7 @@ class had(object):
         p_intro['class'] = 'mg-t--1'
         p_intro = str(p_intro)
         wkdata_upevents.append(p_intro)
+    
     
     wkdata_upevents = list(zip(*[iter(wkdata_upevents)]*3))
 
