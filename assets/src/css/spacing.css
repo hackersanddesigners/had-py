@@ -2,7 +2,8 @@
 
 :root {
 	--spacing-none: 0;
-	--spacing-small: calc(var(--baseline) * 0.5);
+	--spacing-tiny: calc(var(--baseline) * 0.25);
+  --spacing-small: calc(var(--baseline) * 0.5);
 	--spacing-medium: var(--baseline);
 	--spacing-large: calc(var(--baseline) * 2);
 }
@@ -23,6 +24,11 @@
 
 .pd-a--3 {
 	padding: var(--spacing-large);
+}
+
+.pd-v--1 {
+  padding-top: var(--spacing-small);
+  padding-bottom: var(--spacing-small);
 }
 
 .pd-h--2 {
@@ -162,6 +168,10 @@
 
 .mg-b--0 {
 	margin-bottom: var(--spacing-none);
+}
+
+.mg-b--05 {
+  margin-bottom: var(--spacing-tiny);
 }
 
 .mg-b--1 {

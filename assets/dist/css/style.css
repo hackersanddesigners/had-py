@@ -81,8 +81,10 @@ img {
 
 :root {
 	--spacing-none: 0;
-	--spacing-small: 12.15px;
-	--spacing-small: calc(var(--baseline) * 0.5);
+	--spacing-tiny: 6.075px;
+	--spacing-tiny: calc(var(--baseline) * 0.25);
+  --spacing-small: 12.15px;
+  --spacing-small: calc(var(--baseline) * 0.5);
 	--spacing-medium: 24.3px;
 	--spacing-medium: var(--baseline);
 	--spacing-large: 48.6px;
@@ -109,6 +111,13 @@ img {
 .pd-a--3 {
 	padding: 48.6px;
 	padding: var(--spacing-large);
+}
+
+.pd-v--1 {
+  padding-top: 12.15px;
+  padding-top: var(--spacing-small);
+  padding-bottom: 12.15px;
+  padding-bottom: var(--spacing-small);
 }
 
 .pd-h--2 {
@@ -284,6 +293,11 @@ img {
 .mg-b--0 {
 	margin-bottom: 0;
 	margin-bottom: var(--spacing-none);
+}
+
+.mg-b--05 {
+  margin-bottom: 6.075px;
+  margin-bottom: var(--spacing-tiny);
 }
 
 .mg-b--1 {
@@ -724,6 +738,7 @@ http://flickity.metafizzy.co
 
 :root{
   --spacing-none: 0;
+  --spacing-tiny: 6.075px;
   --spacing-small: 12.15px;
   --spacing-medium: 24.3px;
   --spacing-large: 48.6px;
