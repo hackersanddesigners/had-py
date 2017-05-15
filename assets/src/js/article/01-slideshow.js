@@ -3,8 +3,8 @@
   'use strict'
 
   // Flickity
-  var gallery = document.querySelector('.gallery');
-  
+  var gallery = document.querySelector('.gallery')
+
   var slideshow = new Flickity (gallery, {
     adaptiveHeight: false,
     cellAlign: 'center',
@@ -18,5 +18,9 @@
     resize: true,
     wrapAround: true
   });
+
+  gallery.addEventListener('click', function() {
+    slideshow.next(true)
+  })
 
 })(window, document);
