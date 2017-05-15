@@ -4,6 +4,14 @@
   width: 100%;
 }
 
+.w--half {
+  width: 47.5%;
+}
+
+.w--two-thirds {
+  width: 70%;
+}
+
 @media screen and (min-width: 640px) {
   .w--half_m {
     width: 47.5%;
@@ -16,13 +24,12 @@
   }
 }
 
-.gallery img {
-  max-height: 45vh;
+/* Height */
+
+.h--small {
+  height: var(--baseline);
 }
 
-.gallery-item {
-  width: 100%;
-  margin: 0 15% 0 0;
-  padding: var(--spacing-small);
-  counter-increment: gallery-item;
+.h--half {
+  max-height: 45vh;
 }

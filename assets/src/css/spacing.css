@@ -108,19 +108,24 @@
 
 /* margins */
 
-.ma-0 {
+.mg-auto {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.mg-a--0 {
 	margin: var(--spacing-none);
 }
 
-.ma-1 {
+.mg-a--1 {
 	margin: var(--spacing-small);
 }
 
-.ma-2 {
+.mg-a--2 {
 	margin: var(--spacing-medium);
 }
 
-.ma-3 {
+.mg-a--3 {
 	margin: var(--spacing-large);
 }
 
