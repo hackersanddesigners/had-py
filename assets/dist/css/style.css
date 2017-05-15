@@ -486,7 +486,8 @@ hr {
 }
 
 .gallery img {
-  height: 45vh;
+  max-height: 45vh;
+  width: 100%;
 }
 
 .gallery-item {

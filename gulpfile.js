@@ -68,7 +68,7 @@ gulp.task('scripts:article', function() {
  	return gulp.src('assets/src/js/article/*.js')
 	.pipe(jshint())
 	.pipe(jshint.reporter('default'))
-
+  .pipe(concat('slideshow.js'))
 	.pipe(rename({
 		suffix: '.min'
 	}))
