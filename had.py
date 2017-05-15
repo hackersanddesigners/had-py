@@ -435,12 +435,13 @@ class had(object):
 
       # --- clean up <img>
       gallery_item_img = gallery_item.find('img')
+      gallery_item_img['class'] = 'h--half shadow'
       del gallery_item_img['width']
       del gallery_item_img['height']
 
       # --- set img caption
       gallery_item_caption = gallery_item.find('div', class_="gallerytext")
-      gallery_item_caption['class'] = 'pd-t--1 ft-sans t-c'
+      gallery_item_caption['class'] = 'pd-t--1 mg-auto w--two-thirds ft-sans t-c'
 
       # --- get parent <ul>
       gallerybox = gallery_item.find_parent('ul')
