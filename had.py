@@ -446,11 +446,10 @@ class had(object):
       gallerybox = gallery_item.find_parent('ul')
       gallerybox['class'] = 'gallery'
 
-    # --- initialise flickity.js
+    # --- set class to flickity.js
     for gallery in soup_bodytext.find_all('ul', class_="gallery"):
       gallery.name = 'div'
       gallery['class'] = 'gallery mg-b--2'
-      gallery['data-flickity'] = '{ "adaptiveHeight": false, "cellAlign": "center", "contain": false, "lazyLoad": true, "percentPosition": false, "resize": true, "wrapAround": true }'
 
     # --- lists
     for ul in soup_bodytext.find_all('ul'):

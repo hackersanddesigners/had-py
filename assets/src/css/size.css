@@ -18,11 +18,11 @@
 
 .gallery img {
   max-height: 45vh;
-  width: 100%;
 }
 
 .gallery-item {
   width: 100%;
   margin: 0 15% 0 0;
+  padding: var(--spacing-small);
   counter-increment: gallery-item;
 }

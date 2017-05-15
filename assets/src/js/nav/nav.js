@@ -68,7 +68,6 @@ function unwrap(wrapper) {
   wrapper.parentNode.replaceChild(doc_frag, wrapper)
 }
 
-
 function section_menu_toggle (event) {
   if (section_menu.classList.contains('d-n')) {
     section_menu.classList.remove('d-n')
