@@ -9,8 +9,6 @@ html {
 
 body {
 	background-color: var(--color-bg);
-	-webkit-overflow-scrolling: touch;
-	-ms-overflow-style: none;
 }
 
 img {
