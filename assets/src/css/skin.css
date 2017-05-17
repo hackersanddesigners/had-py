@@ -98,60 +98,6 @@ http://flickity.metafizzy.co
   counter-increment: gallery-item;
 }
 
-/* ---- previous/next buttons ---- */
-
-.flickity-prev-next-button {
-  position: absolute;
-  top: 0;
-  width: 50%;
-  height: 100%;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-}
-
-.flickity-prev-next-button.next:hover {
-  filter: blur(6px);
-  border-right: 3rem solid blue;
-}
-
-.flickity-prev-next-button.previous:hover {
-  filter: blur(2px);
-  border-left: 3rem solid blue;
-}
-
-.flickity-prev-next-button:focus {
-  outline: none;
-}
-
-.flickity-prev-next-button:active {
-  /* opacity: 0.6; */
-}
-
-.flickity-prev-next-button.previous { left: 0px; }
-.flickity-prev-next-button.next { right: 0px; }
-/* right to left */
-.flickity-rtl .flickity-prev-next-button.previous {
-  left: auto;
-  right: 0px;
-}
-.flickity-rtl .flickity-prev-next-button.next {
-  right: auto;
-  left: 0px;
-}
-
-.flickity-prev-next-button:disabled {
-  cursor: auto;
-}
-
-.flickity-prev-next-button svg {
-  position: absolute;
-  left: 20%;
-  top: 20%;
-  width: 60%;
-  height: 60%;
-}
-
 /* ---- page dots ---- */
 .flickity-page-dots {
   position: relative;

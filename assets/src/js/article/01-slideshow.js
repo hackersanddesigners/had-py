@@ -12,11 +12,16 @@
     imagesLoaded: true,
     lazyLoad: true,
     percentPosition: false,
-    prevNextButtons: true,
-    arrowShape: '',
+    prevNextButtons: false,
     pageDots: true,
     resize: true,
     wrapAround: true
   });
+  
+  function slideshow_next (event) {
+    slideshow.next(true)
+  }
+
+  gallery.addEventListener('click', slideshow_next, false)
 
 })(window, document);
