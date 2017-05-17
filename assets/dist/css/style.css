@@ -77,6 +77,12 @@ img {
   margin: 0 auto;
 }
 
+.mss {
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
+}
+
 /** Spacing **/
 
 :root {
