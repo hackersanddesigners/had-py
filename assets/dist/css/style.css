@@ -702,24 +702,24 @@ http://flickity.metafizzy.co
 
 .flickity-prev-next-button {
   position: absolute;
-  bottom: 24.3px;
-  bottom: var(--baseline);
-  width: 9%;
-  height: 24.3px;
-  height: var(--baseline);
+  top: 0;
+  width: 50%;
+  height: 100%;
   border: none;
-  background: #0000ff;
-  background: var(--color-compl);
+  background: transparent;
   cursor: pointer;
-  /* vertically center */
-  transform: translateY(-50%);
-  /* filter: blur(3px); */
 }
 
-.flickity-prev-next-button:hover {
-  /* background: white; */
+.flickity-prev-next-button.next:hover {
+  filter: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feGaussianBlur stdDeviation="6" /></filter></svg>#filter');
+  filter: blur(6px);
+  border-right: 3rem solid blue;
+}
+
+.flickity-prev-next-button.previous:hover {
   filter: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feGaussianBlur stdDeviation="2" /></filter></svg>#filter');
   filter: blur(2px);
+  border-left: 3rem solid blue;
 }
 
 .flickity-prev-next-button:focus {

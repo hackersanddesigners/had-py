@@ -102,20 +102,22 @@ http://flickity.metafizzy.co
 
 .flickity-prev-next-button {
   position: absolute;
-  bottom: var(--baseline);
-  width: 9%;
-  height: var(--baseline);
+  top: 0;
+  width: 50%;
+  height: 100%;
   border: none;
-  background: var(--color-compl);
+  background: transparent;
   cursor: pointer;
-  /* vertically center */
-  transform: translateY(-50%);
-  /* filter: blur(3px); */
 }
 
-.flickity-prev-next-button:hover {
-  /* background: white; */
+.flickity-prev-next-button.next:hover {
+  filter: blur(6px);
+  border-right: 3rem solid blue;
+}
+
+.flickity-prev-next-button.previous:hover {
   filter: blur(2px);
+  border-left: 3rem solid blue;
 }
 
 .flickity-prev-next-button:focus {

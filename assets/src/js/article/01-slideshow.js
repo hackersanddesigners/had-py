@@ -19,8 +19,4 @@
     wrapAround: true
   });
 
-  gallery.addEventListener('click', function() {
-    slideshow.next(true)
-  })
-
 })(window, document);
