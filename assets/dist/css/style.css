@@ -117,13 +117,6 @@ img {
 	padding: var(--spacing-large);
 }
 
-.pd-v--1 {
-  padding-top: 12.15px;
-  padding-top: var(--spacing-small);
-  padding-bottom: 12.15px;
-  padding-bottom: var(--spacing-small);
-}
-
 .pd-h--2 {
   padding-right: 24.3px;
   padding-right: var(--spacing-medium);
@@ -159,13 +152,6 @@ img {
 .pd-r--1 {
 	padding-right: 12.15px;
 	padding-right: var(--spacing-small);
-}
-
-@media screen and (min-width: 324px) {
-  .pd-r--1_s {
-    padding-right: 12.15px;
-    padding-right: var(--spacing-small);
-  }
 }
 
 .pd-r--2 {
@@ -250,13 +236,6 @@ img {
   margin-top: var(--spacing-medium);
   margin-bottom: 24.3px;
   margin-bottom: var(--spacing-medium);
-}
-
-.mg-v--3 {
-  margin-top: 48.6px;
-  margin-top: var(--spacing-large);
-  margin-bottom: 48.6px;
-  margin-bottom: var(--spacing-large);
 }
 
 .mg-t--0 {
@@ -430,16 +409,16 @@ hr {
   font-size: 32px;
 }
 
-@media screen and (min-width: 500px) {
-  .ft-1 {
+@media screen and (min-width: 475px) {
+  .ft-1_m {
 	  font-size: 21px;
   }
 
-  .ft-2 {
+  .ft-2_m {
 	  font-size: 28px;
   }
 
-  .ft-3 {
+  .ft-3_m {
 	  font-size: 42px;
   }
 }
@@ -537,11 +516,9 @@ hr {
       justify-content: space-between;
 }
 
-@media screen and (min-width: 324px) {
-  .flex-st_s {
-    -ms-flex-pack: start;
-        justify-content: flex-start;
-  }
+.flex-ab {
+  -ms-flex-align: baseline;
+      align-items: baseline;
 }
 
 /* display */
@@ -636,7 +613,7 @@ hr {
   animation: 0.24s fade ease-in;
 }
 
-/*! Flickity v2.0.5
+/*! Flickity v3.0.5
 http://flickity.metafizzy.co
 ---------------------------------------------- */
 
@@ -702,12 +679,13 @@ http://flickity.metafizzy.co
 
 .flickity-page-dots .dot {
   display: inline-block;
-  width: 10px;
-  height: 10px;
-  margin: 0 8px;
+  width: 9px;
+  height: 9px;
+  margin: 0 6px;
   background: #000000;
   background: var(--color-main);
-  border-radius: 50%;
+  /* border-radius: 50%; */
+  transform: rotate(45deg);
   cursor: pointer;
 }
 

@@ -47,7 +47,7 @@
   animation: 0.24s fade ease-in;
 }
 
-/*! Flickity v2.0.5
+/*! Flickity v3.0.5
 http://flickity.metafizzy.co
 ---------------------------------------------- */
 
@@ -106,11 +106,12 @@ http://flickity.metafizzy.co
 
 .flickity-page-dots .dot {
   display: inline-block;
-  width: 10px;
-  height: 10px;
-  margin: 0 8px;
+  width: 9px;
+  height: 9px;
+  margin: 0 6px;
   background: var(--color-main);
-  border-radius: 50%;
+  /* border-radius: 50%; */
+  transform: rotate(45deg);
   cursor: pointer;
 }
 

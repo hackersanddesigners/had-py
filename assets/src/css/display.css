@@ -23,10 +23,8 @@
   justify-content: space-between;
 }
 
-@media screen and (min-width: 324px) {
-  .flex-st_s {
-    justify-content: flex-start;
-  }
+.flex-ab {
+  align-items: baseline;
 }
 
 /* display */

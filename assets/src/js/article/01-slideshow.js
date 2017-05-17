@@ -1,27 +1,26 @@
 (function (window, document, undefined) {
 
-  'use strict'
+'use strict'
 
-  // Flickity
-  var gallery = document.querySelector('.gallery')
+var gallery = document.querySelector('.gallery')
 
-  var slideshow = new Flickity (gallery, {
-    adaptiveHeight: false,
-    cellAlign: 'center',
-    contain: false,
-    imagesLoaded: true,
-    lazyLoad: true,
-    percentPosition: false,
-    prevNextButtons: false,
-    pageDots: true,
-    resize: true,
-    wrapAround: true
-  });
-  
-  function slideshow_next (event) {
-    slideshow.next(true)
-  }
+var slideshow = new Flickity (gallery, {
+  adaptiveHeight: false,
+  cellAlign: 'center',
+  contain: false,
+  imagesLoaded: true,
+  lazyLoad: true,
+  percentPosition: false,
+  prevNextButtons: false,
+  pageDots: true,
+  resize: true,
+  wrapAround: true
+});
 
-  gallery.addEventListener('click', slideshow_next, false)
+function slideshow_next (event) {
+  slideshow.next(true)
+}
+
+gallery.addEventListener('click', slideshow_next, false)
 
 })(window, document);

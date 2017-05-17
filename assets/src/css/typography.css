@@ -71,16 +71,16 @@ hr {
   font-size: 32px;
 }
 
-@media screen and (min-width: 500px) {
-  .ft-1 {
+@media screen and (min-width: 475px) {
+  .ft-1_m {
 	  font-size: 21px;
   }
 
-  .ft-2 {
+  .ft-2_m {
 	  font-size: 28px;
   }
 
-  .ft-3 {
+  .ft-3_m {
 	  font-size: 42px;
   }
 }

@@ -1,5 +1,3 @@
-/* navigation using waypoints.js */
-
 (function (window, document, undefined) {
 
 'use strict'
@@ -10,6 +8,14 @@ var mm_wrapper = document.createElement('div')
 var main_menu = document.querySelector('.main-menu')
 var section_menu = document.querySelector('.section-menu')
 var sm = document.createElement('button')
+
+var intro = document.querySelector('.intro')
+
+nav.classList.remove('mg-b--2')
+section_menu.classList.add('d-n')
+
+intro.classList.remove('mg-t--3')
+intro.classList.add('mg-t--2')
 
 var threshold = nav.offsetHeight
 var trigger = threshold / 2
@@ -34,15 +40,13 @@ function checkSticky() {
       var mm_parent = main_menu.parentNode
       mm_parent.replaceChild(mm_wrapper, main_menu)
       mm_wrapper.appendChild(main_menu)
-      mm_wrapper.classList.add('mm_wrapper', 'flex-r', 'flex-sb')
-
-      main_menu.classList.remove('flex-r', 'flex-sb', 'flex-st_s')
+      mm_wrapper.classList.add('mm_wrapper', 'flex-r', 'flex-sb', 'flex-ab')
       
-      nav_wrapper.classList.add('p-fx', 'p-tl', 'w--full', 'pd-v--1', 'pd-h--2', 'z-2', 'bg-white')
+      nav_wrapper.classList.add('p-fx', 'p-tl', 'w--full', 'pd-t--1', 'pd-h--2', 'z-2', 'bg-white')
       nav.classList.remove('mg-b--2')
 
       section_menu.classList.add('d-n')
-      sm.classList.add('ft-3', 'blue')
+      sm.classList.add('sm', 'ft-2', 'ft-3_m', 'blue')
       sm.innerHTML = '•••'
       mm_wrapper.appendChild(sm)
     }

@@ -126,7 +126,7 @@ class had(object):
       infobox.decompose()
 
     for heading in soup_wk_intro.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
-      heading['class'] = 'ft-sans ft-3 ft-bold mg-b--1'
+      heading['class'] = 'ft-sans ft-3 ft-3_m ft-bold mg-b--1'
 
     for p in soup_wk_intro.find_all('p'):
       p['class'] = 'mg-b--1'
@@ -206,8 +206,6 @@ class had(object):
         p_intro = soup_wk_introtext.p
         p_intro['class'] = 'mg-t--1'
 
-        print(p_intro)
-        
         for a in p_intro.find_all('a', href=re.compile(r'/mediawiki/*')):
           rel_link = a.get('href')
           rel_link = rel_link.rsplit('/', 1)
@@ -438,7 +436,7 @@ class had(object):
       infobox.decompose()
 
     for heading in soup_bodytext.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
-      heading['class'] = 'ft-sans ft-3 ft-bold mg-b--1'
+      heading['class'] = 'ft-sans ft-3 ft-3_m ft-bold mg-b--1'
 
     for p in soup_bodytext.find_all('p'):
       p['class'] = 'mg-b--1'

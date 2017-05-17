@@ -26,11 +26,6 @@
 	padding: var(--spacing-large);
 }
 
-.pd-v--1 {
-  padding-top: var(--spacing-small);
-  padding-bottom: var(--spacing-small);
-}
-
 .pd-h--2 {
   padding-right: var(--spacing-medium);
   padding-left: var(--spacing-medium);
@@ -58,12 +53,6 @@
 
 .pd-r--1 {
 	padding-right: var(--spacing-small);
-}
-
-@media screen and (min-width: 324px) {
-  .pd-r--1_s {
-    padding-right: var(--spacing-small);
-  }
 }
 
 .pd-r--2 {
@@ -132,11 +121,6 @@
 .mg-v--2 {
   margin-top: var(--spacing-medium);
   margin-bottom: var(--spacing-medium);
-}
-
-.mg-v--3 {
-  margin-top: var(--spacing-large);
-  margin-bottom: var(--spacing-large);
 }
 
 .mg-t--0 {
