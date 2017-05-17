@@ -38,11 +38,12 @@ function checkSticky() {
 
       main_menu.classList.remove('flex-r', 'flex-sb', 'flex-st_s')
       
-      nav_wrapper.classList.add('a-eio', 'p-fx', 'p-tl', 'w--full', 'pd-v--1', 'pd-h--2', 'z-2', 'bg-white')
+      nav_wrapper.classList.add('p-fx', 'p-tl', 'w--full', 'pd-v--1', 'pd-h--2', 'z-2', 'bg-white')
       nav.classList.remove('mg-b--2')
 
       section_menu.classList.add('d-n')
-      sm.classList.add('sm')
+      sm.classList.add('ft-3', 'blue')
+      sm.innerHTML = '•••'
       mm_wrapper.appendChild(sm)
     }
   } else if (isSticky) {

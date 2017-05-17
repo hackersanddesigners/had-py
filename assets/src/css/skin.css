@@ -47,12 +47,6 @@
   animation: 0.24s fade ease-in;
 }
 
-/* Filters */
-
-.blur {
-  filter: blur(5px);
-}
-
 /*! Flickity v2.0.5
 http://flickity.metafizzy.co
 ---------------------------------------------- */

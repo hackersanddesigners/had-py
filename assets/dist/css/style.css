@@ -468,14 +468,6 @@ hr {
   border-bottom: none;
 }
 
-.sm {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  background-color: #0000ff;
-  background-color: var(--color-compl);
-}
-
 /* Size */
 
 .w--full {
@@ -642,13 +634,6 @@ hr {
 
 .a-eio {
   animation: 0.24s fade ease-in;
-}
-
-/* Filters */
-
-.blur {
-  filter: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feGaussianBlur stdDeviation="5" /></filter></svg>#filter');
-  filter: blur(5px);
 }
 
 /*! Flickity v2.0.5

@@ -105,10 +105,3 @@ hr {
 .br-b--0 {
   border-bottom: none;
 }
-
-.sm {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  background-color: var(--color-compl);
-}
