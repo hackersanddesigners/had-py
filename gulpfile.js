@@ -53,7 +53,8 @@ gulp.task('css', function(){
 
 // Concatenate & Minify JS
 gulp.task('scripts:nav', function() {
- 	return gulp.src('assets/src/js/nav/*.js')
+  return gulp.src('assets/src/js/nav/*.js')
+  .pipe(gulp.dest('assets/dist/js/'))
 	.pipe(jshint())
   .pipe(jshint.reporter('default'))
   .pipe(concat('nav.js'))
