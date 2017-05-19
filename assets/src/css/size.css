@@ -1,5 +1,9 @@
 /* Size */
 
+.w--page {
+  max-width: 42rem;
+}
+
 .w--full {
   width: 100%;
 }
@@ -17,7 +21,7 @@
 }
 
 @media screen and (min-width: 640px) {
-  .w--half_m {
+  .w--half__m {
     width: 47.5%;
   }
   
@@ -26,15 +30,15 @@
   }
 }
 
-@media screen and (min-width: 900px) {
-  .w--one-fourth__l {
-    width: 25%;
+@media screen and (min-width: 1200px) {
+  .w--one_third__l {
+    width: 30%;
   }
 }
 
-@media screen and (min-width: 1200px) {
-  .w--third_w {
-    width: 30%;
+@media screen and (min-width: 1600px) {
+  .w--one-fourth__w {
+    width: 22%;
   }
 }
 

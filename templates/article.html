@@ -3,17 +3,19 @@
   <script src="/assets/dist/js/slideshow.min.js"></script>
 {% endblock %}
 {% block article %}
+<div class="w--page">
 
   {% if date %}<h1 class="ft-sans ft-3 ft-3_m mg-t--2">{{ date[0]|dateformat }}</h1>{% endif %}
   <h2 class="ft-serif ft-2 ft-2_m mg-b--2">{{ title }}</h2>
 
-  <!-- <ul> -->
-  <!--   {% if time %}<li>{{ time[0] }}</li>{% endif %} -->
-  <!--   {% if place %}<li>{{ place[0] }}</li>{% endif%} -->
-  <!--   {% if peopleorgs %}<li>{{ peopleorgs|join(', ') }}</li>{% endif %} -->
-  <!-- </ul> -->
+  <ul>
+    {% if time %}<li>{{ time[0] }}</li>{% endif %}
+    {% if place %}<li>{{ place[0] }}</li>{% endif%}
+    {% if peopleorgs %}<li>{{ peopleorgs|join(', ') }}</li>{% endif %}
+  </ul>
   
   {{ bodytext|safe }}
+</div>
 
 {% endblock %}
 

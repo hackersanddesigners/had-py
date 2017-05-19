@@ -124,7 +124,7 @@ function section_menu_toggle (event) {
     section_menu.classList.remove('d-n');
     section_menu.classList.add('flex-r', 'flex-ab', 'flex-sb');
     for(var i = 0; i < sm_i.length; i++) {
-      sm_i[i].classList.remove('mg-r--1', 'mg-b--05')
+      sm_i[i].classList.remove('mg-r--1', 'mg-b--05');
       sm_i[i].classList.add('w--half', 'w--one-third__m', 'w--one-fourth__l', 'mg-b--1');
     }
     nav_wrapper.classList.add('pd-b--1');

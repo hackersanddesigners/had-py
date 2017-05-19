@@ -103,7 +103,7 @@ class had(object):
       a['href'] = 's/Events/p/' + rel_link[1]
     
     for img in soup_wk_intro.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-      img['class'] = 'mg-v--2 shadow'
+      img['class'] = 'mg-v--1 shadow'
 
       src_rel_link = img.get('src')
       srcset_rel_link = img.get('srcset')
@@ -422,6 +422,10 @@ class had(object):
         srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
         srcset_s = ', '.join(srcset_lu)
         img['srcset'] = srcset_s
+
+      # --- set img caption
+      # gallery_item_caption = gallery_item.find('div', class_="gallerytext")
+      # gallery_item_caption['class'] = 'pd-t--1 mg-auto w--two-thirds ft-sans t-c'
 
       # get rid of <a>s wrapping <img>s
       a_img = img.find_parent("a")
