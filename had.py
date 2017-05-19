@@ -51,7 +51,7 @@ class had(object):
       Rule('/s/<section_title>/p/<page_title>', endpoint='article')
     ])
 
-  # ===========
+  # ==========
   # navigation
   def nav_main():
     base_url = "http://wikidev.hackersanddesigners.nl/"
