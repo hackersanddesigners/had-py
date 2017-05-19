@@ -10,20 +10,20 @@
 	<body class="mss pd-a--2 ft-1 ft-1_m">
     <nav class="nav">
       <div class="main-menu pd-b--1">
-        <a href="/" class="ft-sans ft-2 ft-3_m br-b--0 pd-r--1 {% if title == 'Hackers and Designers' %}red{% else %} blue{% endif %}">H&D</a>
+        <a href="/" class="ft-sans ft-2 ft-3_m a-td--0 pd-r--1 blue">H&D</a>
         {% for item in nav_main['query']['results'].items() %}
-        <a href="/p/{{ item[0]|replace(" ", "_") }}" class="ft-sans ft-2 ft-3_m br-b--0{% if not loop.last %} pd-r--1{% endif %}{% if item[0] == title %} red{% else %} blue{% endif %}">{{ item[0] }}</a>
+        <a href="/p/{{ item[0]|replace(" ", "_") }}" class="ft-sans ft-2 ft-3_m a-td--0 blue{% if not loop.last %} pd-r--1{% endif %}">{{ item[0] }}</a>
         {% endfor %}
       </div>
       <div class="section-menu">
 			  {% for item in nav_sections['query']['results'].items() %}
-        <a href="/s/{{ item[1]['fulltext']|replace("Concept:", "")|replace(" ", "_") }}" class="d-ib ft-serif ft-2 ft-2_m{% if not loop.last %} mg-r--1 mg-b--05{% endif %}{% if item[0] == title %} ft-italic{% endif %}">{{ item[1]['fulltext']|replace("Concept:", "")}}</a>
+        <a href="/s/{{ item[1]['fulltext']|replace("Concept:", "")|replace(" ", "_") }}" class="sm-item d-ib ft-serif ft-2 ft-2_m{% if not loop.last %} mg-r--1 mg-b--05{% endif %}{% if item[0] == title %} ft-italic{% endif %}">{{ item[1]['fulltext']|replace("Concept:", "")}}</a>
 			  {% endfor %}
       </div>
     </nav>
     
     {% if intro %}
-    <div class="intro mg-t--3">
+    <div class="intro mg-t--4">
       {{ intro|safe }} 
     </div>
     {% endif %}

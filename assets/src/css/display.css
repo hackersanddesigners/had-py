@@ -37,6 +37,10 @@
   display: inline-block;
 }
 
+.d-bl {
+  display: block;
+}
+
 .d-tb {
   display: table;
 }

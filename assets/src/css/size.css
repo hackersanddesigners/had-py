@@ -4,6 +4,10 @@
   width: 100%;
 }
 
+.w--one-third {
+  width: 30%;
+}
+
 .w--half {
   width: 47.5%;
 }
@@ -15,6 +19,16 @@
 @media screen and (min-width: 640px) {
   .w--half_m {
     width: 47.5%;
+  }
+  
+  .w--one-third__m {
+    width: 30%;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .w--one-fourth__l {
+    width: 25%;
   }
 }
 
