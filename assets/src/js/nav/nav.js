@@ -47,7 +47,7 @@ function onResizing (event) {
           nav.classList.remove('mg-b--2');
     
           section_menu.classList.add('d-n');
-          sm.classList.add('ft-2', 'ft-3_m', 'blue');
+          sm.classList.add('ft-2', 'ft-3__m', 'blue');
           sm.innerHTML = '•••';
           mm_wrapper.appendChild(sm);
         }
@@ -101,7 +101,7 @@ function onResizing (event) {
 
         // wrap section menu to toggle button
         section_menu.classList.add('d-n');
-        sm.classList.add('ft-2', 'ft-3_m', 'blue');
+        sm.classList.add('ft-2', 'ft-3__m', 'blue');
         sm.innerHTML = '•••';
         mm_wrapper.appendChild(sm);
       } else if (nav.classList.contains('sticky')) {

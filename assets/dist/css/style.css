@@ -373,8 +373,6 @@ ul {
 blockquote {
   font-family: Arial;
   font-family: var(--font-sans);
-  font-size: var(--font-size--medium);
-  font-size: var(--font-size--medium);
   margin: 24.3px;
   margin: var(--baseline);
 }
@@ -418,15 +416,15 @@ hr {
 }
 
 @media screen and (min-width: 475px) {
-  .ft-1_m {
+  .ft-1__m {
 	  font-size: 21px;
   }
 
-  .ft-2_m {
+  .ft-2__m {
 	  font-size: 28px;
   }
 
-  .ft-3_m {
+  .ft-3__m {
 	  font-size: 42px;
   }
 }

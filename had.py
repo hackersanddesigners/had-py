@@ -436,10 +436,13 @@ class had(object):
       infobox.decompose()
 
     for heading in soup_bodytext.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
-      heading['class'] = 'ft-sans ft-3 ft-3_m ft-bold mg-b--1'
+      heading['class'] = 'ft-sans ft-3 ft-3__m ft-bold mg-b--1'
 
     for p in soup_bodytext.find_all('p'):
       p['class'] = 'mg-b--1'
+
+    for bq in soup_bodytext.find_all('blockquote'):
+      bq['class'] = 'ft-2 ft-2__m'
 
     # ----------
     # flickity slideshow
