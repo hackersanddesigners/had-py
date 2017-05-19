@@ -15,28 +15,8 @@ var intro = document.querySelector('.intro');
 function onResizing (event) {
   
   // --- make toggle menu
-  if (window.innerWidth < 640) {
-    // clean up space between `nav` and `intro p`
-    nav.classList.remove('mg-b--2');
-    section_menu.classList.add('d-n');
-
-    // set `nav_wrapper` as `nav`'s parent
-    nav_parent.replaceChild(nav_wrapper, nav);
-    nav_wrapper.appendChild(nav);
-
-    mm_parent.replaceChild(mm_wrapper, main_menu);
-    mm_wrapper.appendChild(main_menu);
-    mm_wrapper.classList.add('mm_wrapper', 'flex-r', 'flex-sb', 'flex-ab');
-
-    nav_wrapper.classList.add('p-fx', 'p-tl', 'w--full', 'pd-t--1', 'pd-h--2', 'z-2', 'bg-white');
-    nav.classList.remove('mg-b--2');
-
-    // wrap section menu to toggle button
-    section_menu.classList.add('d-n');
-    sm.classList.add('ft-2', 'ft-3_m', 'blue');
-    sm.innerHTML = '•••';
-    mm_wrapper.appendChild(sm);
-  } else {
+  if (window.innerWidth > 640) {
+    
     // --- set scroll trigger
     var threshold = nav.offsetHeight;
     var trigger = threshold / 2;
@@ -51,9 +31,9 @@ function onResizing (event) {
 
       var isSticky = nav.classList.contains('sticky');
       if (y > threshold) {
-        if (!isSticky) {
+        if (!isSticky && nav.parentNode !== nav_wrapper) {
           nav.classList.add('sticky');
-        
+
           // set `nav_wrapper` as `nav`'s parent
           nav_parent.replaceChild(nav_wrapper, nav);
           nav_wrapper.appendChild(nav);
@@ -61,10 +41,10 @@ function onResizing (event) {
           mm_parent.replaceChild(mm_wrapper, main_menu);
           mm_wrapper.appendChild(main_menu);
           mm_wrapper.classList.add('mm_wrapper', 'flex-r', 'flex-sb', 'flex-ab');
-      
+    
           nav_wrapper.classList.add('p-fx', 'p-tl', 'w--full', 'pd-t--1', 'pd-h--2', 'z-2', 'bg-white');
           nav.classList.remove('mg-b--2');
-        
+    
           section_menu.classList.add('d-n');
           sm.classList.add('ft-2', 'ft-3_m', 'blue');
           sm.innerHTML = '•••';
@@ -72,28 +52,60 @@ function onResizing (event) {
         }
       } else if (isSticky) {
         nav.classList.remove('sticky');
-
+        
         // unwrap section menu
         mm_wrapper.removeChild(sm);
-
         unwrap(nav_wrapper);
         unwrap(mm_wrapper);
 
         section_menu.classList.remove('d-n', 'd-ib');
       }
     } // --- end of checkSticky()
-  }
+    
+    if (section_menu.classList.contains('d-n')) {
+      // unwrap section menu
+      mm_wrapper.removeChild(sm);
 
-  function unwrap(wrapper) {
-    var doc_frag = document.createDocumentFragment();
-    while (wrapper.firstChild) {
-      var child = wrapper.removeChild(wrapper.firstChild);
-      doc_frag.appendChild(child);
+      unwrap(nav_wrapper);
+      unwrap(mm_wrapper);
+
+      section_menu.classList.remove('d-n', 'd-ib');
     }
-      
-    wrapper.parentNode.replaceChild(doc_frag, wrapper);
-  }
 
+    // --- * * *
+
+  } else if (nav.parentNode !== nav_wrapper) {
+    // clean up space between `nav` and `intro p`
+    nav.classList.remove('mg-b--2');
+    section_menu.classList.add('d-n');
+
+    // set `nav_wrapper` as `nav`'s parent
+    nav_parent.replaceChild(nav_wrapper, nav);
+    nav_wrapper.appendChild(nav);
+
+    mm_parent.replaceChild(mm_wrapper, main_menu);
+    mm_wrapper.appendChild(main_menu);
+    mm_wrapper.classList.add('mm_wrapper', 'flex-r', 'flex-sb', 'flex-ab');
+
+    nav_wrapper.classList.add('nav_wrapper', 'p-fx', 'p-tl', 'w--full', 'pd-t--1', 'pd-h--2', 'z-2', 'bg-white');
+    nav.classList.remove('mg-b--2');
+
+    // wrap section menu to toggle button
+    section_menu.classList.add('d-n');
+    sm.classList.add('ft-2', 'ft-3_m', 'blue');
+    sm.innerHTML = '•••';
+    mm_wrapper.appendChild(sm);
+  }
+}
+
+function unwrap(wrapper) {
+  var doc_frag = document.createDocumentFragment();
+  while (wrapper.firstChild) {
+    var child = wrapper.removeChild(wrapper.firstChild);
+    doc_frag.appendChild(child);
+  }
+    
+  wrapper.parentNode.replaceChild(doc_frag, wrapper);
 }
 
 function section_menu_toggle (event) {
