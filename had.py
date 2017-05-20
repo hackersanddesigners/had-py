@@ -401,7 +401,8 @@ class had(object):
       a['href'] = rel_link[1]
 
     for img in soup_bodytext.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-      img['class'] = 'mg-t--1 shadow'
+      img['class'] = 'mg-v--1 shadow'
+      print(img)
 
       src_rel_link = img.get('src')
       srcset_rel_link = img.get('srcset')
@@ -441,9 +442,12 @@ class had(object):
 
     for heading in soup_bodytext.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
       heading['class'] = 'ft-sans ft-3 ft-3__m ft-bold mg-b--1'
-
+    
     for p in soup_bodytext.find_all('p'):
       p['class'] = 'mg-b--1'
+
+    p_first = soup_bodytext.find('p')
+    p_first['class'] = 'mg-t--2 mg-b--1'
 
     for bq in soup_bodytext.find_all('blockquote'):
       bq['class'] = 'ft-2 ft-2__m'

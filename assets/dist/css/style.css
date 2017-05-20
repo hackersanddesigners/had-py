@@ -233,6 +233,13 @@ img {
 	margin: var(--spacing-large);
 }
 
+.mg-v--1 {
+  margin-top: 12.15px;
+  margin-top: var(--spacing-small);
+  margin-bottom: 12.15px;
+  margin-bottom: var(--spacing-small);
+}
+
 .mg-v--2 {
   margin-top: 24.3px;
   margin-top: var(--spacing-medium);

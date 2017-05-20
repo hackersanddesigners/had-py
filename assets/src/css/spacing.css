@@ -119,6 +119,11 @@
 	margin: var(--spacing-large);
 }
 
+.mg-v--1 {
+  margin-top: var(--spacing-small);
+  margin-bottom: var(--spacing-small);
+}
+
 .mg-v--2 {
   margin-top: var(--spacing-medium);
   margin-bottom: var(--spacing-medium);
