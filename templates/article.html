@@ -8,7 +8,10 @@
 
   {% if date %}<h1 class="ft-sans ft-3 ft-3__m mg-t--2">{{ date[0]|dateformat }}</h1>{% endif %}
   
+  {% if title not in nav_main['query']['results'] %}
   <h2 class="ft-serif ft-1 ft-2__m mg-b--2">{{ title }}</h2>
+  {{ super() }}
+  {% endif %}
 
   <ul>
     {% if time %}<li>{{ time[0] }}</li>{% endif %}
