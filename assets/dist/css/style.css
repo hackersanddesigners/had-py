@@ -574,9 +574,18 @@ hr {
   position: fixed;
 }
 
+.p-abs {
+  position: absolute;
+}
+
 .p-tl {
   top: 0;
   left: 0;
+}
+
+.p-tr {
+  top: 0;
+  right: 0;
 }
 
 .z-1 {
@@ -585,6 +594,10 @@ hr {
 
 .z-2 {
   z-index: 2;
+}
+
+.z-3 {
+  z-index: 3;
 }
 
 /** Skin **/
