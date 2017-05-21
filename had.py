@@ -447,25 +447,26 @@ class had(object):
 
     # --- set up embedded videos (yt)
     for embedvid in soup_bodytext.find_all('div', class_="embedvideo"):
-      del embedvid['style']
-      embedvid['class'] = 'mg-v--2'
+      if embedvid:
+        del embedvid['style']
+        embedvid['class'] = 'mg-v--2'
 
-      embedvid_c = embedvid.find('div', class_="thumbinner");
-      del embedvid_c['style']
-      embedvid_c['class'] = 'embed-container'
+        embedvid_c = embedvid.find('div', class_="thumbinner");
+        del embedvid_c['style']
+        embedvid_c['class'] = 'embed-container'
       
-      embedvid_iframe = embedvid_c.find('iframe')
-      del embedvid_iframe['width']
-      del embedvid_iframe['height']
-      embedvid_iframe['frameborder'] = '0'
-      embedvid_iframe['allowfullscreen']
+        embedvid_iframe = embedvid_c.find('iframe')
+        del embedvid_iframe['width']
+        del embedvid_iframe['height']
+        embedvid_iframe['frameborder'] = '0'
+        embedvid_iframe['allowfullscreen']
 
-      # --- video caption
-      embedvid_caption = embedvid_c.find('div', class_="thumbcaption")
-      embedvid_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-c'
-      # --- move video caption outside the `iframe`'s wrapper
-      embedvid_caption.extract()
-      embedvid.append(embedvid_caption)
+        # --- video caption
+        embedvid_caption = embedvid_c.find('div', class_="thumbcaption")
+        embedvid_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-c'
+        # --- move video caption outside the `iframe`'s wrapper
+        embedvid_caption.extract()
+        embedvid.append(embedvid_caption)
 
     # --------
     # typography
