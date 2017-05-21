@@ -404,12 +404,12 @@ class had(object):
       img['class'] = 'mg-v--1 shadow'
     
       # --- check if img has caption/wrapped inside a div
-      img_thumb = img.find_parent('div')
-      
+      img_thumb = img.find_parent('div', class_="thumbinner")
+      img_p = img.find_parent('p')
       if img_thumb:
         img_thumb.unwrap()
 
-        figure = img.find_parent('div')
+        figure = img.find_parent('div', class_='thumb')
         figure.name = 'figure'
         del figure['class']
       
@@ -417,6 +417,9 @@ class had(object):
         img_caption = figure.find('div', class_="thumbcaption")
         img_caption.name = 'figcaption'
         img_caption['class'] = 'mg-auto w--two-thirds ft-sans t-c'
+      
+      elif img_p:
+        img_p.name = 'figure'
 
       src_rel_link = img.get('src')
       srcset_rel_link = img.get('srcset')
