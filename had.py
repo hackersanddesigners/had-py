@@ -402,7 +402,21 @@ class had(object):
 
     for img in soup_bodytext.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
       img['class'] = 'mg-v--1 shadow'
-      print(img)
+    
+      # --- check if img has caption/wrapped inside a div
+      img_thumb = img.find_parent('div')
+      
+      if img_thumb:
+        img_thumb.unwrap()
+
+        figure = img.find_parent('div')
+        figure.name = 'figure'
+        del figure['class']
+      
+        # --- set img caption
+        img_caption = figure.find('div', class_="thumbcaption")
+        img_caption.name = 'figcaption'
+        img_caption['class'] = 'mg-auto w--two-thirds ft-sans t-c'
 
       src_rel_link = img.get('src')
       srcset_rel_link = img.get('srcset')
@@ -423,10 +437,6 @@ class had(object):
         srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
         srcset_s = ', '.join(srcset_lu)
         img['srcset'] = srcset_s
-
-      # --- set img caption
-      # gallery_item_caption = gallery_item.find('div', class_="gallerytext")
-      # gallery_item_caption['class'] = 'pd-t--1 mg-auto w--two-thirds ft-sans t-c'
 
       # get rid of <a>s wrapping <img>s
       a_img = img.find_parent("a")
