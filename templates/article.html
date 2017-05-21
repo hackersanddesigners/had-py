@@ -19,7 +19,9 @@
     {% if peopleorgs %}<li class="d-tbr li-em">w/ {{ peopleorgs|join(', ') }}</li>{% endif %}
   </ul>
   
-  {{ bodytext|safe }}
+  <section class="mg-t--2">
+    {{ bodytext|safe }}
+  <section>  
 </div>
 
 {% endblock %}

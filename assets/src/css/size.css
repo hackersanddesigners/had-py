@@ -16,8 +16,8 @@
   width: 47.5%;
 }
 
-.w--two-thirds {
-  width: 70%;
+.w--four-fifths {
+  width: 80%;
 }
 
 @media screen and (min-width: 640px) {

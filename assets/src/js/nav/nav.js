@@ -9,7 +9,7 @@ var main_menu = document.querySelector('.main-menu');
 var section_menu = document.querySelector('.section-menu');
 var sm = document.createElement('button');
 var sm_i = document.querySelectorAll('.sm-item');
-var intro = document.querySelector('.intro');
+var after_nav = nav.nextElementSibling;
 
 function onResizing (event) {
   
@@ -24,10 +24,10 @@ function onResizing (event) {
   // --- set function to check for scroll trigger
   function checkSticky() {
     var y = window.scrollY - trigger;
-    
+
     if (y > threshold) {
       if (!nav.classList.contains('sticky')) {
-        
+
       // set up `nav`
       nav.classList.add('sticky', 'd-n');
 
@@ -41,6 +41,8 @@ function onResizing (event) {
       sm.classList.add('z-3', 'p-abs', 'p-tr', 'ft-2', 'ft-3__m', 'blue');
       sm.innerHTML = '•••';
       nav_wrapper.insertBefore(sm, nav);
+    
+      after_nav.style.paddingTop = threshold + 'px';
     }
   } else if (nav.classList.contains('sticky')) {
     nav.classList.remove('sticky', 'd-n', 'pd-t--1', 'pd-h--2', 'z-2', 'bg-white');
@@ -55,6 +57,8 @@ function onResizing (event) {
     unwrap(nav_wrapper);
 
     section_menu.classList.remove('d-ib', 'flex-r', 'flex-ab', 'flex-sb');
+
+    after_nav.style.paddingTop = '';
    }
   } // --- end of checkSticky()
 } // --- end resize()

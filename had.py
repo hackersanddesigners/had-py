@@ -126,7 +126,7 @@ class had(object):
       infobox.decompose()
 
     for heading in soup_wk_intro.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
-      heading['class'] = 'ft-sans ft-3 ft-3_m ft-bold mg-b--1'
+      heading['class'] = 'ft-sans ft-1 ft-1_m ft-bold mg-b--1'
 
     for p in soup_wk_intro.find_all('p'):
       p['class'] = 'mg-b--1'
@@ -416,7 +416,7 @@ class had(object):
         # --- set img caption
         img_caption = figure.find('div', class_="thumbcaption")
         img_caption.name = 'figcaption'
-        img_caption['class'] = 'mg-auto w--two-thirds ft-sans t-c'
+        img_caption['class'] = 'mg-auto w--four-fifths ft-sans t-c'
       
       elif img_p:
         img_p.name = 'figure'
@@ -445,6 +445,28 @@ class had(object):
       a_img = img.find_parent("a")
       a_img.unwrap()
 
+    # --- set up embedded videos
+    for embedvid in soup_bodytext.find_all('div', class_="embedvideo"):
+      del embedvid['style']
+      embedvid['class'] = 'mg-v--2'
+
+      embedvid_c = embedvid.find('div', class_="thumbinner");
+      del embedvid_c['style']
+      embedvid_c['class'] = 'embed-container'
+      
+      embedvid_iframe = embedvid_c.find('iframe')
+      del embedvid_iframe['width']
+      del embedvid_iframe['height']
+      embedvid_iframe['frameborder'] = '0'
+      embedvid_iframe['allowfullscreen']
+
+      # --- video caption
+      embedvid_caption = embedvid_c.find('div', class_="thumbcaption")
+      embedvid_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-c'
+      # --- move video caption outside the `iframe`'s wrapper
+      embedvid_caption.extract()
+      embedvid.append(embedvid_caption)
+
     # --------
     # typography
 
@@ -454,13 +476,10 @@ class had(object):
       infobox.decompose()
 
     for heading in soup_bodytext.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
-      heading['class'] = 'ft-sans ft-3 ft-3__m ft-bold mg-b--1'
+      heading['class'] = 'ft-sans ft-1 ft-1__m ft-bold mg-b--1'
     
     for p in soup_bodytext.find_all('p'):
       p['class'] = 'mg-b--1'
-
-    p_first = soup_bodytext.find('p')
-    p_first['class'] = 'mg-t--2 mg-b--1'
 
     for bq in soup_bodytext.find_all('blockquote'):
       bq['class'] = 'ft-2 ft-2__m'
@@ -489,7 +508,7 @@ class had(object):
 
       # --- set img caption
       gallery_item_caption = gallery_item.find('div', class_="gallerytext")
-      gallery_item_caption['class'] = 'pd-t--1 mg-auto w--two-thirds ft-sans t-c'
+      gallery_item_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-c'
 
       # --- get parent <ul>
       gallerybox = gallery_item.find_parent('ul')
