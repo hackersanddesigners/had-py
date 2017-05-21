@@ -445,7 +445,7 @@ class had(object):
       a_img = img.find_parent("a")
       a_img.unwrap()
 
-    # --- set up embedded videos
+    # --- set up embedded videos (yt)
     for embedvid in soup_bodytext.find_all('div', class_="embedvideo"):
       del embedvid['style']
       embedvid['class'] = 'mg-v--2'
