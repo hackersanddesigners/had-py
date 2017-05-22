@@ -264,16 +264,16 @@ class had(object):
    
     wk_intro = wkdata_head['parse']['text']
     soup_wk_intro = BeautifulSoup(wk_intro, 'html.parser')
-    intro = soup_wk_intro.find('p')
+    p_intro = soup_wk_intro.find('p')
     p_intro['class'] = 'mg-t--1'
     
-    for bq in soup_bodytext.find_all('blockquote'):
+    for bq in soup_wk_intro.find_all('blockquote'):
       bq['class'] = 'ft-2 ft-2__m'
 
-    for pre in soup_bodytext.find_all('pre'):
+    for pre in soup_wk_intro.find_all('pre'):
       pre['class'] = 'ft-mono blue ft-1 mg-b--1 pd-l--2'
 
-    wk_intro = intro
+    wk_intro = p_intro
 
     # -------------------------------
     today = datetime.date.today()
