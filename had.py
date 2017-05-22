@@ -487,16 +487,28 @@ class had(object):
         return item_list
 
       wk_date = wkdata_meta['query']['data'][1]['dataitem']
-      wk_date = extract_metadata(wk_date)
+      if 'OnDate' in wkdata_meta['query']['data'][1]['property']:
+        wk_date = extract_metadata(wk_date)
+      else:
+        wk_date = None
       
       wk_time = wkdata_meta['query']['data'][4]['dataitem']
-      wk_time = extract_metadata(wk_time)
+      if 'Time' in wkdata_meta['query']['data'][4]['property']:
+        wk_time = extract_metadata(wk_time)
+      else:
+        wk_time = None
 
       wk_place = wkdata_meta['query']['data'][6]['dataitem']
-      wk_place = extract_metadata(wk_place)
+      if 'Venue' in wkdata_meta['query']['data'][6]['property']:
+        wk_place = extract_metadata(wk_place)
+      else:
+        wk_place = None
 
       wk_peopleorgs = wkdata_meta['query']['data'][2]['dataitem']
-      wk_peopleorgs = extract_metadata(wk_peopleorgs)
+      if 'PeopleOrganisations' in wkdata_meta['query']['data'][2]['property']:
+        wk_peopleorgs = extract_metadata(wk_peopleorgs)
+      else:
+        wk_peopleorgs = None
     
     else:
       wk_date = None
