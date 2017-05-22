@@ -255,6 +255,10 @@ class had(object):
     intro = soup_wk_intro.find('p')
     wk_intro = intro
 
+    # -------------------------------
+    today = datetime.date.today()
+    today = today.strftime('%Y/%m/%d')
+    
     # recursively fetch all pages using `askargs`
     def query(request):
       request['action'] = 'askargs'
@@ -285,52 +289,159 @@ class had(object):
         lastContinue = result['query-continue-offset']
 
     # make section_items list by fetching item's title and img (if any)
-    wk_section_items = []
-    for result in query({'conditions': 'Concept:' + section_title, 'printouts': 'Modification date|NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=Modification date|OnDate|order=desc'}):
+    # ----- Activities
+    if 'Activities' in section_title:
+      wk_section_items = None
 
-      for item in result['results'].items():
-        if item[1]['printouts']['NameOfEvent']:
-          title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
-          wk_section_items.append(title)
-        else:
-          title = item[1]['fulltext']
-          wk_section_items.append(title)
-          date = None
-          wk_section_items.append(date)
-        if item[1]['printouts']['OnDate']:
-          date = item[1]['printouts']['OnDate'][0]['fulltext']
-          wk_section_items.append(date)
+      # ---- upcoming items
+      wk_section_upitems = []
+      for result in query({'conditions': 'Concept:' + section_title + '|OnDate::>' + today, 'printouts': 'Modification date|NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=Modification date|OnDate|order=desc'}): 
+        for item in result['results'].items():
+          if item[1]['printouts']['NameOfEvent']:
+            title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
+            wk_section_upitems.append(title)
+          else:
+            title = item[1]['fulltext']
+            wk_section_upitems.append(title)
+            date = None
+            wk_section_upitems.append(date)
+          if item[1]['printouts']['OnDate']:
+            date = item[1]['printouts']['OnDate'][0]['fulltext']
+            wk_section_upitems.append(date)
 
-        # fetch section item's content
-        item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-        response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
-        wkdata_introtext_item = response_introtext_item.json()
+          # fetch section item's content
+          item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+          response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
+          wkdata_introtext_item = response_introtext_item.json()
 
-        wkdata_text_item = wkdata_introtext_item['parse']['text']
-        # get section item's img
-        soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
-        if soup_wk_introtext.img:
-          cover_img = soup_wk_introtext.img
-          cover_img['class'] = 'mg-t--1 shadow'
+          wkdata_text_item = wkdata_introtext_item['parse']['text']
+          # get section item's img
+          soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
+          if soup_wk_introtext.img:
+            cover_img = soup_wk_introtext.img
+            cover_img['class'] = 'mg-t--1 shadow'
 
-          src_rel_link = cover_img.get('src')
-          srcset_rel_link = cover_img.get('srcset')
-          if src_rel_link:
-            out_link = urljoin(base_url, src_rel_link)
-            cover_img['src'] = out_link
-          if srcset_rel_link:
-            srcset_list = re.split(r'[,]\s*', srcset_rel_link)
-            srcset_lu = srcset_list
-            srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
-            srcset_s = ', '.join(srcset_lu)
-            cover_img['srcset'] = srcset_s
-        else:
-          cover_img = None
+            src_rel_link = cover_img.get('src')
+            srcset_rel_link = cover_img.get('srcset')
+            if src_rel_link:
+              out_link = urljoin(base_url, src_rel_link)
+              cover_img['src'] = out_link
+            if srcset_rel_link:
+              srcset_list = re.split(r'[,]\s*', srcset_rel_link)
+              srcset_lu = srcset_list
+              srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
+              srcset_s = ', '.join(srcset_lu)
+              cover_img['srcset'] = srcset_s
+          else:
+            cover_img = None
 
-        # add `cover_img` to `wk_section_items`
-        wk_section_items.append(cover_img)
+          # add `cover_img` to `wk_section_items`
+          wk_section_upitems.append(cover_img)
+    
+      # ---- * * *
+      wk_section_upitems = list(zip(*[iter(wk_section_upitems)]*3))
 
-    wk_section_items = list(zip(*[iter(wk_section_items)]*3))
+      # ---- past items
+      wk_section_pastitems = []
+
+      for result in query({'conditions': 'Concept:' + section_title + '|OnDate::<' + today, 'printouts': 'Modification date|NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=Modification date|OnDate|order=desc'}): 
+        for item in result['results'].items():
+          if item[1]['printouts']['NameOfEvent']:
+            title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
+            wk_section_pastitems.append(title)
+          else:
+            title = item[1]['fulltext']
+            wk_section_pastitems.append(title)
+            date = None
+            wk_section_pastitems.append(date)
+          if item[1]['printouts']['OnDate']:
+            date = item[1]['printouts']['OnDate'][0]['fulltext']
+            wk_section_pastitems.append(date)
+
+          # fetch section item's content
+          item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+          response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
+          wkdata_introtext_item = response_introtext_item.json()
+
+          wkdata_text_item = wkdata_introtext_item['parse']['text']
+          # get section item's img
+          soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
+          if soup_wk_introtext.img:
+            cover_img = soup_wk_introtext.img
+            cover_img['class'] = 'mg-t--1 shadow'
+
+            src_rel_link = cover_img.get('src')
+            srcset_rel_link = cover_img.get('srcset')
+            if src_rel_link:
+              out_link = urljoin(base_url, src_rel_link)
+              cover_img['src'] = out_link
+            if srcset_rel_link:
+              srcset_list = re.split(r'[,]\s*', srcset_rel_link)
+              srcset_lu = srcset_list
+              srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
+              srcset_s = ', '.join(srcset_lu)
+              cover_img['srcset'] = srcset_s
+          else:
+            cover_img = None
+
+          # add `cover_img` to `wk_section_items`
+          wk_section_pastitems.append(cover_img)
+    
+      # ---- * * *
+      wk_section_pastitems = list(zip(*[iter(wk_section_pastitems)]*3))
+      print(wk_section_pastitems)
+    # -------
+    # other sections
+    else:
+      wk_section_upitems = None
+      wk_section_pastitems = None
+      wk_section_items = []
+      for result in query({'conditions': 'Concept:' + section_title, 'printouts': 'Modification date|NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=Modification date|OnDate|order=desc'}):
+
+        for item in result['results'].items():
+          if item[1]['printouts']['NameOfEvent']:
+            title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
+            wk_section_items.append(title)
+          else:
+            title = item[1]['fulltext']
+            wk_section_items.append(title)
+            date = None
+            wk_section_items.append(date)
+          if item[1]['printouts']['OnDate']:
+            date = item[1]['printouts']['OnDate'][0]['fulltext']
+            wk_section_items.append(date)
+
+          # fetch section item's content
+          item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+          response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
+          wkdata_introtext_item = response_introtext_item.json()
+
+          wkdata_text_item = wkdata_introtext_item['parse']['text']
+          # get section item's img
+          soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
+          if soup_wk_introtext.img:
+            cover_img = soup_wk_introtext.img
+            cover_img['class'] = 'mg-t--1 shadow'
+
+            src_rel_link = cover_img.get('src')
+            srcset_rel_link = cover_img.get('srcset')
+            if src_rel_link:
+              out_link = urljoin(base_url, src_rel_link)
+              cover_img['src'] = out_link
+            if srcset_rel_link:
+              srcset_list = re.split(r'[,]\s*', srcset_rel_link)
+              srcset_lu = srcset_list
+              srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
+              srcset_s = ', '.join(srcset_lu)
+              cover_img['srcset'] = srcset_s
+          else:
+            cover_img = None
+
+          # add `cover_img` to `wk_section_items`
+          wk_section_items.append(cover_img)
+    
+      # ---- * * *
+      wk_section_items = list(zip(*[iter(wk_section_items)]*3))
 
     # build template
     return self.render_template('section_list.html',
@@ -338,6 +449,8 @@ class had(object):
                                 nav_sections=wk_nav_sections,
                                 title=wk_title,
                                 intro=wk_intro,
+                                section_upitems=wk_section_upitems,
+                                section_pastitems=wk_section_pastitems, 
                                 section_items=wk_section_items
                                 )
 
@@ -447,26 +560,25 @@ class had(object):
 
     # --- set up embedded videos (yt)
     for embedvid in soup_bodytext.find_all('div', class_="embedvideo"):
-      if embedvid:
-        del embedvid['style']
-        embedvid['class'] = 'mg-v--2'
+      del embedvid['style']
+      embedvid['class'] = 'mg-v--2'
 
-        embedvid_c = embedvid.find('div', class_="thumbinner");
-        del embedvid_c['style']
-        embedvid_c['class'] = 'embed-container'
+      embedvid_c = embedvid.find('div', class_="thumbinner");
+      del embedvid_c['style']
+      embedvid_c['class'] = 'embed-container'
       
-        embedvid_iframe = embedvid_c.find('iframe')
-        del embedvid_iframe['width']
-        del embedvid_iframe['height']
-        embedvid_iframe['frameborder'] = '0'
-        embedvid_iframe['allowfullscreen']
+      embedvid_iframe = embedvid_c.find('iframe')
+      del embedvid_iframe['width']
+      del embedvid_iframe['height']
+      embedvid_iframe['frameborder'] = '0'
+      embedvid_iframe['allowfullscreen']
 
-        # --- video caption
-        embedvid_caption = embedvid_c.find('div', class_="thumbcaption")
-        embedvid_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-c'
-        # --- move video caption outside the `iframe`'s wrapper
-        embedvid_caption.extract()
-        embedvid.append(embedvid_caption)
+      # --- video caption
+      embedvid_caption = embedvid_c.find('div', class_="thumbcaption")
+      embedvid_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-c'
+      # --- move video caption outside the `iframe`'s wrapper
+      embedvid_caption.extract()
+      embedvid.append(embedvid_caption)
 
     # --------
     # typography
