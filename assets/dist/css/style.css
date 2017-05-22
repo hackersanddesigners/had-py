@@ -406,14 +406,6 @@ blockquote {
 }
 
 code, pre {
-  font-size: 18px;
-  font-size: var(--font-size--base);
-  font-family: "Liberation Mono", "DejaVu Sans Mono", Menlo, Consolas, Monaco, "Lucida Console", monospace;
-  font-family: var(--font-mono);
-  color: #0000ff;
-  color: var(--color-compl);
-  padding-left: 24.3px;
-  padding-left: var(--spacing-medium);
   white-space: pre-line;
 }
 
@@ -433,6 +425,11 @@ hr {
 .ft-serif {
 	font-family: Georgia, serif;
 	font-family: var(--font-serif);
+}
+
+.ft-mono {
+  font-family: "Liberation Mono", "DejaVu Sans Mono", Menlo, Consolas, Monaco, "Lucida Console", monospace;
+  font-family: var(--font-mono);
 }
 
 .ft-italic {
@@ -507,6 +504,12 @@ hr {
 
 .w--four-fifths {
   width: 80%;
+}
+
+@media screen and (min-width: 500px) {
+  .w--half__s {
+    width: 47.5%;
+  }
 }
 
 @media screen and (min-width: 640px) {

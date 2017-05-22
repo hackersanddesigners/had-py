@@ -131,6 +131,12 @@ class had(object):
     for p in soup_wk_intro.find_all('p'):
       p['class'] = 'mg-b--1'
 
+    for bq in soup_wk_intro.find_all('blockquote'):
+      bq['class'] = 'ft-2 ft-2__m'
+
+    for pre in soup_wk_intro.find_all('pre'):
+      pre['class'] = 'ft-mono blue ft-1 mg-b--1 pd-l--2'
+
     # --- lists
     for ul in soup_wk_intro.find_all('ul'):
       ul['class'] = 'd-tb pd-b--1'
@@ -206,6 +212,12 @@ class had(object):
         p_intro = soup_wk_introtext.p
         p_intro['class'] = 'mg-t--1'
 
+        for bq in soup_wk_introtext.find_all('blockquote'):
+          bq['class'] = 'ft-2 ft-2__m'
+
+        for pre in soup_wk_introtext.find_all('pre'):
+          pre['class'] = 'ft-mono blue ft-1 mg-b--1 pd-l--2'
+
         for a in p_intro.find_all('a', href=re.compile(r'/mediawiki/*')):
           rel_link = a.get('href')
           rel_link = rel_link.rsplit('/', 1)
@@ -253,6 +265,14 @@ class had(object):
     wk_intro = wkdata_head['parse']['text']
     soup_wk_intro = BeautifulSoup(wk_intro, 'html.parser')
     intro = soup_wk_intro.find('p')
+    p_intro['class'] = 'mg-t--1'
+    
+    for bq in soup_bodytext.find_all('blockquote'):
+      bq['class'] = 'ft-2 ft-2__m'
+
+    for pre in soup_bodytext.find_all('pre'):
+      pre['class'] = 'ft-mono blue ft-1 mg-b--1 pd-l--2'
+
     wk_intro = intro
 
     # -------------------------------
@@ -609,6 +629,9 @@ class had(object):
     for bq in soup_bodytext.find_all('blockquote'):
       bq['class'] = 'ft-2 ft-2__m'
 
+    for pre in soup_bodytext.find_all('pre'):
+      pre['class'] = 'ft-mono blue ft-1 mg-b--1 pd-l--2'
+
     # ----------
     # flickity slideshow
     for gallery_item in soup_bodytext.find_all('li', class_="gallerybox"):
@@ -709,4 +732,4 @@ def create_app(with_assets=True):
 if __name__ == '__main__':
 	from werkzeug.serving import run_simple
 	app = create_app()
-	run_simple('127.0.0.1', 5000, app, use_debugger=True, use_reloader=True)
+	run_simple('127.0.0.1', 5000, app, use_debugger=False, use_reloader=True)

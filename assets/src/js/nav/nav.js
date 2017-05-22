@@ -38,7 +38,7 @@ function onResizing (event) {
       nav.classList.remove('mg-b--2');
       
       // set up `sm`
-      sm.classList.add('z-3', 'p-abs', 'p-tr', 'pd-r--1', 'ft-2', 'ft-3__m', 'blue');
+      sm.classList.add('z-3', 'p-abs', 'p-tr', 'pd-t--1','pd-r--1', 'ft-2', 'ft-3__m', 'blue');
       sm.innerHTML = '•••';
       nav_wrapper.insertBefore(sm, nav);
     
@@ -48,7 +48,7 @@ function onResizing (event) {
     nav.classList.remove('sticky', 'd-n', 'pd-t--1', 'pd-h--2', 'z-2', 'bg-white');
         
     for(var i = 0; i < sm_i.length; i++) {
-      sm_i[i].classList.remove('w--half', 'w--one-third__m', 'w--one-fourth__l', 'mg-b--1');
+      sm_i[i].classList.remove('w--full', 'w--half__s', 'w--one-third__m', 'w--one-fourth__l', 'mg-b--1');
       sm_i[i].classList.add('mg-r--1', 'mg-b--05');
     }
 
@@ -81,7 +81,7 @@ function section_menu_toggle (event) {
     
     for(var i = 0; i < sm_i.length; i++) {
       sm_i[i].classList.remove('mg-r--1', 'mg-b--05');
-      sm_i[i].classList.add('w--half', 'w--one-third__m', 'w--one-fourth__l', 'mg-b--1');
+      sm_i[i].classList.add('w--full', 'w--half__s', 'w--one-third__m', 'w--one-fourth__l', 'mg-b--1');
     }
   } else {
     nav.classList.add('d-n');
@@ -90,7 +90,7 @@ function section_menu_toggle (event) {
     section_menu.classList.remove('d-ib');
     
     for(var i = 0; i < sm_i.length; i++) {
-      sm_i[i].classList.remove('w--half', 'w--one-third__m', 'w--one-fourth__l', 'mg-b--1');
+      sm_i[i].classList.remove('w--full', 'w--half__s', 'w--one-third__m', 'w--one-fourth__l', 'mg-b--1');
     }
   }
 }

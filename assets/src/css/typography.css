@@ -39,10 +39,6 @@ blockquote {
 }
 
 code, pre {
-  font-size: var(--font-size--base);
-  font-family: var(--font-mono);
-  color: var(--color-compl);
-  padding-left: var(--spacing-medium);
   white-space: pre-line;
 }
 
@@ -59,6 +55,10 @@ hr {
 
 .ft-serif {
 	font-family: var(--font-serif);
+}
+
+.ft-mono {
+  font-family: var(--font-mono);
 }
 
 .ft-italic {
