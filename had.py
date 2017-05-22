@@ -295,7 +295,7 @@ class had(object):
 
       # ---- upcoming items
       wk_section_upitems = []
-      for result in query({'conditions': 'Concept:' + section_title + '|OnDate::>' + today, 'printouts': 'Modification date|NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=Modification date|OnDate|order=asc'}): 
+      for result in query({'conditions': 'Concept:' + section_title + '|OnDate::>' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=asc'}): 
         for item in result['results'].items():
           if item[1]['printouts']['NameOfEvent']:
             title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
@@ -344,7 +344,7 @@ class had(object):
       # ---- past items
       wk_section_pastitems = []
 
-      for result in query({'conditions': 'Concept:' + section_title + '|OnDate::<' + today, 'printouts': 'Modification date|NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=Modification date|OnDate|order=desc'}): 
+      for result in query({'conditions': 'Concept:' + section_title + '|OnDate::<' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc'}): 
         for item in result['results'].items():
           if item[1]['printouts']['NameOfEvent']:
             title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
