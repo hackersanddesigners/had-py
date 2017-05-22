@@ -77,7 +77,7 @@ hr {
 
 html {
 	width: 100%;
-	font-family: Georgia;
+	font-family: Georgia, serif;
 	font-family: var(--font-serif);
 	-webkit-text-size-adjust: 100%;
 	-ms-text-size-adjust: 100%;
@@ -360,8 +360,9 @@ img {
 /* Typography */
 
 :root {
-	--font-serif: Georgia;
-	--font-sans: Arial;
+	--font-serif: Georgia, serif;
+	--font-sans: Arial, sans-serif;
+  --font-mono: "Liberation Mono", "DejaVu Sans Mono", Menlo, Consolas, Monaco, "Lucida Console", monospace;
 
 	--font-size--base: 18px;
 	--font-lh--base: 1.35;
@@ -398,10 +399,22 @@ ul {
 }
 
 blockquote {
-  font-family: Arial;
+  font-family: Arial, sans-serif;
   font-family: var(--font-sans);
   margin: 24.3px;
   margin: var(--baseline);
+}
+
+code, pre {
+  font-size: 18px;
+  font-size: var(--font-size--base);
+  font-family: "Liberation Mono", "DejaVu Sans Mono", Menlo, Consolas, Monaco, "Lucida Console", monospace;
+  font-family: var(--font-mono);
+  color: #0000ff;
+  color: var(--color-compl);
+  padding-left: 24.3px;
+  padding-left: var(--spacing-medium);
+  white-space: pre-line;
 }
 
 hr {
@@ -413,12 +426,12 @@ hr {
 /* components */
 
 .ft-sans {
-	font-family: Arial;
+	font-family: Arial, sans-serif;
 	font-family: var(--font-sans);
 }
 
 .ft-serif {
-	font-family: Georgia;
+	font-family: Georgia, serif;
 	font-family: var(--font-serif);
 }
 
@@ -763,8 +776,9 @@ http://flickity.metafizzy.co
   --spacing-medium: 24.3px;
   --spacing-large: 48.6px;
   --spacing-big: 72.9px;
-  --font-serif: Georgia;
-  --font-sans: Arial;
+  --font-serif: Georgia, serif;
+  --font-sans: Arial, sans-serif;
+  --font-mono: "Liberation Mono", "DejaVu Sans Mono", Menlo, Consolas, Monaco, "Lucida Console", monospace;
   --font-size--base: 18px;
   --font-lh--base: 1.35;
   --baseline: 24.3px;

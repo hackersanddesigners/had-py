@@ -4,21 +4,23 @@
 {% endblock %}
 
 {% block article %}
-<div class="w--page">
+<div class="w--page mg-t--4">
 
-  {% if date %}<h1 class="ft-sans ft-3 ft-3__m mg-t--2">{{ date[0]|dateformat }}</h1>{% endif %}
+  {% if date %}<h1 class="ft-sans ft-3 ft-3__m">{{ date[0]|dateformat }}</h1>{% endif %}
   
   {% if title not in nav_main['query']['results'] %}
   <h2 class="ft-serif ft-1 ft-2__m mg-b--2">{{ title }}</h2>
   {{ super() }}
   {% endif %}
 
+  {% if time or place or peopleorgs %}
   <ul class="d-tb pd-b--1">
     {% if time %}<li class="d-tbr li-em">{{ time[0] }}</li>{% endif %}
     {% if place %}<li class="d-tbr li-em">{{ place[0] }}</li>{% endif%}
     {% if peopleorgs %}<li class="d-tbr li-em">w/ {{ peopleorgs|join(', ') }}</li>{% endif %}
   </ul>
-  
+  {% endif %}
+
   <section class="mg-t--2">
     {{ bodytext|safe }}
   <section>  
