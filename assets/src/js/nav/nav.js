@@ -28,7 +28,7 @@ function onResizing (event) {
     if (y > threshold) {
       if (!nav.classList.contains('sticky')) {
 
-      // set up `nav`
+      // hide `nav`
       nav.classList.add('sticky', 'd-n');
 
       // set `nav_wrapper` as `nav`'s parent
@@ -38,7 +38,7 @@ function onResizing (event) {
       nav.classList.remove('mg-b--2');
       
       // set up `sm`
-      sm.classList.add('z-3', 'p-abs', 'p-tr', 'ft-2', 'ft-3__m', 'blue');
+      sm.classList.add('z-3', 'p-abs', 'p-tr', 'pd-r--1', 'ft-2', 'ft-3__m', 'blue');
       sm.innerHTML = '•••';
       nav_wrapper.insertBefore(sm, nav);
     
