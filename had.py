@@ -135,7 +135,7 @@ class had(object):
       bq['class'] = 'ft-2 ft-2__m'
 
     for pre in soup_wk_intro.find_all('pre'):
-      pre['class'] = 'ft-mono blue ft-1 mg-b--1 pd-l--2'
+      pre['class'] = 'ft-mono blue ft-05 ft-05__m mg-b--1 pd-l--2'
 
     # --- lists
     for ul in soup_wk_intro.find_all('ul'):
@@ -216,7 +216,7 @@ class had(object):
           bq['class'] = 'ft-2 ft-2__m'
 
         for pre in soup_wk_introtext.find_all('pre'):
-          pre['class'] = 'ft-mono blue ft-1 mg-b--1 pd-l--2'
+          pre['class'] = 'ft-mono blue ft-05 ft-05__m mg-b--1 pd-l--2'
 
         for a in p_intro.find_all('a', href=re.compile(r'/mediawiki/*')):
           rel_link = a.get('href')
@@ -271,7 +271,7 @@ class had(object):
       bq['class'] = 'ft-2 ft-2__m'
 
     for pre in soup_wk_intro.find_all('pre'):
-      pre['class'] = 'ft-mono blue ft-1 mg-b--1 pd-l--2'
+      pre['class'] = 'ft-mono ws-pl blue ft-05 ft-05__m mg-b--1 pd-l--2'
 
     wk_intro = p_intro
 
@@ -630,7 +630,7 @@ class had(object):
       bq['class'] = 'ft-2 ft-2__m'
 
     for pre in soup_bodytext.find_all('pre'):
-      pre['class'] = 'ft-mono blue ft-1 mg-b--1 pd-l--2'
+      pre['class'] = 'ft-mono blue ws-pl ft-05 ft-05__m mg-b--1 pd-l--2'
 
     # ----------
     # flickity slideshow

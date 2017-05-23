@@ -405,10 +405,6 @@ blockquote {
   margin: var(--baseline);
 }
 
-code, pre {
-  white-space: pre-line;
-}
-
 hr {
   margin: 24.3px auto;
   margin: var(--baseline) auto;
@@ -440,6 +436,10 @@ hr {
   font-weight: 600;
 }
 
+.ft-05 {
+  font-size: 16px;
+}
+
 .ft-1 {
 	font-size: 18px;
 }
@@ -453,6 +453,10 @@ hr {
 }
 
 @media screen and (min-width: 475px) {
+  .ft-05__m {
+    font-size: 18px;
+  }
+  
   .ft-1__m {
 	  font-size: 21px;
   }
@@ -476,6 +480,10 @@ hr {
   margin: 0 0 0 -calc(var(--baseline) * 2);
   width: 24.3px;
   width: var(--baseline);
+}
+
+.ws-pl {
+  white-space: pre-line;
 }
 
 /* align */
