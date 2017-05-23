@@ -21,6 +21,12 @@
 }
 
 @media screen and (min-width: 500px) {
+  .w--auto__s {
+    width: auto;
+  }
+}
+
+@media screen and (min-width: 500px) {
   .w--half__s {
     width: 47.5%;
   }
@@ -56,4 +62,8 @@
 
 .h--half {
   max-height: 45vh;
+}
+
+.h--full {
+  height: 100vh;
 }

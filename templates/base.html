@@ -17,7 +17,7 @@
       </div>
       <div class="section-menu">
 			  {% for item in nav_sections['query']['results'].items() %}
-        <a href="/s/{{ item[1]['fulltext']|replace("Concept:", "")|replace(" ", "_") }}" class="sm-item d-ib ft-serif ft-2 ft-2__m{% if not loop.last %} mg-r--1 mg-b--05{% endif %}{% if item[0] == title %} ft-italic{% endif %}">{{ item[1]['fulltext']|replace("Concept:", "")}}</a>
+        <a href="/s/{{ item[1]['fulltext']|replace("Concept:", "")|replace(" ", "_") }}" class="sm-item d-ib ft-serif ft-2 ft-2__m w--full w--auto__s{% if not loop.last %} mg-r--1 mg-b--05{% endif %}{% if item[0] == title %} ft-italic{% endif %}">{{ item[1]['fulltext']|replace("Concept:", "")}}</a>
 			  {% endfor %}
       </div>
     </nav>

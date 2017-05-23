@@ -139,6 +139,13 @@ img {
 	padding: var(--spacing-large);
 }
 
+.pd-v--1 {
+  padding-top: 12.15px;
+  padding-top: var(--spacing-small);
+  padding-bottom: 12.15px;
+  padding-bottom: var(--spacing-small);
+}
+
 .pd-h--2 {
   padding-right: 24.3px;
   padding-right: var(--spacing-medium);
@@ -519,6 +526,12 @@ hr {
 }
 
 @media screen and (min-width: 500px) {
+  .w--auto__s {
+    width: auto;
+  }
+}
+
+@media screen and (min-width: 500px) {
   .w--half__s {
     width: 47.5%;
   }
@@ -555,6 +568,10 @@ hr {
 
 .h--half {
   max-height: 45vh;
+}
+
+.h--full {
+  height: 100vh;
 }
 
 /* Display */

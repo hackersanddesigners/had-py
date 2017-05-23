@@ -27,6 +27,11 @@
 	padding: var(--spacing-large);
 }
 
+.pd-v--1 {
+  padding-top: var(--spacing-small);
+  padding-bottom: var(--spacing-small);
+}
+
 .pd-h--2 {
   padding-right: var(--spacing-medium);
   padding-left: var(--spacing-medium);
