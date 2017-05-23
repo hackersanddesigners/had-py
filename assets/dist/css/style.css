@@ -486,6 +486,10 @@ hr {
   white-space: pre-line;
 }
 
+.o-x__scroll {
+  overflow-x: scroll;
+}
+
 /* align */
 
 .t-c {
