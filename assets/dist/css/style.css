@@ -48,7 +48,7 @@ button {
 }
 
 hr {
-  border-top: 0.15rem solid #000000;
+  border-top: var(--border-main);
   border-top: var(--border-main);
   height: 0.05rem;
 }
@@ -137,13 +137,6 @@ img {
 .pd-a--3 {
 	padding: 48.6px;
 	padding: var(--spacing-large);
-}
-
-.pd-v--1 {
-  padding-top: 12.15px;
-  padding-top: var(--spacing-small);
-  padding-bottom: 12.15px;
-  padding-bottom: var(--spacing-small);
 }
 
 .pd-h--2 {
@@ -344,6 +337,13 @@ img {
 	margin-bottom: var(--spacing-large);
 }
 
+@media screen and (min-width: 640px) {
+  .mg-b--3__m {
+    margin-bottom: 48.6px;
+    margin-bottom: var(--spacing-large);
+  }
+}
+
 .mg-l--0 {
 	margin-left: 0;
 	margin-left: var(--spacing-none);
@@ -378,13 +378,9 @@ img {
 
 	--baseline: calc(var(--font-size--base) * var(--font-lh--base));
 
-	--border-main: 0.15rem solid #000000;
+  --border-compl: 1px solid #0000ff;
 
-	--border-main: 0.15rem solid var(--color-main);
-  --border-compl: 0.15rem solid #0000ff;
-  --border-compl: 0.15rem solid var(--color-compl);
-	--border-bg: 0.15rem solid #ffffff;
-	--border-bg: 0.15rem solid var(--color-bg);
+  --border-compl: 1px solid var(--color-compl);
 }
 
 /* Base */
@@ -497,6 +493,11 @@ hr {
   overflow-x: scroll;
 }
 
+.bd-r--1 {
+  border-right: 1px solid #0000ff;
+  border-right: var(--border-compl);
+}
+
 /* align */
 
 .t-c {
@@ -568,10 +569,6 @@ hr {
 
 .h--half {
   max-height: 45vh;
-}
-
-.h--full {
-  height: 100vh;
 }
 
 /* Display */
@@ -814,9 +811,7 @@ http://flickity.metafizzy.co
   --font-size--base: 18px;
   --font-lh--base: 1.35;
   --baseline: 24.3px;
-  --border-main: 0.15rem solid #000000;
-  --border-compl: 0.15rem solid #0000ff;
-  --border-bg: 0.15rem solid #ffffff;
+  --border-compl: 1px solid #0000ff;
   --color-main: #000000;
   --color-compl: #0000ff;
   --color-bg: #ffffff;

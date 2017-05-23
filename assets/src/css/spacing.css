@@ -27,11 +27,6 @@
 	padding: var(--spacing-large);
 }
 
-.pd-v--1 {
-  padding-top: var(--spacing-small);
-  padding-bottom: var(--spacing-small);
-}
-
 .pd-h--2 {
   padding-right: var(--spacing-medium);
   padding-left: var(--spacing-medium);
@@ -188,6 +183,12 @@
 
 .mg-b--3 {
 	margin-bottom: var(--spacing-large);
+}
+
+@media screen and (min-width: 640px) {
+  .mg-b--3__m {
+    margin-bottom: var(--spacing-large);
+  }
 }
 
 .mg-l--0 {
