@@ -43,7 +43,7 @@ class had(object):
     self.jinja_env.filters['dateformat'] = dateformat
 
     # -------
-    # Routing
+    # routing
     self.url_map = Map([
       Rule('/', endpoint='home'),
       Rule('/p/<page_title>', endpoint='article'),
@@ -51,23 +51,23 @@ class had(object):
       Rule('/s/<section_title>/p/<page_title>', endpoint='article')
     ])
 
-  # ==========
+  # ----------
   # navigation
   def nav_main():
-    base_url = "http://wikidev.hackersanddesigners.nl/"
-    folder_url = "mediawiki/"
-    api_call =  "api.php?"
+    base_url = 'http://wikidev.hackersanddesigners.nl/'
+    folder_url = 'mediawiki/'
+    api_call =  'api.php?'
     
-    filters_nav_main = "|?MainNavigation|order=asc"
+    filters_nav_main = '|?MainNavigation|order=asc'
     nav_main_options = {'action': 'ask', 'query': '[[Concept:MainNavigation]]' + filters_nav_main, 'format': 'json', 'formatversion': '2'}
     response_nav_main = requests.get(base_url + folder_url + api_call , params=nav_main_options)
     wk_nav_main = response_nav_main.json()
     return wk_nav_main
 
   def nav_sections():
-    base_url = "http://wikidev.hackersanddesigners.nl/"
-    folder_url = "mediawiki/"
-    api_call =  "api.php?"
+    base_url = 'http://wikidev.hackersanddesigners.nl/'
+    folder_url = 'mediawiki/'
+    api_call =  'api.php?'
     
     nav_sections_options = {'action': 'ask', 'query': '[[Concept:+]]', 'format': 'json', 'formatversion': '2'}
     response_nav_sections = requests.get(base_url + folder_url + api_call , params=nav_sections_options)
@@ -77,34 +77,22 @@ class had(object):
     del wk_nav_sections['query']['results']['Concept:MainNavigation']
     
     return wk_nav_sections
-
-  # ==========
-  # home	
-  def on_home(self, request, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
-    base_url = "http://wikidev.hackersanddesigners.nl/"
-    folder_url = "mediawiki/"
-    api_call =  "api.php?"
-
-    # fetch intro
-    intro_options = {'action': 'parse', 'pageid': '29', 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-    intro_response = requests.get(base_url + folder_url + api_call , params=intro_options)
-    wkdata_intro = intro_response.json()
-
-    wk_title = wkdata_intro['parse']['title']
-    wk_intro = wkdata_intro['parse']['text']
-
-    # fix rel-links to be abs-ones
-    soup_wk_intro = BeautifulSoup(wk_intro, 'html.parser')
-
-    for a in soup_wk_intro.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-    # for a in soup_wk_intro.find_all('a', href=re.compile(r'/mediawiki/*')):
+  
+  # --- fix rel-links to be abs-ones (a)
+  def fix_extlinks_a(text, url):
+    base_url = 'http://wikidev.hackersanddesigners.nl/'
+    
+    for a in text.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
       rel_link = a.get('href')
       rel_link = rel_link.rsplit('/', 1)
-      a['href'] = 's/Events/p/' + rel_link[1]
-    
-    for img in soup_wk_intro.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-      img['class'] = 'mg-v--1 shadow'
+      a['href'] = url + rel_link[1]
+    return text
 
+  # --- fix rel-links to be abs ones (img)
+  def fix_extlink_imgs(text):
+    base_url = 'http://wikidev.hackersanddesigners.nl/'
+
+    for img in text.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
       src_rel_link = img.get('src')
       srcset_rel_link = img.get('srcset')
       if (src_rel_link):
@@ -116,49 +104,77 @@ class had(object):
         srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
         srcset_s = ', '.join(srcset_lu)
         img['srcset'] = srcset_s
+    return text
 
-    # --------
-    # typography
-
+  # --- typography
+  def typography(text):
+    
     # delete wiki infobox
-    infobox = soup_wk_intro.find('table')
+    infobox = text.find('table')
     if infobox:
       infobox.decompose()
 
-    for heading in soup_wk_intro.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
-      heading['class'] = 'ft-sans ft-1 ft-1_m ft-bold mg-b--1'
+    for heading in text.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
+      heading['class'] = 'ft-sans ft-1 ft-1__m ft-bold mg-b--1'
 
-    for p in soup_wk_intro.find_all('p'):
+    p_intro = text.p
+    p_intro['class'] = 'mg-t--1'
+
+    for p in text.find_all('p'):
       p['class'] = 'mg-b--1'
 
-    for bq in soup_wk_intro.find_all('blockquote'):
+    for bq in text.find_all('blockquote'):
       bq['class'] = 'ft-2 ft-2__m'
 
-    for pre in soup_wk_intro.find_all('pre'):
-      pre['class'] = 'ft-mono blue ft-05 ft-05__m mg-b--1 pd-l--2 o-x__sroll'
+    for pre in text.find_all('pre'):
+      pre['class'] = 'ft-mono blue ft-05 ft-05__m mg-b--1 pd-l--2 o-x__scroll bd-r--1'
 
-    # --- lists
-    for ul in soup_wk_intro.find_all('ul'):
+    for img in text.find_all('img'):
+      img['class'] = 'mg-v--1 shadow'
+
+      a_img = img.find_parent('a')
+      if a_img:
+        a_img.unwrap()
+
+    for ul in text.find_all('ul'):
       ul['class'] = 'd-tb pd-b--1'
       for li in ul.find_all('li'):
         li['class'] = 'd-tbr li-em'
 
-    for ol in soup_wk_intro.find_all('ol'):
+    for ol in text.find_all('ol'):
       ol['class'] = 'pd-l--2 pd-b-0'
 
     # delete mediawiki autogenerated comments
-    for comment in soup_wk_intro.find_all(text=lambda text:isinstance(text, Comment)):
+    for comment in text.find_all(text=lambda text:isinstance(text, Comment)):
       comment.extract()
     
-    # get rid of <a>s wrapping <img>s
-    a_img = img.find_parent("a")
-    a_img.unwrap()
+    return text
+  
+  # --- Views
+  
+  # home	
+  def on_home(self, request, typography=typography, fix_extlinks_a=fix_extlinks_a, fix_extlink_imgs=fix_extlink_imgs,wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
+    base_url = 'http://wikidev.hackersanddesigners.nl/'
+    folder_url = 'mediawiki/'
+    api_call =  'api.php?'
+
+    # fetch intro
+    intro_options = {'action': 'parse', 'pageid': '29', 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+    intro_response = requests.get(base_url + folder_url + api_call , params=intro_options)
+    wkdata_intro = intro_response.json()
+
+    wk_title = wkdata_intro['parse']['title']
+    wk_intro = wkdata_intro['parse']['text']
     
+    soup_wk_intro = BeautifulSoup(wk_intro, 'html.parser')
+    # ---
+    fix_extlinks_a(soup_wk_intro, url='s/Events/p/')
+    fix_extlink_imgs(soup_wk_intro)
+    typography(soup_wk_intro)
+    # ---
     wk_intro = soup_wk_intro
 
-    # ===========
-    # events list
-
+    # --- events list
     # recursively fetch all pages using `askargs`
     def query(request):
       request['action'] = 'askargs'
@@ -188,11 +204,11 @@ class had(object):
           break
         lastContinue = result['query-continue-offset']
     
-    # -------------------------------
+    # ---------------------------
     today = datetime.date.today()
     today = today.strftime('%Y/%m/%d')
 
-    # upcoming events
+    # --- upcoming events
     wkdata_upevents = []
     for result in query({'conditions': 'Category:Event|OnDate::>' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=asc'}):
       for item in result['results'].items():
@@ -208,28 +224,17 @@ class had(object):
 
         text = wkdata_introtext_upevents['parse']['text'] 
         soup_wk_introtext = BeautifulSoup(text, 'html.parser')
-
+        # ---
+        typography(soup_wk_introtext)
         p_intro = soup_wk_introtext.p
-        p_intro['class'] = 'mg-t--1'
-
-        for bq in soup_wk_introtext.find_all('blockquote'):
-          bq['class'] = 'ft-2 ft-2__m'
-
-        for pre in soup_wk_introtext.find_all('pre'):
-          pre['class'] = 'ft-mono blue ft-05 ft-05__m mg-b--1 pd-l--2 o-x__scroll'
-
-        for a in p_intro.find_all('a', href=re.compile(r'/mediawiki/*')):
-          rel_link = a.get('href')
-          rel_link = rel_link.rsplit('/', 1)
-          a['href'] = urljoin('/s/Events/p/', rel_link[1])
-        
+        fix_extlinks_a(p_intro, '/s/Events/p/')
+        # ---
         soup_intro = p_intro
         wkdata_upevents.append(p_intro)
     
     wkdata_upevents = list(zip(*[iter(wkdata_upevents)]*3))
 
-    # ===========
-    # past events
+    # --- past events
     wkdata_pastevents = []
     for result in query({'conditions': 'Category:Event|OnDate::<' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc'}):
       for item in result['results'].items():
@@ -250,32 +255,25 @@ class had(object):
                                 past_event_list=wkdata_pastevents
                                 )
 
-  def on_section(self, request, section_title=None, page_title=None, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
-    base_url = "http://wikidev.hackersanddesigners.nl/"
-    folder_url = "mediawiki/"
-    api_call =  "api.php?"
+  def on_section(self, request, typography=typography, section_title=None, page_title=None, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
+    base_url = 'http://wikidev.hackersanddesigners.nl/'
+    folder_url = 'mediawiki/'
+    api_call =  'api.php?'
 
     # fetch page-content
     page_head_options = {'action': 'parse', 'page': 'Concept:' + section_title, 'format': 'json', 'formatversion': '2'}
     response_head = requests.get(base_url + folder_url + api_call, params=page_head_options)
     wkdata_head = response_head.json()
 
-    wk_title = wkdata_head['parse']['title']
-   
+    wk_title = wkdata_head['parse']['title'] 
     wk_intro = wkdata_head['parse']['text']
+
     soup_wk_intro = BeautifulSoup(wk_intro, 'html.parser')
+    typography(soup_wk_intro)
     p_intro = soup_wk_intro.find('p')
-    p_intro['class'] = 'mg-t--1'
-    
-    for bq in soup_wk_intro.find_all('blockquote'):
-      bq['class'] = 'ft-2 ft-2__m'
-
-    for pre in soup_wk_intro.find_all('pre'):
-      pre['class'] = 'ft-mono blue ft-05 ft-05__m mg-b--1 pd-l--2 o-x__scroll'
-
     wk_intro = p_intro
 
-    # -------------------------------
+    # --------------------------
     today = datetime.date.today()
     today = today.strftime('%Y/%m/%d')
     
@@ -309,11 +307,11 @@ class had(object):
         lastContinue = result['query-continue-offset']
 
     # make section_items list by fetching item's title and img (if any)
-    # ----- Activities
+    # ---- Activities
     if 'Activities' in section_title:
       wk_section_items = None
 
-      # ---- upcoming items
+      # --- upcoming items
       wk_section_upitems = []
       for result in query({'conditions': 'Concept:' + section_title + '|OnDate::>' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=asc'}): 
         for item in result['results'].items():
@@ -409,8 +407,8 @@ class had(object):
     
       # ---- * * *
       wk_section_pastitems = list(zip(*[iter(wk_section_pastitems)]*3))
-      print(wk_section_pastitems)
-    # -------
+    
+    # --------------
     # other sections
     else:
       wk_section_upitems = None
@@ -474,12 +472,12 @@ class had(object):
                                 section_items=wk_section_items
                                 )
 
-  # ===========
+  # -------
   # article
-  def on_article(self, request, page_title=None, section_title=None, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
-    base_url = "http://wikidev.hackersanddesigners.nl/"
-    folder_url = "mediawiki/"
-    api_call =  "api.php?"
+  def on_article(self, request, typography=typography, fix_extlinks_a=fix_extlinks_a, page_title=None, section_title=None, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
+    base_url = 'http://wikidev.hackersanddesigners.nl/'
+    folder_url = 'mediawiki/'
+    api_call =  'api.php?'
 
     # fetch page-content
     page_options = {'action': 'parse', 'page': page_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
@@ -491,8 +489,8 @@ class had(object):
 
     # fetch page-metadata for Event
     if 'Event' in wk_data['parse']['categories'][0]['category']:
-      category_events = "[[Category:Event]]"
-      page_meta_filter = "|?PeopleOrganisations"
+      category_events = '[[Category:Event]]'
+      page_meta_filter = '|?PeopleOrganisations'
       page_meta_options = {'action': 'browsebysubject', 'subject': page_title, 'format': 'json', 'formatversion': '2'}
       response_meta = requests.get(base_url + folder_url + api_call, params=page_meta_options)
       wkdata_meta = response_meta.json()
@@ -539,27 +537,21 @@ class had(object):
     # fix rel-links to be abs-ones
     soup_bodytext = BeautifulSoup(wk_bodytext, 'html.parser')
 
-    # for a in soup_bodytext.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z1-9+.-]*:|//))')):
-    for a in soup_bodytext.find_all('a', href=re.compile(r'/mediawiki/*')):
-      rel_link = a.get('href')
-      rel_link = rel_link.rsplit('/', 1)
-      a['href'] = rel_link[1]
+    fix_extlinks_a(soup_bodytext, url='')
 
     for img in soup_bodytext.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-      img['class'] = 'mg-v--1 shadow'
-    
       # --- check if img has caption/wrapped inside a div
-      img_thumb = img.find_parent('div', class_="thumbinner")
+      img_thumb = img.find_parent('div', class_='thumbinner')
       img_p = img.find_parent('p')
       if img_thumb:
         img_thumb.unwrap()
 
         figure = img.find_parent('div', class_='thumb')
         figure.name = 'figure'
-        del figure['class']
+        figure['class'] = 'mg-b--1'
       
         # --- set img caption
-        img_caption = figure.find('div', class_="thumbcaption")
+        img_caption = figure.find('div', class_='thumbcaption')
         img_caption.name = 'figcaption'
         img_caption['class'] = 'mg-auto w--four-fifths ft-sans t-c'
       
@@ -586,16 +578,15 @@ class had(object):
         srcset_s = ', '.join(srcset_lu)
         img['srcset'] = srcset_s
 
-      # get rid of <a>s wrapping <img>s
-      a_img = img.find_parent("a")
-      a_img.unwrap()
-
+    # --- typography
+    typography(soup_bodytext)
+    
     # --- set up embedded videos (yt)
-    for embedvid in soup_bodytext.find_all('div', class_="embedvideo"):
+    for embedvid in soup_bodytext.find_all('div', class_='embedvideo'):
       del embedvid['style']
       embedvid['class'] = 'mg-v--2'
 
-      embedvid_c = embedvid.find('div', class_="thumbinner");
+      embedvid_c = embedvid.find('div', class_='thumbinner');
       del embedvid_c['style']
       embedvid_c['class'] = 'embed-container'
       
@@ -606,42 +597,21 @@ class had(object):
       embedvid_iframe['allowfullscreen']
 
       # --- video caption
-      embedvid_caption = embedvid_c.find('div', class_="thumbcaption")
+      embedvid_caption = embedvid_c.find('div', class_='thumbcaption')
       embedvid_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-c'
       # --- move video caption outside the `iframe`'s wrapper
       embedvid_caption.extract()
       embedvid.append(embedvid_caption)
-
-    # --------
-    # typography
-
-    # delete wiki infobox
-    infobox = soup_bodytext.find('table')
-    if infobox:
-      infobox.decompose()
-
-    for heading in soup_bodytext.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
-      heading['class'] = 'ft-sans ft-1 ft-1__m ft-bold mg-b--1'
     
-    for p in soup_bodytext.find_all('p'):
-      p['class'] = 'mg-b--1'
-
-    for bq in soup_bodytext.find_all('blockquote'):
-      bq['class'] = 'ft-2 ft-2__m'
-
-    for pre in soup_bodytext.find_all('pre'):
-      pre['class'] = 'ft-mono blue ft-05 ft-05__m mg-b--1 pd-l--2 o-x__scroll'
-
-    # ----------
-    # flickity slideshow
-    for gallery_item in soup_bodytext.find_all('li', class_="gallerybox"):
+    # --- flickity slideshow
+    for gallery_item in soup_bodytext.find_all('li', class_='gallerybox'):
       # --- img div wrapper (from <li> to <div>)
       gallery_item.name = 'div'
       del gallery_item['style']
       gallery_item['class'] = 'gallery-item'
       
       # --- delete extra <div>s before and after img div wrapper
-      gallery_item_div = gallery_item.find('div', class_="thumb")
+      gallery_item_div = gallery_item.find('div', class_='thumb')
       pp = gallery_item_div.parent
       pp.unwrap()
       child = gallery_item_div.div
@@ -655,7 +625,7 @@ class had(object):
       del gallery_item_img['height']
 
       # --- set img caption
-      gallery_item_caption = gallery_item.find('div', class_="gallerytext")
+      gallery_item_caption = gallery_item.find('div', class_='gallerytext')
       gallery_item_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-c'
 
       # --- get parent <ul>
@@ -663,23 +633,10 @@ class had(object):
       gallerybox['class'] = 'gallery'
 
     # --- set class to flickity.js
-    for gallery in soup_bodytext.find_all('ul', class_="gallery"):
+    for gallery in soup_bodytext.find_all('ul', class_='gallery'):
       gallery.name = 'div'
       gallery['class'] = 'gallery mg-b--2'
 
-    # --- lists
-    for ul in soup_bodytext.find_all('ul'):
-      ul['class'] = 'd-tb pd-b--1'
-      for li in ul.find_all('li'):
-        li['class'] = 'd-tbr li-em'
-
-    for ol in soup_bodytext.find_all('ol'):
-      ol['class'] = 'pd-l--2 pd-b-0'
-
-    # delete mediawiki autogenerated comments
-    for comment in soup_bodytext.find_all(text=lambda text:isinstance(text, Comment)):
-      comment.extract()
-    
     wk_bodytext = soup_bodytext
 
     # build template

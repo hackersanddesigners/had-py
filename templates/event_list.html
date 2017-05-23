@@ -5,8 +5,8 @@
 	<ul>
 	  {% for up_event in up_event_list %}
 		<li class="mg-b--2">
-      <h2 class="ft-sans ft-3 ft-3_m black">{{ up_event[1]|dateformat }}</h2>
-      <a href="/s/Events/p/{{ up_event[0]|replace(' ', '_') }}" class="ft-2 ft-2_m">{{ up_event[0] }}</a>
+      <h2 class="ft-sans ft-3 ft-3__m black">{{ up_event[1]|dateformat }}</h2>
+      <a href="/s/Events/p/{{ up_event[0]|replace(' ', '_') }}" class="ft-2 ft-2__m d-ib mg-b--1">{{ up_event[0] }}</a>
       {{ up_event[2]|safe }}
 		</li>
     {% endfor %}

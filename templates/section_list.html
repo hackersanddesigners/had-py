@@ -1,23 +1,23 @@
 {% extends 'base.html' %}
 {% block section_list %}
 
-<div class="mg-t--4">
+<div class="mg-t--2">
   {% if section_upitems or section_pastitems %}
   <h2 class="ft-sans ft-3 ft-3_m blue mg-b--1">Upcoming</h2>
-  <ul class="flex-c flex-r__m flex-sb mg-t--2">
+  <ul class="flex-c flex-r__m flex-sb">
   {% for item in section_upitems %}
-  <li class="w--half__m w--one_third__l w--one-fourth__w mg-b--2">
+  <li class="w--half__m w--one_third__l w--one-fourth__w mg-b--2 mg-b--3__m">
       {% if item[1] %}<h2 class="ft-sans ft-3 ft-3__m">{{ item[1]|dateformat }}</h2>{% endif %}
-      <a href="{{ title|replace('Concept:', '')|replace(' ', '_') }}/p/{{ item[0]|replace(' ', '_') }}" class="ft-2 ft-2_m">{{ item[0] }}</a>
+      <a href="{{ title|replace('Concept:', '')|replace(' ', '_') }}/p/{{ item[0]|replace(' ', '_') }}" class="ft-2 ft-2__m">{{ item[0] }}</a>
       {% if item[2] %}{{ item[2]|safe }}{% endif %}
     </li>
   {% endfor %}
   </ul>
 
   <h2 class="ft-sans ft-3 ft-3_m blue mg-b--1">Archive</h2>
-  <ul class="flex-c flex-r__m flex-sb mg-t--2">
+  <ul class="flex-c flex-r__m flex-sb">
   {% for item in section_pastitems %}
-  <li class="w--half__m w--one_third__l w--one-fourth__w mg-b--3">
+  <li class="w--half__m w--one_third__l w--one-fourth__w mg-b--2 mg-b--3__m">
       {% if item[1] %}<h2 class="ft-sans ft-3 ft-3__m">{{ item[1]|dateformat }}</h2>{% endif %}
       <a href="{{ title|replace('Concept:', '')|replace(' ', '_') }}/p/{{ item[0]|replace(' ', '_') }}" class="ft-2 ft-2_m">{{ item[0] }}</a>
       {% if item[2] %}{{ item[2]|safe }}{% endif %}
@@ -28,7 +28,7 @@
   {% elif section_items %}
   <ul class="flex-c flex-r__m flex-sb mg-t--2">
   {% for item in section_items %}
-  <li class="w--half__m w--one_third__l w--one-fourth__w mg-b--2">
+  <li class="w--half__m w--one_third__l w--one-fourth__w mg-b--2 mg-b--3__m">
       {% if item[1] %}<h2 class="ft-sans ft-3 ft-3__m">{{ item[1]|dateformat }}</h2>{% endif %}
       <a href="{{ title|replace('Concept:', '')|replace(' ', '_') }}/p/{{ item[0]|replace(' ', '_') }}" class="ft-2 ft-2_m">{{ item[0] }}</a>
       {% if item[2] %}{{ item[2]|safe }}{% endif %}
