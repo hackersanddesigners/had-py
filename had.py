@@ -7,6 +7,7 @@ from werkzeug.utils import redirect
 import requests
 import datetime
 from dateutil.parser import parse
+from operator import itemgetter, attrgetter, methodcaller
 import re
 from bs4 import BeautifulSoup, Comment
 from urllib.parse import urljoin, quote
@@ -230,7 +231,7 @@ class had(object):
         wkdata_upevents.append(p_intro)
 
     wkdata_upevents = list(zip(*[iter(wkdata_upevents)]*3))
-    sorted(wkdata_upevents, key=lambda x: x[1])
+    sorted(wkdata_upevents, key=itemgetter(1))
 
     # --- past events
     wkdata_pastevents = []
@@ -242,8 +243,7 @@ class had(object):
         wkdata_pastevents.append(date)
     
     wkdata_pastevents = list(zip(*[iter(wkdata_pastevents)]*2))
-    sorted(wkdata_pastevents, key=lambda y: y[1])
-
+    sorted(wkdata_pastevents, key=itemgetter(1), reverse=True)
     # build template
     return self.render_template('event_list.html',
                                 nav_main=wk_nav_main,
