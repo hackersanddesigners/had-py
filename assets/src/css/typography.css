@@ -10,7 +10,7 @@
 
 	--baseline: calc(var(--font-size--base) * var(--font-lh--base));
 
-  --border-compl: 1px solid var(--color-compl);
+  --border-compl: 0.05rem solid var(--color-compl);
 }
 
 /* Base */
@@ -37,8 +37,14 @@ blockquote {
 }
 
 hr {
-  margin: var(--baseline) auto;
-  width: 30%;
+  border: 0;
+  margin: 0 auto var(--baseline) auto;
+  width: 0;
+  height: 0;
+}
+
+hr:after {
+  content: '•';
 }
 
 /* components */
@@ -120,6 +126,6 @@ hr {
 
 /* align */
 
-.t-c {
+.t-a--c {
   text-align: center;
 }

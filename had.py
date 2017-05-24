@@ -79,10 +79,11 @@ class had(object):
   def fix_extlinks_a(text, url):
     base_url = 'http://wikidev.hackersanddesigners.nl/'
     
-    for a in text.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+    for a in text.find_all('a', href=re.compile(r'/mediawiki/.*')):
       rel_link = a.get('href')
       rel_link = rel_link.rsplit('/', 1)
-      a['href'] = url + rel_link[1]
+      print(rel_link)
+      a['href'] = urljoin(url, rel_link[1])
     return text
 
   # --- fix rel-links to be abs ones (img)
@@ -120,11 +121,29 @@ class had(object):
     for bq in text.find_all('blockquote'):
       bq['class'] = 'ft-2 ft-2__m'
 
-    for pre in text.find_all('pre'):
-      pre['class'] = 'ft-mono blue ft-05 ft-05__m mg-b--1 pd-l--2 o-x__scroll bd-r--1'
+    for code  in text.find_all(['pre', 'code']):
+      code['class'] = 'd-ib ft-mono blue ft-05 ft-05__m mg-b--1 pd-l--2 o-x__scroll'
 
     for img in text.find_all('img'):
       img['class'] = 'mg-v--1 shadow'
+ 
+      # check if img has caption/wrapped inside a div
+      img_thumb = img.find_parent('div', class_='thumbinner')
+      img_p = img.find_parent('p')
+      if img_thumb:
+        img_thumb.unwrap()
+
+        figure = img.find_parent('div', class_='thumb')
+        figure.name = 'figure'
+        figure['class'] = 'mg-b--2'
+      
+        # set img caption
+        img_caption = figure.find('div', class_='thumbcaption')
+        img_caption.name = 'figcaption'
+        img_caption['class'] = 'mg-auto w--four-fifths ft-sans t-a--c'
+      
+      elif img_p:
+        img_p.name = 'figure'
 
       a_img = img.find_parent('a')
       if a_img:
@@ -530,6 +549,7 @@ class had(object):
         wk_peopleorgs = extract_metadata(wk_peopleorgs)
       else:
         wk_peopleorgs = None
+
     # --- if it has not, set Event's metadata tp `None`
     except:
       wk_date = None
@@ -552,12 +572,12 @@ class had(object):
 
         figure = img.find_parent('div', class_='thumb')
         figure.name = 'figure'
-        figure['class'] = 'mg-b--1'
+        figure['class'] = 'mg-b--2'
       
         # set img caption
         img_caption = figure.find('div', class_='thumbcaption')
         img_caption.name = 'figcaption'
-        img_caption['class'] = 'mg-auto w--four-fifths ft-sans t-c'
+        img_caption['class'] = 'mg-auto w--four-fifths ft-sans t-a--c'
       
       elif img_p:
         img_p.name = 'figure'
@@ -602,7 +622,7 @@ class had(object):
 
       # video caption
       embedvid_caption = embedvid_c.find('div', class_='thumbcaption')
-      embedvid_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-c'
+      embedvid_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-a--c'
       # move video caption outside the `iframe`'s wrapper
       embedvid_caption.extract()
       embedvid.append(embedvid_caption)
@@ -630,7 +650,7 @@ class had(object):
 
       # set img caption
       gallery_item_caption = gallery_item.find('div', class_='gallerytext')
-      gallery_item_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-c'
+      gallery_item_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-a--c'
 
       #  get parent <ul>
       gallerybox = gallery_item.find_parent('ul')
