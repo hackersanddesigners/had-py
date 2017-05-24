@@ -115,7 +115,7 @@ class had(object):
       heading['class'] = 'ft-sans ft-1 ft-1__m ft-bold mg-b--1'
  
     for p in text.find_all('p'):
-      p['class'] = 'mg-b--1'
+      p['class'] = 'w--copy mg-b--1'
 
     for bq in text.find_all('blockquote'):
       bq['class'] = 'ft-2 ft-2__m'
@@ -134,7 +134,7 @@ class had(object):
 
         figure = img.find_parent('div', class_='thumb')
         figure.name = 'figure'
-        figure['class'] = 'mg-b--2'
+        figure['class'] = 'w--copy mg-auto mg-b--2'
       
         # set img caption
         img_caption = figure.find('div', class_='thumbcaption')
@@ -143,10 +143,38 @@ class had(object):
       
       elif img_p:
         img_p.name = 'figure'
+        img_p['class'] = 'w--copy mg-auto mg-b--2'
+
+      else:
+        text.img.wrap(text.new_tag('figure'))
+        figure = img.find_parent('figure')
+        figure['class'] = 'w--copy mg-auto mg-b--2'
 
       a_img = img.find_parent('a')
       if a_img:
         a_img.unwrap()
+
+    # --- set up embedded videos (yt)
+    for embedvid in text.find_all('div', class_='embedvideo'):
+      del embedvid['style']
+      embedvid['class'] = 'mg-v--2'
+
+      embedvid_c = embedvid.find('div', class_='thumbinner');
+      del embedvid_c['style']
+      embedvid_c['class'] = 'embed-container'
+      
+      embedvid_iframe = embedvid_c.find('iframe')
+      del embedvid_iframe['width']
+      del embedvid_iframe['height']
+      embedvid_iframe['frameborder'] = '0'
+      embedvid_iframe['allowfullscreen']
+
+      # video caption
+      embedvid_caption = embedvid_c.find('div', class_='thumbcaption')
+      embedvid_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-a--c'
+      # move video caption outside the `iframe`'s wrapper
+      embedvid_caption.extract()
+      embedvid.append(embedvid_caption)
 
     for ul in text.find_all('ul'):
       ul['class'] = 'd-tb pd-b--1'
@@ -561,26 +589,11 @@ class had(object):
 
     fix_extlinks_a(soup_bodytext, url='')
 
+    # --- typography
+    typography(soup_bodytext)
+    
     # --- images
     for img in soup_bodytext.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-      # check if img has caption/wrapped inside a div
-      img_thumb = img.find_parent('div', class_='thumbinner')
-      img_p = img.find_parent('p')
-      if img_thumb:
-        img_thumb.unwrap()
-
-        figure = img.find_parent('div', class_='thumb')
-        figure.name = 'figure'
-        figure['class'] = 'mg-b--2'
-      
-        # set img caption
-        img_caption = figure.find('div', class_='thumbcaption')
-        img_caption.name = 'figcaption'
-        img_caption['class'] = 'mg-auto w--four-fifths ft-sans t-a--c'
-      
-      elif img_p:
-        img_p.name = 'figure'
-
       src_rel_link = img.get('src')
       srcset_rel_link = img.get('srcset')
       if (src_rel_link):
@@ -601,31 +614,6 @@ class had(object):
         srcset_s = ', '.join(srcset_lu)
         img['srcset'] = srcset_s
 
-    # --- typography
-    typography(soup_bodytext)
-    
-    # --- set up embedded videos (yt)
-    for embedvid in soup_bodytext.find_all('div', class_='embedvideo'):
-      del embedvid['style']
-      embedvid['class'] = 'mg-v--2'
-
-      embedvid_c = embedvid.find('div', class_='thumbinner');
-      del embedvid_c['style']
-      embedvid_c['class'] = 'embed-container'
-      
-      embedvid_iframe = embedvid_c.find('iframe')
-      del embedvid_iframe['width']
-      del embedvid_iframe['height']
-      embedvid_iframe['frameborder'] = '0'
-      embedvid_iframe['allowfullscreen']
-
-      # video caption
-      embedvid_caption = embedvid_c.find('div', class_='thumbcaption')
-      embedvid_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-a--c'
-      # move video caption outside the `iframe`'s wrapper
-      embedvid_caption.extract()
-      embedvid.append(embedvid_caption)
-    
     # --- flickity slideshow
     for gallery_item in soup_bodytext.find_all('li', class_='gallerybox'):
       # img div wrapper (from <li> to <div>)

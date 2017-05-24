@@ -506,8 +506,8 @@ hr:after {
 
 /* Size */
 
-.w--page {
-  max-width: 42rem;
+.w--copy {
+  max-width: 39rem;
 }
 
 .w--full {
