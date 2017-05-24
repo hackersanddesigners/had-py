@@ -230,7 +230,7 @@ class had(object):
         wkdata_upevents.append(p_intro)
 
     wkdata_upevents = list(zip(*[iter(wkdata_upevents)]*3))
-    sorted(wkdata_upevents, key=lambda event: event[1], reverse=True)
+    sorted(wkdata_upevents, key=lambda event: event[1])
 
     # --- past events
     wkdata_pastevents = []
