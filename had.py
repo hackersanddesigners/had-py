@@ -230,7 +230,7 @@ class had(object):
         wkdata_upevents.append(p_intro)
 
     wkdata_upevents = list(zip(*[iter(wkdata_upevents)]*3))
-    sorted(wkdata_upevents, key=lambda event: event[1])
+    sorted(wkdata_upevents, key=lambda x: x[1])
 
     # --- past events
     wkdata_pastevents = []
@@ -242,7 +242,7 @@ class had(object):
         wkdata_pastevents.append(date)
     
     wkdata_pastevents = list(zip(*[iter(wkdata_pastevents)]*2))
-    sorted(wkdata_pastevents, key=lambda pastevent: pastevent[1])
+    sorted(wkdata_pastevents, key=lambda y: y[1])
 
     # build template
     return self.render_template('event_list.html',
