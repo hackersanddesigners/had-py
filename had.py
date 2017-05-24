@@ -5,11 +5,8 @@ from werkzeug.exceptions import HTTPException, NotFound
 from werkzeug.wsgi import SharedDataMiddleware
 from werkzeug.utils import redirect
 import requests
-from requests_futures.sessions import FuturesSession
-import pprint
 import datetime
 from dateutil.parser import parse
-from collections import OrderedDict
 import re
 from bs4 import BeautifulSoup, Comment
 from urllib.parse import urljoin, quote
@@ -539,8 +536,9 @@ class had(object):
 
     fix_extlinks_a(soup_bodytext, url='')
 
+    # --- images
     for img in soup_bodytext.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-      # --- check if img has caption/wrapped inside a div
+      # check if img has caption/wrapped inside a div
       img_thumb = img.find_parent('div', class_='thumbinner')
       img_p = img.find_parent('p')
       if img_thumb:
@@ -550,7 +548,7 @@ class had(object):
         figure.name = 'figure'
         figure['class'] = 'mg-b--1'
       
-        # --- set img caption
+        # set img caption
         img_caption = figure.find('div', class_='thumbcaption')
         img_caption.name = 'figcaption'
         img_caption['class'] = 'mg-auto w--four-fifths ft-sans t-c'
@@ -596,39 +594,39 @@ class had(object):
       embedvid_iframe['frameborder'] = '0'
       embedvid_iframe['allowfullscreen']
 
-      # --- video caption
+      # video caption
       embedvid_caption = embedvid_c.find('div', class_='thumbcaption')
       embedvid_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-c'
-      # --- move video caption outside the `iframe`'s wrapper
+      # move video caption outside the `iframe`'s wrapper
       embedvid_caption.extract()
       embedvid.append(embedvid_caption)
     
     # --- flickity slideshow
     for gallery_item in soup_bodytext.find_all('li', class_='gallerybox'):
-      # --- img div wrapper (from <li> to <div>)
+      # img div wrapper (from <li> to <div>)
       gallery_item.name = 'div'
       del gallery_item['style']
       gallery_item['class'] = 'gallery-item'
       
-      # --- delete extra <div>s before and after img div wrapper
+      # delete extra <div>s before and after img div wrapper
       gallery_item_div = gallery_item.find('div', class_='thumb')
-      pp = gallery_item_div.parent
-      pp.unwrap()
+      gallery_pp = gallery_item_div.parent
+      gallery_pp.unwrap()
       child = gallery_item_div.div
       child.unwrap()
       gallery_item_div.unwrap()
 
-      # --- clean up <img>
+      # clean up <img>
       gallery_item_img = gallery_item.find('img')
       gallery_item_img['class'] = 'h--half shadow'
       del gallery_item_img['width']
       del gallery_item_img['height']
 
-      # --- set img caption
+      # set img caption
       gallery_item_caption = gallery_item.find('div', class_='gallerytext')
       gallery_item_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-c'
 
-      # --- get parent <ul>
+      #  get parent <ul>
       gallerybox = gallery_item.find_parent('ul')
       gallerybox['class'] = 'gallery'
 
