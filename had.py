@@ -82,7 +82,6 @@ class had(object):
     for a in text.find_all('a', href=re.compile(r'/mediawiki/.*')):
       rel_link = a.get('href')
       rel_link = rel_link.rsplit('/', 1)
-      print(rel_link)
       a['href'] = urljoin(url, rel_link[1])
     return text
 
@@ -90,7 +89,7 @@ class had(object):
   def fix_extlink_imgs(text):
     base_url = 'http://wikidev.hackersanddesigners.nl/'
 
-    for img in text.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+    for img in text.find_all('img', src=re.compile(r'/mediawiki/.*')):
       src_rel_link = img.get('src')
       srcset_rel_link = img.get('srcset')
       if (src_rel_link):
