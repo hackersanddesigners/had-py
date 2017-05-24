@@ -113,10 +113,7 @@ class had(object):
 
     for heading in text.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
       heading['class'] = 'ft-sans ft-1 ft-1__m ft-bold mg-b--1'
-
-    p_intro = text.p
-    p_intro['class'] = 'mg-t--1'
-
+ 
     for p in text.find_all('p'):
       p['class'] = 'mg-b--1'
 
@@ -461,7 +458,10 @@ class had(object):
     
       # ---- * * *
       wk_section_items = list(zip(*[iter(wk_section_items)]*3))
-      wk_section_items = sorted(wk_section_items, key=lambda x: x[1])
+      try:
+        wk_section_items = sorted(wk_section_items, key=lambda x: x[1])
+      except TypeError:
+        wk_section_items = sorted(wk_section_items, key=lambda x: x[0])
 
     # build template
     return self.render_template('section_list.html',
