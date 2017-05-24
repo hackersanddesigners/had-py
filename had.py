@@ -357,8 +357,9 @@ class had(object):
     
       # ---- * * *
       wk_section_upitems = list(zip(*[iter(wk_section_upitems)]*3))
-
-      # ---- past items
+      wk_section_upitems = sorted(wk_section_upitems, key=lambda x: x[1])
+     
+       # ---- past items
       wk_section_pastitems = []
 
       for result in query({'conditions': 'Concept:' + section_title + '|OnDate::<' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc'}): 
