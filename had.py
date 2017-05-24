@@ -228,8 +228,10 @@ class had(object):
         # ---
         soup_intro = p_intro
         wkdata_upevents.append(p_intro)
-    
+
     wkdata_upevents = list(zip(*[iter(wkdata_upevents)]*3))
+    sorted(wkdata_upevents, key=lambda event: event[1])
+    print(wkdata_upevents)
 
     # --- past events
     wkdata_pastevents = []
