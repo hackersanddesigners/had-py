@@ -129,6 +129,7 @@ class had(object):
       # check if img has caption/wrapped inside a div
       img_thumb = img.find_parent('div', class_='thumbinner')
       img_p = img.find_parent('p')
+      figure = img.find_parent('figure')
       if img_thumb:
         img_thumb.unwrap()
 
