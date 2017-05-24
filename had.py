@@ -146,11 +146,6 @@ class had(object):
         img_p.name = 'figure'
         img_p['class'] = 'w--copy mg-auto mg-b--2'
 
-      else:
-        text.img.wrap(text.new_tag('figure'))
-        figure = img.find_parent('figure')
-        figure['class'] = 'w--copy mg-auto mg-b--2'
-
       a_img = img.find_parent('a')
       if a_img:
         a_img.unwrap()
@@ -590,9 +585,6 @@ class had(object):
 
     fix_extlinks_a(soup_bodytext, url='')
 
-    # --- typography
-    typography(soup_bodytext)
-    
     # --- images
     for img in soup_bodytext.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
       src_rel_link = img.get('src')
@@ -649,6 +641,9 @@ class had(object):
       gallery.name = 'div'
       gallery['class'] = 'gallery mg-b--2'
 
+    # --- typography
+    typography(soup_bodytext)
+    
     wk_bodytext = soup_bodytext
 
     # build template
