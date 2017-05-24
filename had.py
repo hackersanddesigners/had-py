@@ -242,7 +242,7 @@ class had(object):
         wkdata_pastevents.append(date)
     
     wkdata_pastevents = list(zip(*[iter(wkdata_pastevents)]*2))
-    sorted(wkdata_pastevents, key=lambda event: event[0], reverse=True)
+    sorted(wkdata_pastevents, key=lambda event: event[0])
 
     # build template
     return self.render_template('event_list.html',
