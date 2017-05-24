@@ -407,7 +407,8 @@ class had(object):
     
       # ---- * * *
       wk_section_pastitems = list(zip(*[iter(wk_section_pastitems)]*3))
-    
+      wk_section_pastitems = sorted(wk_section_pastitems, key=lambda x: x[1])
+
     # --------------
     # other sections
     else:
@@ -460,6 +461,7 @@ class had(object):
     
       # ---- * * *
       wk_section_items = list(zip(*[iter(wk_section_items)]*3))
+      wk_section_items = sorted(wk_section_items, key=lambda x: x[1])
 
     # build template
     return self.render_template('section_list.html',
