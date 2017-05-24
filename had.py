@@ -407,7 +407,7 @@ class had(object):
     
       # ---- * * *
       wk_section_pastitems = list(zip(*[iter(wk_section_pastitems)]*3))
-      wk_section_pastitems = sorted(wk_section_pastitems, key=lambda x: x[1])
+      wk_section_pastitems = sorted(wk_section_pastitems, key=lambda x: x[1], reverse=True)
 
     # --------------
     # other sections
