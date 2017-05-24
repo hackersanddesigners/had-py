@@ -489,8 +489,9 @@ class had(object):
     wk_title = wk_data['parse']['title']
     wk_bodytext = wk_data['parse']['text']
 
+    try:
+    # --- if it has [Category:Event] 
     # fetch page-metadata for Event
-    if 'Event' in wk_data['parse']['categories'][0]['category']:
       category_events = '[[Category:Event]]'
       page_meta_filter = '|?PeopleOrganisations'
       page_meta_options = {'action': 'browsebysubject', 'subject': page_title, 'format': 'json', 'formatversion': '2'}
@@ -529,13 +530,13 @@ class had(object):
         wk_peopleorgs = extract_metadata(wk_peopleorgs)
       else:
         wk_peopleorgs = None
-    
-    else:
+    # --- if it has not, set Event's metadata tp `None`
+    except:
       wk_date = None
       wk_time = None
       wk_peopleorgs = None
       wk_place = None
-
+    
     # fix rel-links to be abs-ones
     soup_bodytext = BeautifulSoup(wk_bodytext, 'html.parser')
 
@@ -692,4 +693,4 @@ def create_app(with_assets=True):
 if __name__ == '__main__':
 	from werkzeug.serving import run_simple
 	app = create_app()
-	run_simple('127.0.0.1', 5000, app, use_debugger=False, use_reloader=True)
+	run_simple('127.0.0.1', 5000, app, use_debugger=True, use_reloader=True)
