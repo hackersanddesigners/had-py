@@ -372,9 +372,9 @@ img {
 
 	--baseline: calc(var(--font-size--base) * var(--font-lh--base));
 
-  --border-compl: 0.05rem solid #0000ff;
+  --border-main: 1px solid #000000;
 
-  --border-compl: 0.05rem solid var(--color-compl);
+  --border-main: 1px solid var(--color-main);
 }
 
 /* Base */
@@ -403,15 +403,11 @@ blockquote {
 }
 
 hr {
-  border: 0;
-  margin: 0 auto 24.3px auto;
-  margin: 0 auto var(--baseline) auto;
-  width: 0;
-  height: 0;
-}
-
-hr:after {
-  content: '•';
+  border: 1px solid #000000;
+  border: var(--border-main);
+  width: 30%;
+  margin: 24.3px auto;
+  margin: var(--baseline) auto;
 }
 
 /* components */
@@ -494,7 +490,7 @@ hr:after {
 }
 
 .bd-r--1 {
-  border-right: 0.05rem solid #0000ff;
+  border-right: var(--border-compl);
   border-right: var(--border-compl);
 }
 
@@ -817,7 +813,7 @@ http://flickity.metafizzy.co
   --font-size--base: 18px;
   --font-lh--base: 1.35;
   --baseline: 24.3px;
-  --border-compl: 0.05rem solid #0000ff;
+  --border-main: 1px solid #000000;
   --color-main: #000000;
   --color-compl: #0000ff;
   --color-bg: #ffffff;
