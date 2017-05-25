@@ -54,7 +54,6 @@ gulp.task('css', function(){
 // Concatenate & Minify JS
 gulp.task('scripts:nav', function() {
   return gulp.src('assets/src/js/nav/*.js')
-  .pipe(gulp.dest('assets/dist/js/'))
 	.pipe(jshint())
   .pipe(jshint.reporter('default'))
   .pipe(concat('nav.js'))
@@ -79,15 +78,6 @@ gulp.task('scripts:article', function() {
 
 // Scripts
 gulp.task('scripts', gulp.series('scripts:article', 'scripts:nav'));
-
-gulp.task('browser-sync', gulp.series('css', function() {
-	browsersync.init({
-		server: {
-			baseDir: "./"
-		},
-		proxy: 'http://127.0.0.1:5000'
-	});
-}));
 
 gulp.task('watch', ('browser-sync', function () {
   gulp.watch('assets/src/css/*.css', gulp.series('css'));
