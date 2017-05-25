@@ -19,7 +19,9 @@ img {
 }
 
 .mss {
+  height: 100%;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: none;
+  position: relative;
 }
