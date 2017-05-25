@@ -120,7 +120,7 @@ class had(object):
     for bq in text.find_all('blockquote'):
       bq['class'] = 'ft-2 ft-2__m'
 
-    for code  in text.find_all(['pre', 'code']):
+    for code in text.find_all(['pre', 'code']):
       code['class'] = 'd-bl ft-mono blue ft-05 ft-05__m mg-b--1 pd-l--2 o-x__scroll'
 
     for img in text.find_all('img'):
