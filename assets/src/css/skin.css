@@ -16,6 +16,10 @@
 	color: var(--color-compl);
 }
 
+.bg-black {
+  background-color: var(--color-main);
+}
+
 .bg-blue {
 	background-color: var(--color-compl);
 }
@@ -106,13 +110,19 @@ http://flickity.metafizzy.co
 
 .flickity-page-dots .dot {
   display: inline-block;
-  width: 9px;
-  height: 9px;
+  width: 6px;
+  height: 6px;
   margin: 0 6px;
   background: var(--color-main);
-  /* border-radius: 50%; */
-  transform: rotate(45deg);
+  border-radius: 50%;
   cursor: pointer;
+}
+
+@media screen and (min-width: 475px) {
+ .flickity-page-dots .dot {
+   width: 11px;
+   height: 11px;
+ } 
 }
 
 .flickity-page-dots .dot.is-selected {

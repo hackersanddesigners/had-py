@@ -22,7 +22,6 @@
       </div>
     </nav>
     
-
     {% if intro %}
     <div class="intro mg-t--3 mg-b--2">
       {{ intro|safe }} 
@@ -33,6 +32,8 @@
     {% block section_list %}{% endblock %}
     {% block article %}{% endblock %}
     {% block error %}{% endblock %}
+
+    <div class="dot bg-black mg-t--4 mg-auto"></div>
 
     <script src="/assets/dist/js/nav.min.js"></script>
     {% block article_script %}{% endblock %}

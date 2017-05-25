@@ -8,7 +8,6 @@ import requests
 import pprint
 import datetime
 from dateutil.parser import parse
-from collections import OrderedDict
 import re
 from bs4 import BeautifulSoup, Comment
 from urllib.parse import urljoin, quote
@@ -81,17 +80,17 @@ class had(object):
   def fix_extlinks_a(text, url):
     base_url = 'http://wiki.hackersanddesigners.nl/'
     
-    for a in text.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+    for a in text.find_all('a', href=re.compile(r'/mediawiki/.*')):
       rel_link = a.get('href')
       rel_link = rel_link.rsplit('/', 1)
-      a['href'] = url + rel_link[1]
+      a['href'] = urljoin(url, rel_link[1])
     return text
 
   # --- fix rel-links to be abs ones (img)
   def fix_extlink_imgs(text):
     base_url = 'http://wiki.hackersanddesigners.nl/'
 
-    for img in text.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+    for img in text.find_all('img', src=re.compile(r'/mediawiki/.*')):
       src_rel_link = img.get('src')
       srcset_rel_link = img.get('srcset')
       if (src_rel_link):
@@ -115,25 +114,64 @@ class had(object):
 
     for heading in text.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
       heading['class'] = 'ft-sans ft-1 ft-1__m ft-bold mg-b--1'
-
-    p_intro = text.p
-    p_intro['class'] = 'mg-t--1'
-
+ 
     for p in text.find_all('p'):
-      p['class'] = 'mg-b--1'
+      p['class'] = 'w--copy mg-b--1'
 
     for bq in text.find_all('blockquote'):
       bq['class'] = 'ft-2 ft-2__m'
 
-    for pre in text.find_all('pre'):
-      pre['class'] = 'ft-mono blue ft-05 ft-05__m mg-b--1 pd-l--2 o-x__scroll bd-r--1'
+    for code in text.find_all(['pre', 'code']):
+      code['class'] = 'd-bl ft-mono blue ft-05 ft-05__m mg-b--1 pd-l--2 o-x__scroll'
 
     for img in text.find_all('img'):
       img['class'] = 'mg-v--1 shadow'
+ 
+      # check if img has caption/wrapped inside a div
+      img_thumb = img.find_parent('div', class_='thumbinner')
+      img_p = img.find_parent('p')
+      figure = img.find_parent('figure')
+      if img_thumb:
+        img_thumb.unwrap()
+
+        figure = img.find_parent('div', class_='thumb')
+        figure.name = 'figure'
+        figure['class'] = 'w--copy mg-auto mg-b--2'
+      
+        # set img caption
+        img_caption = figure.find('div', class_='thumbcaption')
+        img_caption.name = 'figcaption'
+        img_caption['class'] = 'mg-auto w--four-fifths ft-sans t-a--c'
+      
+      elif img_p:
+        img_p.name = 'figure'
+        img_p['class'] = 'w--copy mg-auto mg-b--2'
 
       a_img = img.find_parent('a')
       if a_img:
         a_img.unwrap()
+
+    # --- set up embedded videos (yt)
+    for embedvid in text.find_all('div', class_='embedvideo'):
+      del embedvid['style']
+      embedvid['class'] = 'mg-v--2'
+
+      embedvid_c = embedvid.find('div', class_='thumbinner');
+      del embedvid_c['style']
+      embedvid_c['class'] = 'embed-container'
+      
+      embedvid_iframe = embedvid_c.find('iframe')
+      del embedvid_iframe['width']
+      del embedvid_iframe['height']
+      embedvid_iframe['frameborder'] = '0'
+      embedvid_iframe['allowfullscreen']
+
+      # video caption
+      embedvid_caption = embedvid_c.find('div', class_='thumbcaption')
+      embedvid_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-a--c'
+      # move video caption outside the `iframe`'s wrapper
+      embedvid_caption.extract()
+      embedvid.append(embedvid_caption)
 
     for ul in text.find_all('ul'):
       ul['class'] = 'd-tb pd-b--1'
@@ -232,8 +270,9 @@ class had(object):
         # ---
         soup_intro = p_intro
         wkdata_upevents.append(p_intro)
-    
+
     wkdata_upevents = list(zip(*[iter(wkdata_upevents)]*3))
+    wkdata_upevents = sorted(wkdata_upevents, key=lambda x: x[1])
 
     # --- past events
     wkdata_pastevents = []
@@ -245,7 +284,8 @@ class had(object):
         wkdata_pastevents.append(date)
     
     wkdata_pastevents = list(zip(*[iter(wkdata_pastevents)]*2))
-   
+    wkdata_pastevents = sorted(wkdata_pastevents, key=lambda x: x[1], reverse=True)
+
     # build template
     return self.render_template('event_list.html',
                                 nav_main=wk_nav_main,
@@ -359,8 +399,9 @@ class had(object):
     
       # ---- * * *
       wk_section_upitems = list(zip(*[iter(wk_section_upitems)]*3))
-
-      # ---- past items
+      wk_section_upitems = sorted(wk_section_upitems, key=lambda x: x[1])
+     
+       # ---- past items
       wk_section_pastitems = []
 
       for result in query({'conditions': 'Concept:' + section_title + '|OnDate::<' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc'}): 
@@ -408,7 +449,8 @@ class had(object):
     
       # ---- * * *
       wk_section_pastitems = list(zip(*[iter(wk_section_pastitems)]*3))
-    
+      wk_section_pastitems = sorted(wk_section_pastitems, key=lambda x: x[1], reverse=True)
+
     # --------------
     # other sections
     else:
@@ -461,6 +503,10 @@ class had(object):
     
       # ---- * * *
       wk_section_items = list(zip(*[iter(wk_section_items)]*3))
+      try:
+        wk_section_items = sorted(wk_section_items, key=lambda x: x[1])
+      except TypeError:
+        wk_section_items = sorted(wk_section_items, key=lambda x: x[0])
 
     # build template
     return self.render_template('section_list.html',
@@ -488,8 +534,9 @@ class had(object):
     wk_title = wk_data['parse']['title']
     wk_bodytext = wk_data['parse']['text']
 
+    try:
+    # --- if it has [Category:Event] 
     # fetch page-metadata for Event
-    if 'Event' in wk_data['parse']['categories'][0]['category']:
       category_events = '[[Category:Event]]'
       page_meta_filter = '|?PeopleOrganisations'
       page_meta_options = {'action': 'browsebysubject', 'subject': page_title, 'format': 'json', 'formatversion': '2'}
@@ -528,37 +575,21 @@ class had(object):
         wk_peopleorgs = extract_metadata(wk_peopleorgs)
       else:
         wk_peopleorgs = None
-    
-    else:
+
+    # --- if it has not, set Event's metadata tp `None`
+    except:
       wk_date = None
       wk_time = None
       wk_peopleorgs = None
       wk_place = None
-
+    
     # fix rel-links to be abs-ones
     soup_bodytext = BeautifulSoup(wk_bodytext, 'html.parser')
 
     fix_extlinks_a(soup_bodytext, url='')
 
+    # --- images
     for img in soup_bodytext.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
-      # --- check if img has caption/wrapped inside a div
-      img_thumb = img.find_parent('div', class_='thumbinner')
-      img_p = img.find_parent('p')
-      if img_thumb:
-        img_thumb.unwrap()
-
-        figure = img.find_parent('div', class_='thumb')
-        figure.name = 'figure'
-        figure['class'] = 'mg-b--1'
-      
-        # --- set img caption
-        img_caption = figure.find('div', class_='thumbcaption')
-        img_caption.name = 'figcaption'
-        img_caption['class'] = 'mg-auto w--four-fifths ft-sans t-c'
-      
-      elif img_p:
-        img_p.name = 'figure'
-
       src_rel_link = img.get('src')
       srcset_rel_link = img.get('srcset')
       if (src_rel_link):
@@ -579,57 +610,32 @@ class had(object):
         srcset_s = ', '.join(srcset_lu)
         img['srcset'] = srcset_s
 
-    # --- typography
-    typography(soup_bodytext)
-    
-    # --- set up embedded videos (yt)
-    for embedvid in soup_bodytext.find_all('div', class_='embedvideo'):
-      del embedvid['style']
-      embedvid['class'] = 'mg-v--2'
-
-      embedvid_c = embedvid.find('div', class_='thumbinner');
-      del embedvid_c['style']
-      embedvid_c['class'] = 'embed-container'
-      
-      embedvid_iframe = embedvid_c.find('iframe')
-      del embedvid_iframe['width']
-      del embedvid_iframe['height']
-      embedvid_iframe['frameborder'] = '0'
-      embedvid_iframe['allowfullscreen']
-
-      # --- video caption
-      embedvid_caption = embedvid_c.find('div', class_='thumbcaption')
-      embedvid_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-c'
-      # --- move video caption outside the `iframe`'s wrapper
-      embedvid_caption.extract()
-      embedvid.append(embedvid_caption)
-    
     # --- flickity slideshow
     for gallery_item in soup_bodytext.find_all('li', class_='gallerybox'):
-      # --- img div wrapper (from <li> to <div>)
+      # img div wrapper (from <li> to <div>)
       gallery_item.name = 'div'
       del gallery_item['style']
       gallery_item['class'] = 'gallery-item'
       
-      # --- delete extra <div>s before and after img div wrapper
+      # delete extra <div>s before and after img div wrapper
       gallery_item_div = gallery_item.find('div', class_='thumb')
-      pp = gallery_item_div.parent
-      pp.unwrap()
+      gallery_pp = gallery_item_div.parent
+      gallery_pp.unwrap()
       child = gallery_item_div.div
       child.unwrap()
       gallery_item_div.unwrap()
 
-      # --- clean up <img>
+      # clean up <img>
       gallery_item_img = gallery_item.find('img')
       gallery_item_img['class'] = 'h--half shadow'
       del gallery_item_img['width']
       del gallery_item_img['height']
 
-      # --- set img caption
+      # set img caption
       gallery_item_caption = gallery_item.find('div', class_='gallerytext')
-      gallery_item_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-c'
+      gallery_item_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-a--c'
 
-      # --- get parent <ul>
+      #  get parent <ul>
       gallerybox = gallery_item.find_parent('ul')
       gallerybox['class'] = 'gallery'
 
@@ -638,6 +644,9 @@ class had(object):
       gallery.name = 'div'
       gallery['class'] = 'gallery mg-b--2'
 
+    # --- typography
+    typography(soup_bodytext)
+    
     wk_bodytext = soup_bodytext
 
     # build template
@@ -690,4 +699,4 @@ def create_app(with_assets=True):
 if __name__ == '__main__':
 	from werkzeug.serving import run_simple
 	app = create_app()
-	run_simple('127.0.0.1', 5000, app, use_debugger=False, use_reloader=True)
+	run_simple('127.0.0.1', 5000, app, use_debugger=True, use_reloader=True)

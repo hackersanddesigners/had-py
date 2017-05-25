@@ -39,11 +39,6 @@ button {
   outline: 0;
 }
 
-hr {
-  border-top: var(--border-main);
-  height: 0.05rem;
-}
-
 /* embed video */
 
 .embed-container { 

@@ -47,12 +47,6 @@ button {
   outline: 0;
 }
 
-hr {
-  border-top: var(--border-main);
-  border-top: var(--border-main);
-  height: 0.05rem;
-}
-
 /* embed video */
 
 .embed-container { 
@@ -96,9 +90,11 @@ img {
 }
 
 .mss {
-  overflow-y: scroll;
+  height: 100%;
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: none;
+  position: relative;
 }
 
 /** Spacing **/
@@ -378,9 +374,9 @@ img {
 
 	--baseline: calc(var(--font-size--base) * var(--font-lh--base));
 
-  --border-compl: 1px solid #0000ff;
+  --border-main: 1px solid #000000;
 
-  --border-compl: 1px solid var(--color-compl);
+  --border-main: 1px solid var(--color-main);
 }
 
 /* Base */
@@ -409,9 +405,11 @@ blockquote {
 }
 
 hr {
+  border: 1px solid #000000;
+  border: var(--border-main);
+  width: 30%;
   margin: 24.3px auto;
   margin: var(--baseline) auto;
-  width: 30%;
 }
 
 /* components */
@@ -494,20 +492,30 @@ hr {
 }
 
 .bd-r--1 {
-  border-right: 1px solid #0000ff;
+  border-right: var(--border-compl);
   border-right: var(--border-compl);
 }
 
 /* align */
 
-.t-c {
+.t-a--c {
   text-align: center;
+}
+
+/* glyphs */
+
+.dot {
+  width: 24.3px;
+  width: var(--baseline);
+  height: 24.3px;
+  height: var(--baseline);
+  border-radius: 50%;
 }
 
 /* Size */
 
-.w--page {
-  max-width: 42rem;
+.w--copy {
+  max-width: 39rem;
 }
 
 .w--full {
@@ -682,6 +690,11 @@ hr {
 	color: var(--color-compl);
 }
 
+.bg-black {
+  background-color: #000000;
+  background-color: var(--color-main);
+}
+
 .bg-blue {
 	background-color: #0000ff;
 	background-color: var(--color-compl);
@@ -783,14 +796,20 @@ http://flickity.metafizzy.co
 
 .flickity-page-dots .dot {
   display: inline-block;
-  width: 9px;
-  height: 9px;
+  width: 6px;
+  height: 6px;
   margin: 0 6px;
   background: #000000;
   background: var(--color-main);
-  /* border-radius: 50%; */
-  transform: rotate(45deg);
+  border-radius: 50%;
   cursor: pointer;
+}
+
+@media screen and (min-width: 475px) {
+ .flickity-page-dots .dot {
+   width: 11px;
+   height: 11px;
+ } 
 }
 
 .flickity-page-dots .dot.is-selected {
@@ -811,7 +830,7 @@ http://flickity.metafizzy.co
   --font-size--base: 18px;
   --font-lh--base: 1.35;
   --baseline: 24.3px;
-  --border-compl: 1px solid #0000ff;
+  --border-main: 1px solid #000000;
   --color-main: #000000;
   --color-compl: #0000ff;
   --color-bg: #ffffff;
