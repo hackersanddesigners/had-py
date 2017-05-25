@@ -5,7 +5,6 @@ from werkzeug.exceptions import HTTPException, NotFound
 from werkzeug.wsgi import SharedDataMiddleware
 from werkzeug.utils import redirect
 import requests
-from requests_futures.sessions import FuturesSession
 import pprint
 import datetime
 from dateutil.parser import parse
@@ -54,7 +53,7 @@ class had(object):
   # ----------
   # navigation
   def nav_main():
-    base_url = 'http://wikidev.hackersanddesigners.nl/'
+    base_url = 'http://wiki.hackersanddesigners.nl/'
     folder_url = 'mediawiki/'
     api_call =  'api.php?'
     
@@ -65,7 +64,7 @@ class had(object):
     return wk_nav_main
 
   def nav_sections():
-    base_url = 'http://wikidev.hackersanddesigners.nl/'
+    base_url = 'http://wiki.hackersanddesigners.nl/'
     folder_url = 'mediawiki/'
     api_call =  'api.php?'
     
@@ -80,7 +79,7 @@ class had(object):
   
   # --- fix rel-links to be abs-ones (a)
   def fix_extlinks_a(text, url):
-    base_url = 'http://wikidev.hackersanddesigners.nl/'
+    base_url = 'http://wiki.hackersanddesigners.nl/'
     
     for a in text.find_all('a', href=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
       rel_link = a.get('href')
@@ -90,7 +89,7 @@ class had(object):
 
   # --- fix rel-links to be abs ones (img)
   def fix_extlink_imgs(text):
-    base_url = 'http://wikidev.hackersanddesigners.nl/'
+    base_url = 'http://wiki.hackersanddesigners.nl/'
 
     for img in text.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
       src_rel_link = img.get('src')
@@ -154,7 +153,7 @@ class had(object):
   
   # home	
   def on_home(self, request, typography=typography, fix_extlinks_a=fix_extlinks_a, fix_extlink_imgs=fix_extlink_imgs,wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
-    base_url = 'http://wikidev.hackersanddesigners.nl/'
+    base_url = 'http://wiki.hackersanddesigners.nl/'
     folder_url = 'mediawiki/'
     api_call =  'api.php?'
 
@@ -193,6 +192,8 @@ class had(object):
         req.update(parameters)
         
         # call API
+        print(base_url + folder_url + api_call)
+        print(req)
         result = requests.get(base_url + folder_url + api_call, params=req).json()
         if 'error' in result:
           raise Error(result['error'])
@@ -256,7 +257,7 @@ class had(object):
                                 )
 
   def on_section(self, request, typography=typography, section_title=None, page_title=None, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
-    base_url = 'http://wikidev.hackersanddesigners.nl/'
+    base_url = 'http://wiki.hackersanddesigners.nl/'
     folder_url = 'mediawiki/'
     api_call =  'api.php?'
 
@@ -475,7 +476,7 @@ class had(object):
   # -------
   # article
   def on_article(self, request, typography=typography, fix_extlinks_a=fix_extlinks_a, page_title=None, section_title=None, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
-    base_url = 'http://wikidev.hackersanddesigners.nl/'
+    base_url = 'http://wiki.hackersanddesigners.nl/'
     folder_url = 'mediawiki/'
     api_call =  'api.php?'
 
