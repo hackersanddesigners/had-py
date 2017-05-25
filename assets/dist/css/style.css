@@ -500,6 +500,16 @@ hr {
   text-align: center;
 }
 
+/* glyphs */
+
+.dot {
+  width: 24.3px;
+  width: var(--baseline);
+  height: 24.3px;
+  height: var(--baseline);
+  border-radius: 50%;
+}
+
 /* Size */
 
 .w--copy {
@@ -676,6 +686,11 @@ hr {
 .blue {
 	color: #0000ff;
 	color: var(--color-compl);
+}
+
+.bg-black {
+  background-color: #000000;
+  background-color: var(--color-main);
 }
 
 .bg-blue {

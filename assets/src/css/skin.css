@@ -16,6 +16,10 @@
 	color: var(--color-compl);
 }
 
+.bg-black {
+  background-color: var(--color-main);
+}
+
 .bg-blue {
 	background-color: var(--color-compl);
 }

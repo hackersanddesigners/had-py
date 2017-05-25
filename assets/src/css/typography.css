@@ -124,3 +124,11 @@ hr {
 .t-a--c {
   text-align: center;
 }
+
+/* glyphs */
+
+.dot {
+  width: var(--baseline);
+  height: var(--baseline);
+  border-radius: 50%;
+}
