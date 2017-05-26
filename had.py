@@ -666,10 +666,6 @@ class had(object):
     response.status_code = 404
     return response
 
-  def on_files(self, request, file=None):
-    filepath = urljoin('/', file)
-    return Response(filepath, direct_passthrough=True)
-
   def render_template(self, template_name, **context):
     t = self.jinja_env.get_template(template_name)
     return Response(t.render(context), mimetype='text/html')
