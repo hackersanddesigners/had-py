@@ -204,7 +204,7 @@ class had(object):
     
     soup_wk_intro = BeautifulSoup(wk_intro, 'html.parser')
     # ---
-    fix_extlinks_a(soup_wk_intro, url='s/Events/p/')
+    # fix_extlinks_a(soup_wk_intro, url='s/Events/p/')
     fix_extlink_imgs(soup_wk_intro)
     typography(soup_wk_intro)
     # ---
@@ -584,6 +584,8 @@ class had(object):
     
     # fix rel-links to be abs-ones
     soup_bodytext = BeautifulSoup(wk_bodytext, 'html.parser')
+
+    fix_extlinks_a(soup_bodytext, url='')
 
     # --- images
     for img in soup_bodytext.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
