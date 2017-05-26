@@ -589,7 +589,7 @@ class had(object):
     fix_extlinks_a(soup_bodytext, url='')
 
     # --- images
-    for img in soup_bodytext.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
+    for img in soup_bodytext.find_all('img', src=re.compile(r'/mediawiki/.*')):
       src_rel_link = img.get('src')
       srcset_rel_link = img.get('srcset')
       if (src_rel_link):
