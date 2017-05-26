@@ -125,7 +125,9 @@ class had(object):
       code['class'] = 'd-bl ft-mono blue ft-05 ft-05__m mg-b--1 pd-l--2 o-x__scroll'
 
     for img in text.find_all('img'):
-      img['class'] = 'mg-v--1 shadow'
+      img['class'] = 'h--half mg-v--1 shadow'
+      del img['width']
+      del img['height']
  
       # check if img has caption/wrapped inside a div
       img_thumb = img.find_parent('div', class_='thumbinner')
@@ -142,6 +144,10 @@ class had(object):
         img_caption = figure.find('div', class_='thumbcaption')
         img_caption.name = 'figcaption'
         img_caption['class'] = 'mg-auto w--four-fifths ft-sans t-a--c'
+
+        magnify = img_caption.find('div', class_='magnify')
+        if magnify:
+          magnify.decompose()
       
       elif img_p:
         img_p.name = 'figure'
@@ -633,7 +639,11 @@ class had(object):
 
       # set img caption
       gallery_item_caption = gallery_item.find('div', class_='gallerytext')
-      gallery_item_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-a--c'
+      gallery_item_caption.name = 'figcaption'
+      gallery_item_caption['class'] = 'pd-t--1 mg-auto w--copy ft-sans t-a--c'
+      gcp = gallery_item_caption.find('p')
+      if gcp:
+        gcp.unwrap()
 
       #  get parent <ul>
       gallerybox = gallery_item.find_parent('ul')
