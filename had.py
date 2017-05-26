@@ -5,7 +5,6 @@ from werkzeug.exceptions import HTTPException, NotFound
 from werkzeug.wsgi import SharedDataMiddleware
 from werkzeug.utils import redirect
 import requests
-import pprint
 import datetime
 from dateutil.parser import parse
 import re
@@ -585,8 +584,6 @@ class had(object):
     
     # fix rel-links to be abs-ones
     soup_bodytext = BeautifulSoup(wk_bodytext, 'html.parser')
-
-    fix_extlinks_a(soup_bodytext, url='')
 
     # --- images
     for img in soup_bodytext.find_all('img', src=re.compile(r'^(?!(?:[a-zA-Z][a-zA-Z0-9+.-]*:|//))')):
