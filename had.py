@@ -43,7 +43,7 @@ class had(object):
     # routing
     self.url_map = Map([
       Rule('/', endpoint='home'),
-      # Rule('/<file>', endpoint='files'),
+      Rule('/<file>', redirect_to='/assets/files/<file>'),
       Rule('/p/<page_title>', endpoint='article'),
       Rule('/s/<section_title>', endpoint='section'),
       Rule('/s/<section_title>/p/<page_title>', endpoint='article')
@@ -666,9 +666,9 @@ class had(object):
     response.status_code = 404
     return response
 
-  # def on_files(self, request, file=None):
-    # filepath = urljoin('/', file)
-    # return Response(filepath, direct_passthrough=True)
+  def on_files(self, request, file=None):
+    filepath = urljoin('/', file)
+    return Response(filepath, direct_passthrough=True)
 
   def render_template(self, template_name, **context):
     t = self.jinja_env.get_template(template_name)
