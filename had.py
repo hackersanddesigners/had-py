@@ -1,6 +1,6 @@
 import os
 from werkzeug.wrappers import Request, Response
-from werkzeug.routing import Map, Rule
+from werkzeug.routing import Map, Rule, NotFound, RequestRedirect
 from werkzeug.exceptions import HTTPException, NotFound
 from werkzeug.wsgi import SharedDataMiddleware
 from werkzeug.utils import redirect
@@ -43,6 +43,7 @@ class had(object):
     # routing
     self.url_map = Map([
       Rule('/', endpoint='home'),
+      Rule('/<file>', endpoint='files'),
       Rule('/p/<page_title>', endpoint='article'),
       Rule('/s/<section_title>', endpoint='section'),
       Rule('/s/<section_title>/p/<page_title>', endpoint='article')
@@ -664,6 +665,10 @@ class had(object):
     response = self.render_template('404.html')
     response.status_code = 404
     return response
+
+  def on_files(self, request, file=None):
+    # response = self.render_template('files.html')
+    return Response(file, direct_passthrough=True)
 
   def render_template(self, template_name, **context):
     t = self.jinja_env.get_template(template_name)
