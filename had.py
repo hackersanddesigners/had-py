@@ -205,7 +205,7 @@ class had(object):
     
     soup_wk_intro = BeautifulSoup(wk_intro, 'html.parser')
     # ---
-    # fix_extlinks_a(soup_wk_intro, url='s/Events/p/')
+    fix_extlinks_a(soup_wk_intro, url='s/Events/p/')
     fix_extlink_imgs(soup_wk_intro)
     typography(soup_wk_intro)
     # ---
