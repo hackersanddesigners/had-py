@@ -190,7 +190,7 @@ class had(object):
   # --- Views
   
   # home	
-  def on_home(self, request, typography=typography, fix_extlinks_a=fix_extlinks_a, fix_extlink_imgs=fix_extlink_imgs,wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
+  def on_home(self, request, typography=typography, fix_extlinks_a=fix_extlinks_a, fix_extlink_imgs=fix_extlink_imgs, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
     base_url = 'https://wiki.hackersanddesigners.nl/'
     folder_url = 'mediawiki/'
     api_call =  'api.php?'
@@ -667,8 +667,8 @@ class had(object):
     return response
 
   def on_files(self, request, file=None):
-    filepath = urljoin('assets/files/', file)
-    return Response(file, direct_passthrough=True)
+    filepath = urljoin('/', file)
+    return Response(filepath, direct_passthrough=True)
 
   def render_template(self, template_name, **context):
     t = self.jinja_env.get_template(template_name)
