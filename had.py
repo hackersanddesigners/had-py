@@ -43,7 +43,7 @@ class had(object):
     # routing
     self.url_map = Map([
       Rule('/', endpoint='home'),
-      Rule('/assets/files/<file>', endpoint='files'),
+      Rule('/<file>', endpoint='files'),
       Rule('/p/<page_title>', endpoint='article'),
       Rule('/s/<section_title>', endpoint='section'),
       Rule('/s/<section_title>/p/<page_title>', endpoint='article')
