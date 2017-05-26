@@ -11,6 +11,7 @@
 	--baseline: calc(var(--font-size--base) * var(--font-lh--base));
 
   --border-main: 1px solid var(--color-main);
+  --border-compl: 1px solid var(--color-compl);
 }
 
 /* Base */

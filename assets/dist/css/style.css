@@ -377,6 +377,8 @@ img {
   --border-main: 1px solid #000000;
 
   --border-main: 1px solid var(--color-main);
+  --border-compl: 1px solid #0000ff;
+  --border-compl: 1px solid var(--color-compl);
 }
 
 /* Base */
@@ -492,7 +494,7 @@ hr {
 }
 
 .bd-r--1 {
-  border-right: var(--border-compl);
+  border-right: 1px solid #0000ff;
   border-right: var(--border-compl);
 }
 
@@ -515,7 +517,7 @@ hr {
 /* Size */
 
 .w--copy {
-  max-width: 39rem;
+  max-width: 42rem;
 }
 
 .w--full {
@@ -831,6 +833,7 @@ http://flickity.metafizzy.co
   --font-lh--base: 1.35;
   --baseline: 24.3px;
   --border-main: 1px solid #000000;
+  --border-compl: 1px solid #0000ff;
   --color-main: #000000;
   --color-compl: #0000ff;
   --color-bg: #ffffff;

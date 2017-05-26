@@ -122,7 +122,7 @@ class had(object):
       bq['class'] = 'ft-2 ft-2__m w--copy'
 
     for code in text.find_all(['pre', 'code']):
-      code['class'] = 'd-bl ft-mono blue ft-05 ft-05__m mg-b--1 pd-l--2 o-x__scroll'
+      code['class'] = 'w--copy d-bl ft-mono blue ft-05 ft-05__m mg-b--1 pd-l--2 bd-r--1 o-x__scroll'
 
     for img in text.find_all('img'):
       img['class'] = 'h--half mg-v--1 shadow'
