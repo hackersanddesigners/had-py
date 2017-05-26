@@ -47,8 +47,8 @@ gulp.task('css', function(){
 	.pipe(rename({
 		suffix: '.min'
 	}))
-	.pipe(gulp.dest('assets/dist/css'))
-	.pipe(browsersync.reload({stream: true}))
+  .pipe(gulp.dest('assets/dist/css'))
+  .pipe(browsersync.reload({stream: true}))
 });
 
 // Concatenate & Minify JS

@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/afincato/had-py.git"
+    "url": "git+https://github.com/hackersanddesigners/had-py.git"
   },
   "keywords": [
     "hackers&designers",
@@ -17,11 +17,10 @@
   "author": "André Fincato",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/afincato/had-py/issues"
+    "url": "https://github.com/hackersanddesigners/had-py/issues"
   },
-  "homepage": "https://github.com/afincato/had-py#readme",
+  "homepage": "https://github.com/hackersanddesigners/had-py#readme",
   "devDependencies": {
-    "browser-sync": "^2.18.8",
     "del": "^2.2.2",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-concat": "^2.6.1",
