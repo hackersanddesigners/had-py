@@ -6,7 +6,6 @@ from werkzeug.wsgi import SharedDataMiddleware
 from werkzeug.utils import redirect
 import requests
 import datetime
-from dateutil.parser import parse
 import re
 from bs4 import BeautifulSoup, Comment
 from urllib.parse import urljoin, quote
