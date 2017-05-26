@@ -43,7 +43,7 @@ class had(object):
     # routing
     self.url_map = Map([
       Rule('/', endpoint='home'),
-      Rule('/<file>', endpoint='files'),
+      Rule('/assets/files/<file>', endpoint='files'),
       Rule('/p/<page_title>', endpoint='article'),
       Rule('/s/<section_title>', endpoint='section'),
       Rule('/s/<section_title>/p/<page_title>', endpoint='article')
@@ -667,7 +667,7 @@ class had(object):
     return response
 
   def on_files(self, request, file=None):
-    # response = self.render_template('files.html')
+    filepath = urljoin('assets/files/', file)
     return Response(file, direct_passthrough=True)
 
   def render_template(self, template_name, **context):
