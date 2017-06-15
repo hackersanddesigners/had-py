@@ -159,7 +159,7 @@ class had(object):
     # --- set up embedded videos (yt)
     for embedvid in text.find_all('div', class_='embedvideo'):
       del embedvid['style']
-      embedvid['class'] = 'w--copy mg-auto mg-v--1'
+      embedvid['class'] = 'w--copy mg-auto mg-t--1 mg-b--3'
 
       embedvid_c = embedvid.find('div', class_='thumbinner');
       del embedvid_c['style']
