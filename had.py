@@ -150,7 +150,7 @@ class had(object):
       
       elif img_p:
         img_p.name = 'figure'
-        img_p['class'] = 'w--copy mg-auto mg-b--2'
+        img_p['class'] = 'w--copy mg-auto mg-b-0'
 
       a_img = img.find_parent('a')
       if a_img:
@@ -159,7 +159,7 @@ class had(object):
     # --- set up embedded videos (yt)
     for embedvid in text.find_all('div', class_='embedvideo'):
       del embedvid['style']
-      embedvid['class'] = 'mg-v--2'
+      embedvid['class'] = 'w--copy mg-v--1'
 
       embedvid_c = embedvid.find('div', class_='thumbinner');
       del embedvid_c['style']
