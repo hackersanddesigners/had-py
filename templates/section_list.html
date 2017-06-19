@@ -2,7 +2,8 @@
 {% block section_list %}
 
 <div class="mg-t--2">
-  {% if section_upitems or section_pastitems %}
+{% if section_upitems or section_pastitems %}
+  {% if section_upitems %}
   <h2 class="ft-sans ft-3 ft-3_m blue mg-b--1">Upcoming</h2>
   <ul class="flex-c flex-r__m flex-sb">
   {% for item in section_upitems %}
@@ -13,7 +14,11 @@
     </li>
   {% endfor %}
   </ul>
+  {% else %}
+    <p class="mg-b--2 mg-b--3__m">No upcoming activities!</p>
+  {% endif %}
 
+  {% if section_pastitems %}
   <h2 class="ft-sans ft-3 ft-3_m blue mg-b--1">Archive</h2>
   <ul class="flex-c flex-r__m flex-sb">
   {% for item in section_pastitems %}
@@ -24,6 +29,7 @@
     </li>
   {% endfor %}
   </ul>
+  {% endif %}
 
   {% elif section_items %}
   <ul class="flex-c flex-r__m flex-sb mg-t--2">
@@ -35,7 +41,7 @@
     </li>
   {% endfor %}
   </ul>
-  {% endif %}
+{% endif %}
 </div>
 
 {% endblock %}
