@@ -18,6 +18,10 @@ img {
   margin: 0 auto;
 }
 
+a {
+  word-wrap: break-word;
+}
+
 .mss {
   height: 100%;
   overflow: auto;
