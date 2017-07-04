@@ -96,6 +96,12 @@
 	padding-left: var(--spacing-large);
 }
 
+@media screen and (min-width: 640px) {
+  .pd-b--1__m {
+    padding-bottom: var(--spacing-small);
+  }
+}
+
 /* margins */
 
 .mg-auto {

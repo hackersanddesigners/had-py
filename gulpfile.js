@@ -15,7 +15,6 @@ var jshint = require('gulp-jshint');
 var uglify = require('gulp-uglify');
 var notify = require("gulp-notify");
 var inlinesource = require('gulp-inline-source');
-var browsersync = require('browser-sync').create();
 
 gulp.task('clean', function () {
 	return del([
@@ -48,7 +47,6 @@ gulp.task('css', function(){
 		suffix: '.min'
 	}))
   .pipe(gulp.dest('assets/dist/css'))
-  .pipe(browsersync.reload({stream: true}))
 });
 
 // Concatenate & Minify JS
@@ -79,10 +77,10 @@ gulp.task('scripts:article', function() {
 // Scripts
 gulp.task('scripts', gulp.series('scripts:article', 'scripts:nav'));
 
-gulp.task('watch', ('browser-sync', function () {
+gulp.task('watch', function() {
   gulp.watch('assets/src/css/*.css', gulp.series('css'));
   gulp.watch('assets/src/js/**/*.js', gulp.series('scripts'));
-}));
+});
 
 // Default Task
 gulp.task('default', gulp.series('clean', 'css', 'scripts', 'watch'));

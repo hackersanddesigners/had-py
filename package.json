@@ -32,8 +32,8 @@
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^2.1.2",
     "gulp-util": "^3.0.8",
-    "jshint": "^2.9.4",
-    "postcss-cssnext": "^2.10.0",
+    "jshint": "^2.9.5",
+    "postcss-cssnext": "^2.11.0",
     "postcss-import": "^9.1.0"
   }
 }
