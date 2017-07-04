@@ -13,10 +13,10 @@
   {{ super() }}
   {% endif %}
 
-  {% if time or place or peopleorgs %}
+  {% if time or venue or peopleorgs %}
   <ul class="d-tb pd-b--1 ft-sans">
     {% if time %}<li class="d-tbr li-em">{{ time[0] }}</li>{% endif %}
-    {% if place %}<li class="d-tbr li-em">{{ place[0] }}</li>{% endif%}
+    {% if venue %}<li class="d-tbr li-em">{{ venue[0] }}</li>{% endif%}
     {% if peopleorgs %}<li class="d-tbr li-em">w/ {{ peopleorgs|join(', ') }}</li>{% endif %}
   </ul>
   {% endif %}

@@ -235,8 +235,6 @@ class had(object):
         req.update(parameters)
         
         # call API
-        print(base_url + folder_url + api_call)
-        print(req)
         result = requests.get(base_url + folder_url + api_call, params=req).json()
         if 'error' in result:
           raise Error(result['error'])
@@ -545,8 +543,8 @@ class had(object):
     wk_bodytext = wk_data['parse']['text']
 
     try:
-    # --- if it has [Category:Event] 
-    # fetch page-metadata for Event
+      # --- if it has [Category:Event]
+      # fetch page-metadata for Event
       category_events = '[[Category:Event]]'
       page_meta_filter = '|?PeopleOrganisations'
       page_meta_options = {'action': 'browsebysubject', 'subject': page_title, 'format': 'json', 'formatversion': '2'}
@@ -562,36 +560,28 @@ class had(object):
           item_list.append(item)
         return item_list
 
-      wk_date = wkdata_meta['query']['data'][1]['dataitem']
-      if 'OnDate' in wkdata_meta['query']['data'][1]['property']:
-        wk_date = extract_metadata(wk_date)
-      else:
-        wk_date = None
-      
-      wk_time = wkdata_meta['query']['data'][4]['dataitem']
-      if 'Time' in wkdata_meta['query']['data'][4]['property']:
-        wk_time = extract_metadata(wk_time)
-      else:
-        wk_time = None
-
-      wk_place = wkdata_meta['query']['data'][6]['dataitem']
-      if 'Venue' in wkdata_meta['query']['data'][6]['property']:
-        wk_place = extract_metadata(wk_place)
-      else:
-        wk_place = None
-
-      wk_peopleorgs = wkdata_meta['query']['data'][2]['dataitem']
-      if 'PeopleOrganisations' in wkdata_meta['query']['data'][2]['property']:
-        wk_peopleorgs = extract_metadata(wk_peopleorgs)
-      else:
-        wk_peopleorgs = None
-
-    # --- if it has not, set Event's metadata tp `None`
-    except:
       wk_date = None
       wk_time = None
+      wk_venue = None
       wk_peopleorgs = None
-      wk_place = None
+
+      for item in wkdata_meta['query']['data']:
+        # --- Date
+        if 'OnDate' in item['property']:
+          wk_date = extract_metadata(item['dataitem'])
+        # --- Time
+        if 'Time' in item['property']:
+          wk_time = extract_metadata(item['dataitem'])
+        # --- Venue
+        if 'Venue' in item['property']:
+          wk_venue = extract_metadata(item['dataitem'])
+        # --- PeopleOrgs
+        if 'PeopleOrganisations' in item['property']:
+          wk_peopleorgs = extract_metadata(item['dataitem'])
+    
+    # --- if it has not, set Event's metadata to `None`
+    except KeyError:
+      print('nein')
     
     # fix rel-links to be abs-ones
     soup_bodytext = BeautifulSoup(wk_bodytext, 'html.parser')
@@ -670,8 +660,8 @@ class had(object):
                                 title=wk_title,
                                 date=wk_date,
                                 time=wk_time,
+                                venue=wk_venue,
                                 peopleorgs=wk_peopleorgs,
-                                place=wk_place,
                                 bodytext=wk_bodytext
                                 )
 
