@@ -10,7 +10,6 @@ var main_menu = document.querySelector('.main-menu');
 var mm_parent = main_menu.parentNode;
 var sm = document.querySelector('.section-menu');
 var toggle = document.createElement('button');
-var after_nav = nav.nextElementSibling;
 
 function on_resizing (event) {
 
@@ -47,6 +46,11 @@ function wrap_sb () {
   mm_wrapper.classList.add('mm_wrapper', 'flex-r', 'flex-sb', 'flex-ab');
   
   nav_wrapper.classList.add('p-fx', 'p-tl', 'w--full', 'z-2');
+
+  nav_wrapper.nextElementSibling.classList.remove('mg-t--3');
+  var nav_wh = nav_wrapper.offsetHeight;
+  nav_wrapper.nextElementSibling.style.paddingTop = nav_wh + 'px';
+
   nav.classList.add('pd-t--1', 'pd-h--2', 'z-2', 'bg-white');
   nav.classList.remove('mg-b--2');
   
@@ -94,8 +98,8 @@ function sticky () {
       }
     }
 
-  };
-};
+  }
+}
 
 function unwrap(wrapper) {
   var doc_frag = document.createDocumentFragment();
