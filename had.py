@@ -4,6 +4,7 @@ from werkzeug.routing import Map, Rule, NotFound, RequestRedirect
 from werkzeug.exceptions import HTTPException, NotFound
 from werkzeug.wsgi import SharedDataMiddleware
 from werkzeug.utils import redirect
+from werkzeug.wsgi import get_current_url
 import requests
 import datetime
 import re
@@ -81,6 +82,7 @@ class had(object):
     
     for a in text.find_all('a', href=re.compile(r'/mediawiki/.*')):
       rel_link = a.get('href')
+      rel_link = rel_link.replace(':', '%3A')
       rel_link = rel_link.rsplit('/', 1)
       a['href'] = urljoin(url, rel_link[1])
     return text
@@ -157,26 +159,29 @@ class had(object):
         a_img.unwrap()
 
     # --- set up embedded videos (yt)
-    for embedvid in text.find_all('div', class_='embedvideo'):
-      del embedvid['style']
-      embedvid['class'] = 'w--copy mg-auto mg-t--1 mg-b--3'
+    try:
+      for embedvid in text.find_all('div', class_='embedvideo'):
+        del embedvid['style']
+        embedvid['class'] = 'w--copy mg-auto mg-t--1 mg-b--3'
 
-      embedvid_c = embedvid.find('div', class_='thumbinner');
-      del embedvid_c['style']
-      embedvid_c['class'] = 'embed-container'
-      
-      embedvid_iframe = embedvid_c.find('iframe')
-      del embedvid_iframe['width']
-      del embedvid_iframe['height']
-      embedvid_iframe['frameborder'] = '0'
-      embedvid_iframe['allowfullscreen']
+        embedvid_c = embedvid.find('div', class_='thumbinner');
+        del embedvid_c['style']
+        embedvid_c['class'] = 'embed-container'
+          
+        embedvid_iframe = embedvid_c.find('iframe')
+        del embedvid_iframe['width']
+        del embedvid_iframe['height']
+        embedvid_iframe['frameborder'] = '0'
+        embedvid_iframe['allowfullscreen']
 
-      # video caption
-      embedvid_caption = embedvid_c.find('div', class_='thumbcaption')
-      embedvid_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-a--c'
-      # move video caption outside the `iframe`'s wrapper
-      embedvid_caption.extract()
-      embedvid.append(embedvid_caption)
+        # video caption
+        embedvid_caption = embedvid_c.find('div', class_='thumbcaption')
+        embedvid_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-a--c'
+        # move video caption outside the `iframe`'s wrapper
+        embedvid_caption.extract()
+        embedvid.append(embedvid_caption)
+    except TypeError:
+      print('no embed video')
 
     for ul in text.find_all('ul'):
       ul['class'] = 'd-tb pd-b--1 w--copy'
@@ -581,12 +586,16 @@ class had(object):
     
     # --- if it has not, set Event's metadata to `None`
     except KeyError:
-      print('nein')
+      print('No Event metadata')
     
     # fix rel-links to be abs-ones
     soup_bodytext = BeautifulSoup(wk_bodytext, 'html.parser')
+   
+    envy = request.environ
+    p_url = get_current_url(envy)
+    p_url = p_url.rsplit('/', 1)
 
-    fix_extlinks_a(soup_bodytext, url='')
+    fix_extlinks_a(soup_bodytext, url=p_url[0] + '/')
 
     # --- images
     for img in soup_bodytext.find_all('img', src=re.compile(r'/mediawiki/.*')):
