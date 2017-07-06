@@ -30,20 +30,22 @@
       </div>
     </nav>
     
-    {% if intro %}
-    <div class="intro mg-t--3 mg-b--2">
-      {{ intro|safe }} 
-    </div>
-    {% endif %}
+    <main class="mg-t--3">
+      {% if intro %}
+      <div class="intro mg-t--3 mg-b--2">
+        {{ intro|safe }} 
+      </div>
+      {% endif %}
 
-    {% block event_list %}{% endblock %}
-    {% block section_list %}{% endblock %}
-    {% block article %}{% endblock %}
-    {% block error %}{% endblock %}
+      {% block event_list %}{% endblock %}
+      {% block section_list %}{% endblock %}
+      {% block article %}{% endblock %}
+      {% block error %}{% endblock %}
 
-    <div class="dot bg-black mg-t--4 mg-auto"></div>
+      <div class="dot bg-black mg-t--4 mg-auto"></div>
+    </main>
 
-    <script src="/assets/dist/js/nav.min.js"></script>
+    <script src="/assets/src/js/nav/nav.js"></script>
     {% block article_script %}{% endblock %}
   </body>
 </html>
