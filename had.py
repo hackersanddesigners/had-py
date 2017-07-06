@@ -467,52 +467,55 @@ class had(object):
     # --------------
     # other sections
     else:
-      wk_section_upitems = None
-      wk_section_pastitems = None
-      wk_section_items = []
-      for result in query({'conditions': 'Concept:' + section_title, 'printouts': 'Modification date|NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=Modification date|OnDate|order=desc'}):
+      try:
+        wk_section_upitems = None
+        wk_section_pastitems = None
+        wk_section_items = []
+        for result in query({'conditions': 'Concept:' + section_title, 'printouts': 'Modification date|NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=Modification date|OnDate|order=desc'}):
 
-        for item in result['results'].items():
-          if item[1]['printouts']['NameOfEvent']:
-            title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
-            wk_section_items.append(title)
-          else:
-            title = item[1]['fulltext']
-            wk_section_items.append(title)
-            date = None
-            wk_section_items.append(date)
-          if item[1]['printouts']['OnDate']:
-            date = item[1]['printouts']['OnDate'][0]['fulltext']
-            wk_section_items.append(date)
+          for item in result['results'].items():
+            if item[1]['printouts']['NameOfEvent']:
+              title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
+              wk_section_items.append(title)
+            else:
+              title = item[1]['fulltext']
+              wk_section_items.append(title)
+              date = None
+              wk_section_items.append(date)
+            if item[1]['printouts']['OnDate']:
+              date = item[1]['printouts']['OnDate'][0]['fulltext']
+              wk_section_items.append(date)
 
-          # fetch section item's content
-          item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-          response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
-          wkdata_introtext_item = response_introtext_item.json()
+            # fetch section item's content
+            item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+            response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
+            wkdata_introtext_item = response_introtext_item.json()
 
-          wkdata_text_item = wkdata_introtext_item['parse']['text']
-          # get section item's img
-          soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
-          if soup_wk_introtext.img:
-            cover_img = soup_wk_introtext.img
-            cover_img['class'] = 'mg-t--1 shadow'
+            wkdata_text_item = wkdata_introtext_item['parse']['text']
+            # get section item's img
+            soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
+            if soup_wk_introtext.img:
+              cover_img = soup_wk_introtext.img
+              cover_img['class'] = 'mg-t--1 shadow'
 
-            src_rel_link = cover_img.get('src')
-            srcset_rel_link = cover_img.get('srcset')
-            if src_rel_link:
-              out_link = urljoin(base_url, src_rel_link)
-              cover_img['src'] = out_link
-            if srcset_rel_link:
-              srcset_list = re.split(r'[,]\s*', srcset_rel_link)
-              srcset_lu = srcset_list
-              srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
-              srcset_s = ', '.join(srcset_lu)
-              cover_img['srcset'] = srcset_s
-          else:
-            cover_img = None
+              src_rel_link = cover_img.get('src')
+              srcset_rel_link = cover_img.get('srcset')
+              if src_rel_link:
+                out_link = urljoin(base_url, src_rel_link)
+                cover_img['src'] = out_link
+              if srcset_rel_link:
+                srcset_list = re.split(r'[,]\s*', srcset_rel_link)
+                srcset_lu = srcset_list
+                srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
+                srcset_s = ', '.join(srcset_lu)
+                cover_img['srcset'] = srcset_s
+            else:
+              cover_img = None
 
-          # add `cover_img` to `wk_section_items`
-          wk_section_items.append(cover_img)
+            # add `cover_img` to `wk_section_items`
+            wk_section_items.append(cover_img)
+      except KeyError:
+        print('no intro text')
     
       # ---- * * *
       wk_section_items = list(zip(*[iter(wk_section_items)]*3))
