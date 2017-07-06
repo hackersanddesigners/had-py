@@ -182,7 +182,16 @@ class had(object):
         embedvid_caption.extract()
         embedvid.append(embedvid_caption)
     except TypeError:
-      print('no embed video')
+      print('No embed video')
+
+    # --- iframe embed
+    for iframe in text.find_all('iframe'):
+      del iframe['style']
+      iframe['frameborder'] = '0'
+      iframe.wrap(text.new_tag('div'))
+      iframe.parent['class'] = 'w--full mh--half bd-a--1'
+      iframe['class'] = 'w--full mh--half bd-a--0'
+
 
     for ul in text.find_all('ul'):
       ul['class'] = 'd-tb pd-b--1 w--copy'

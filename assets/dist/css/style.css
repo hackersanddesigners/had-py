@@ -504,6 +504,15 @@ hr {
   overflow-x: scroll;
 }
 
+.bd-a--0 {
+  border: none;
+}
+
+.bd-a--1 {
+  border: 1px solid #0000ff;
+  border: var(--border-compl);
+}
+
 .bd-r--1 {
   border-right: 1px solid #0000ff;
   border-right: var(--border-compl);
@@ -588,8 +597,12 @@ hr {
   height: var(--baseline);
 }
 
-.h--half {
-  max-height: 45vh;
+.mh--half {
+  min-height: 50%;
+}
+
+.h--full {
+  height: 100%;
 }
 
 /* Display */

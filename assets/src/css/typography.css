@@ -116,6 +116,14 @@ hr {
   overflow-x: scroll;
 }
 
+.bd-a--0 {
+  border: none;
+}
+
+.bd-a--1 {
+  border: var(--border-compl);
+}
+
 .bd-r--1 {
   border-right: var(--border-compl);
 }

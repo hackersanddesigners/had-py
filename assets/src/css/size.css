@@ -60,6 +60,10 @@
   height: var(--baseline);
 }
 
-.h--half {
-  max-height: 45vh;
+.mh--half {
+  min-height: 50%;
+}
+
+.h--full {
+  height: 100%;
 }
