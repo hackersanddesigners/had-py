@@ -516,7 +516,7 @@ class had(object):
             # add `cover_img` to `wk_section_items`
             wk_section_items.append(cover_img)
       except KeyError:
-        print('no intro text')
+        print('No intro text')
     
       # ---- * * *
       wk_section_items = list(zip(*[iter(wk_section_items)]*3))
