@@ -44,7 +44,7 @@ class had(object):
     self.url_map = Map([
       Rule('/', endpoint='home'),
       Rule('/<file>', redirect_to='/assets/files/<file>'),
-      Rule('/<favicon>', redirect_to='/assets/files/favicon/<favicon>'),
+      Rule('/browserconfig.xml', redirect_to='/assets/files/favicon/browserconfig.xml'),
       Rule('/p/<page_title>', endpoint='article'),
       Rule('/s/<section_title>', endpoint='section'),
       Rule('/s/<section_title>/p/<page_title>', endpoint='article')
