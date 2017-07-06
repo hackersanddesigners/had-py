@@ -601,6 +601,10 @@ hr {
   min-height: 50%;
 }
 
+.mhvh--half {
+  min-height: 50vh;
+}
+
 .h--full {
   height: 100%;
 }

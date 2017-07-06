@@ -189,8 +189,8 @@ class had(object):
       del iframe['style']
       iframe['frameborder'] = '0'
       iframe.wrap(text.new_tag('div'))
-      iframe.parent['class'] = 'w--full mh--half bd-a--1'
-      iframe['class'] = 'w--full mh--half bd-a--0'
+      iframe.parent['class'] = 'w--full mhvh--half bd-a--1'
+      iframe['class'] = 'w--full mhvh--half bd-a--0'
 
 
     for ul in text.find_all('ul'):
