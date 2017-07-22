@@ -293,7 +293,7 @@ class had(object):
         wkdata_upevents = list(zip(*[iter(wkdata_upevents)]*3))
         wkdata_upevents = sorted(wkdata_upevents, key=lambda x: x[1])
       except:
-        print('problem?')
+        print('wkdata_upevents problem?')
 
     # --- past events
     wkdata_pastevents = []
@@ -304,12 +304,16 @@ class had(object):
           wkdata_pastevents.append(title)
           date = item[1]['printouts']['OnDate'][0]['fulltext']
           wkdata_pastevents.append(date)
-    
+        
         wkdata_pastevents = list(zip(*[iter(wkdata_pastevents)]*2))
         wkdata_pastevents = sorted(wkdata_pastevents, key=lambda x: x[1], reverse=True)
-      except:
-        print('problem?')
+        print(wkdata_pastevents)
 
+      except TypeError:
+        print('——————')
+        print('wkdata_pastevents problem?')
+        print('——————')
+    
     # build template
     return self.render_template('event_list.html',
                                 nav_main=wk_nav_main,
@@ -317,7 +321,7 @@ class had(object):
                                 title=wk_title,
                                 intro=wk_intro,
                                 up_event_list=wkdata_upevents,
-                                past_event_list=wkdata_pastevents
+                                # past_event_list=wkdata_pastevents
                                 )
 
   def on_section(self, request, typography=typography, section_title=None, page_title=None, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
@@ -389,6 +393,7 @@ class had(object):
               wk_section_upitems.append(title)
               date = None
               wk_section_upitems.append(date)
+            
             if item[1]['printouts']['OnDate']:
               date = item[1]['printouts']['OnDate'][0]['fulltext']
               wk_section_upitems.append(date)
@@ -430,21 +435,24 @@ class had(object):
       wk_section_upitems = list(zip(*[iter(wk_section_upitems)]*3))
       wk_section_upitems = sorted(wk_section_upitems, key=lambda x: x[1])
      
-       # ---- past items
+      # ---- past items
       wk_section_pastitems = []
 
-      for result in query({'conditions': 'Concept:' + section_title + '|OnDate::<' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc'}): 
+      for result in query({'conditions': 'Concept:' + section_title + '|OnDate::<' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc'}):
         for item in result['results'].items():
           if item[1]['printouts']['NameOfEvent']:
             title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
+            print(title)
             wk_section_pastitems.append(title)
           else:
             title = item[1]['fulltext']
             wk_section_pastitems.append(title)
             date = None
             wk_section_pastitems.append(date)
+        
           if item[1]['printouts']['OnDate']:
             date = item[1]['printouts']['OnDate'][0]['fulltext']
+            print(date)
             wk_section_pastitems.append(date)
 
           # fetch section item's content
@@ -478,7 +486,10 @@ class had(object):
     
       # ---- * * *
       wk_section_pastitems = list(zip(*[iter(wk_section_pastitems)]*3))
-      wk_section_pastitems = sorted(wk_section_pastitems, key=lambda x: x[1], reverse=True)
+      try:
+        wk_section_pastitems = sorted(wk_section_pastitems, key=lambda x: x[1], reverse=True)
+      except TypeError:
+        print('😰')
 
     # --------------
     # other sections
