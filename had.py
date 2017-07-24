@@ -268,51 +268,46 @@ class had(object):
     # --- upcoming events
     wkdata_upevents = []
     for result in query({'conditions': 'Category:Event|OnDate::>' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=asc'}):
-      try:
-        for item in result['results'].items():
-          title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
-          wkdata_upevents.append(title)
+      for item in result['results'].items():
+        
+        # take the name of the object as title
+        # because sometimes
+        # `item[1]['printouts']['NameOfEvent'][0]['fulltext']`
+        # is empty (due to how mediawiki works?)
+        title = item[0]
+        wkdata_upevents.append(title)
           
-          date = item[1]['printouts']['OnDate'][0]['fulltext']
-          wkdata_upevents.append(date)
+        date = item[1]['printouts']['OnDate'][0]['fulltext']
+        wkdata_upevents.append(date)
 
-          upevents_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-          response_introtext_upevents = requests.get(base_url + folder_url + api_call , params=upevents_introtext_options)
-          wkdata_introtext_upevents = response_introtext_upevents.json()
+        upevents_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+        response_introtext_upevents = requests.get(base_url + folder_url + api_call , params=upevents_introtext_options)
+        wkdata_introtext_upevents = response_introtext_upevents.json()
 
-          text = wkdata_introtext_upevents['parse']['text'] 
-          soup_wk_introtext = BeautifulSoup(text, 'html.parser')
-          # ---
-          typography(soup_wk_introtext)
-          p_intro = soup_wk_introtext.p
-          fix_extlinks_a(p_intro, '/s/Events/p/')
-          # ---
-          soup_intro = p_intro
-          wkdata_upevents.append(p_intro)
+        text = wkdata_introtext_upevents['parse']['text'] 
+        soup_wk_introtext = BeautifulSoup(text, 'html.parser')
+        # ---
+        typography(soup_wk_introtext)
+        p_intro = soup_wk_introtext.p
+        fix_extlinks_a(p_intro, '/s/Events/p/')
+        # ---
+        soup_intro = p_intro
+        wkdata_upevents.append(p_intro)
 
-        wkdata_upevents = list(zip(*[iter(wkdata_upevents)]*3))
-        wkdata_upevents = sorted(wkdata_upevents, key=lambda x: x[1])
-      except:
-        print('wkdata_upevents problem?')
-
+    wkdata_upevents = list(zip(*[iter(wkdata_upevents)]*3))
+    wkdata_upevents = sorted(wkdata_upevents, key=lambda x: x[1])
+    
     # --- past events
     wkdata_pastevents = []
     for result in query({'conditions': 'Category:Event|OnDate::<' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc'}):
-      try:
-        for item in result['results'].items():
-          title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
-          wkdata_pastevents.append(title)
-          date = item[1]['printouts']['OnDate'][0]['fulltext']
-          wkdata_pastevents.append(date)
-        
-        wkdata_pastevents = list(zip(*[iter(wkdata_pastevents)]*2))
-        wkdata_pastevents = sorted(wkdata_pastevents, key=lambda x: x[1], reverse=True)
-        print(wkdata_pastevents)
+      for item in result['results'].items():
+        title = item[0]
+        wkdata_pastevents.append(title)
+        date = item[1]['printouts']['OnDate'][0]['fulltext']
+        wkdata_pastevents.append(date)
 
-      except TypeError:
-        print('——————')
-        print('wkdata_pastevents problem?')
-        print('——————')
+    wkdata_pastevents = list(zip(*[iter(wkdata_pastevents)]*2))
+    wkdata_pastevents = sorted(wkdata_pastevents, key=lambda x: x[1], reverse=True)
     
     # build template
     return self.render_template('event_list.html',
@@ -321,7 +316,7 @@ class had(object):
                                 title=wk_title,
                                 intro=wk_intro,
                                 up_event_list=wkdata_upevents,
-                                # past_event_list=wkdata_pastevents
+                                past_event_list=wkdata_pastevents
                                 )
 
   def on_section(self, request, typography=typography, section_title=None, page_title=None, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
