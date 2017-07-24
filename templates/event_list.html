@@ -13,8 +13,7 @@
 	</ul>
 
   <h2 class="ft-sans ft-3 ft-3_m blue mg-b--1">Archive</h2>
-  {% if past_event_list %}
-  <ul class="w--copy">
+	<ul class="w--copy">
 	{% for past_event in past_event_list %}
 		<li class="mg-b--2">
       <h2 class="ft-sans ft-3 ft-3_m black">{{ past_event[1]|dateformat }}</h2>
@@ -22,8 +21,5 @@
 		</li>
 	{% endfor %}
   </ul>
-  {% else %}
-    <p>Temporarily unavailable.</p>
-  {% endif %}
 
 {% endblock %}
