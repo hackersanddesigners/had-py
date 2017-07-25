@@ -544,14 +544,15 @@ class had(object):
     page_options = {'action': 'parse', 'page': page_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
     response_content = requests.get(base_url + folder_url + api_call, params=page_options)
     wk_data = response_content.json()
+    print(response_content.url)
 
     wk_title = wk_data['parse']['title']
     wk_bodytext = wk_data['parse']['text']
-
-    try:
+    
+    if 'Event' in wk_data['parse']['categories'][0]['category']:
+    # try:
       # --- if it has [Category:Event]
       # fetch page-metadata for Event
-      category_events = '[[Category:Event]]'
       page_meta_filter = '|?PeopleOrganisations'
       page_meta_options = {'action': 'browsebysubject', 'subject': page_title, 'format': 'json', 'formatversion': '2'}
       response_meta = requests.get(base_url + folder_url + api_call, params=page_meta_options)
@@ -561,15 +562,11 @@ class had(object):
         item_list = []
         for item in query:
           str = item['item']
-          # strip out weird hash at the end (see why https://www.semantic-mediawiki.org/wiki/Ask_API#BrowseBySubject)
+          # strip out weird hash at the end 
+          # (see why https://www.semantic-mediawiki.org/wiki/Ask_API#BrowseBySubject)
           item = re.sub(r'#\d#', '', str).replace('_', ' ')
           item_list.append(item)
         return item_list
-
-      wk_date = None
-      wk_time = None
-      wk_venue = None
-      wk_peopleorgs = None
 
       for item in wkdata_meta['query']['data']:
         # --- Date
@@ -586,9 +583,12 @@ class had(object):
           wk_peopleorgs = extract_metadata(item['dataitem'])
     
     # --- if it has not, set Event's metadata to `None`
-    except KeyError:
-      print('No Event metadata')
-    
+    else:
+      wk_date = None
+      wk_time = None
+      wk_venue = None
+      wk_peopleorgs = None
+
     # fix rel-links to be abs-ones
     soup_bodytext = BeautifulSoup(wk_bodytext, 'html.parser')
    
