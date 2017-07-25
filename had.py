@@ -268,31 +268,30 @@ class had(object):
     # --- upcoming events
     wkdata_upevents = []
     for result in query({'conditions': 'Category:Event|OnDate::>' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=asc'}):
-      for item in result['results'].items():
-        
-        # take the name of the object as title
-        # because sometimes
-        # `item[1]['printouts']['NameOfEvent'][0]['fulltext']`
-        # is empty (due to how mediawiki works?)
-        title = item[0]
-        wkdata_upevents.append(title)
+      try:
+        for item in result['results'].items():
+          title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
+          wkdata_upevents.append(title)
           
-        date = item[1]['printouts']['OnDate'][0]['fulltext']
-        wkdata_upevents.append(date)
+          date = item[1]['printouts']['OnDate'][0]['fulltext']
+          wkdata_upevents.append(date)
 
-        upevents_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-        response_introtext_upevents = requests.get(base_url + folder_url + api_call , params=upevents_introtext_options)
-        wkdata_introtext_upevents = response_introtext_upevents.json()
+          upevents_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+          response_introtext_upevents = requests.get(base_url + folder_url + api_call , params=upevents_introtext_options)
+          wkdata_introtext_upevents = response_introtext_upevents.json()
 
-        text = wkdata_introtext_upevents['parse']['text'] 
-        soup_wk_introtext = BeautifulSoup(text, 'html.parser')
-        # ---
-        typography(soup_wk_introtext)
-        p_intro = soup_wk_introtext.p
-        fix_extlinks_a(p_intro, '/s/Events/p/')
-        # ---
-        soup_intro = p_intro
-        wkdata_upevents.append(p_intro)
+          text = wkdata_introtext_upevents['parse']['text'] 
+          soup_wk_introtext = BeautifulSoup(text, 'html.parser')
+          # ---
+          typography(soup_wk_introtext)
+          p_intro = soup_wk_introtext.p
+          fix_extlinks_a(p_intro, '/s/Events/p/')
+          # ---
+          soup_intro = p_intro
+          wkdata_upevents.append(p_intro)
+
+      except AttributeError:
+        print('No upcoming events')
 
     wkdata_upevents = list(zip(*[iter(wkdata_upevents)]*3))
     wkdata_upevents = sorted(wkdata_upevents, key=lambda x: x[1])
@@ -330,10 +329,9 @@ class had(object):
     wkdata_head = response_head.json()
 
     wk_title = wkdata_head['parse']['title']
-    
+   
     if wkdata_head['parse']['text']:
       wk_intro = wkdata_head['parse']['text']
-
       soup_wk_intro = BeautifulSoup(wk_intro, 'html.parser')
       typography(soup_wk_intro)
       p_intro = soup_wk_intro.find('p')
