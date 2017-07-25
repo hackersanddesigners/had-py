@@ -329,13 +329,15 @@ class had(object):
     response_head = requests.get(base_url + folder_url + api_call, params=page_head_options)
     wkdata_head = response_head.json()
 
-    wk_title = wkdata_head['parse']['title'] 
-    wk_intro = wkdata_head['parse']['text']
+    wk_title = wkdata_head['parse']['title']
+    
+    if wkdata_head['parse']['text']:
+      wk_intro = wkdata_head['parse']['text']
 
-    soup_wk_intro = BeautifulSoup(wk_intro, 'html.parser')
-    typography(soup_wk_intro)
-    p_intro = soup_wk_intro.find('p')
-    wk_intro = p_intro
+      soup_wk_intro = BeautifulSoup(wk_intro, 'html.parser')
+      typography(soup_wk_intro)
+      p_intro = soup_wk_intro.find('p')
+      wk_intro = p_intro
 
     # --------------------------
     today = datetime.date.today()
@@ -380,18 +382,10 @@ class had(object):
       for result in query({'conditions': 'Concept:' + section_title + '|OnDate::>' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=asc'}):
         try:
           for item in result['results'].items():
-            if item[1]['printouts']['NameOfEvent']:
-              title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
-              wk_section_upitems.append(title)
-            else:
-              title = item[1]['fulltext']
-              wk_section_upitems.append(title)
-              date = None
-              wk_section_upitems.append(date)
-            
-            if item[1]['printouts']['OnDate']:
-              date = item[1]['printouts']['OnDate'][0]['fulltext']
-              wk_section_upitems.append(date)
+            title = item[1]['fulltext']
+            wk_section_upitems.append(title)
+            date = item[1]['printouts']['OnDate'][0]['fulltext']
+            wk_section_upitems.append(date)
 
             # fetch section item's content
             item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
@@ -434,21 +428,12 @@ class had(object):
       wk_section_pastitems = []
 
       for result in query({'conditions': 'Concept:' + section_title + '|OnDate::<' + today, 'printouts': 'NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=OnDate|order=desc'}):
-        for item in result['results'].items():
-          if item[1]['printouts']['NameOfEvent']:
-            title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
-            print(title)
-            wk_section_pastitems.append(title)
-          else:
-            title = item[1]['fulltext']
-            wk_section_pastitems.append(title)
-            date = None
-            wk_section_pastitems.append(date)
         
-          if item[1]['printouts']['OnDate']:
-            date = item[1]['printouts']['OnDate'][0]['fulltext']
-            print(date)
-            wk_section_pastitems.append(date)
+        for item in result['results'].items():
+          title = item[1]['fulltext']
+          wk_section_pastitems.append(title)
+          date = item[1]['printouts']['OnDate'][0]['fulltext']
+          wk_section_pastitems.append(date)
 
           # fetch section item's content
           item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
@@ -481,63 +466,54 @@ class had(object):
     
       # ---- * * *
       wk_section_pastitems = list(zip(*[iter(wk_section_pastitems)]*3))
-      try:
-        wk_section_pastitems = sorted(wk_section_pastitems, key=lambda x: x[1], reverse=True)
-      except TypeError:
-        print('😰')
+      wk_section_pastitems = sorted(wk_section_pastitems, key=lambda x: x[1], reverse=True)
 
     # --------------
     # other sections
     else:
-      try:
-        wk_section_upitems = None
-        wk_section_pastitems = None
-        wk_section_items = []
-        for result in query({'conditions': 'Concept:' + section_title, 'printouts': 'Modification date|NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=Modification date|OnDate|order=desc'}):
+      wk_section_upitems = None
+      wk_section_pastitems = None
+      wk_section_items = []
+      for result in query({'conditions': 'Concept:' + section_title, 'printouts': 'Modification date|NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=Modification date|OnDate|order=desc'}):
 
-          for item in result['results'].items():
-            if item[1]['printouts']['NameOfEvent']:
-              title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
-              wk_section_items.append(title)
-            else:
-              title = item[1]['fulltext']
-              wk_section_items.append(title)
-              date = None
-              wk_section_items.append(date)
-            if item[1]['printouts']['OnDate']:
-              date = item[1]['printouts']['OnDate'][0]['fulltext']
-              wk_section_items.append(date)
+        for item in result['results'].items():
+          title = item[1]['fulltext']
+          wk_section_items.append(title)
+          if len(item) > 1 and len(item[1]['printouts']['OnDate']) > 0:
+            date = item[1]['printouts']['OnDate'][0]['fulltext']
+            wk_section_items.append(date)
+          else:
+            date = None
+            wk_section_items.append(date)
 
-            # fetch section item's content
-            item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-            response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
-            wkdata_introtext_item = response_introtext_item.json()
+          # fetch section item's content
+          item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+          response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
+          wkdata_introtext_item = response_introtext_item.json()
 
-            wkdata_text_item = wkdata_introtext_item['parse']['text']
-            # get section item's img
-            soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
-            if soup_wk_introtext.img:
-              cover_img = soup_wk_introtext.img
-              cover_img['class'] = 'mg-t--1 shadow'
+          wkdata_text_item = wkdata_introtext_item['parse']['text']
+          # get section item's img
+          soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
+          if soup_wk_introtext.img:
+            cover_img = soup_wk_introtext.img
+            cover_img['class'] = 'mg-t--1 shadow'
 
-              src_rel_link = cover_img.get('src')
-              srcset_rel_link = cover_img.get('srcset')
-              if src_rel_link:
-                out_link = urljoin(base_url, src_rel_link)
-                cover_img['src'] = out_link
-              if srcset_rel_link:
-                srcset_list = re.split(r'[,]\s*', srcset_rel_link)
-                srcset_lu = srcset_list
-                srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
-                srcset_s = ', '.join(srcset_lu)
-                cover_img['srcset'] = srcset_s
-            else:
-              cover_img = None
+            src_rel_link = cover_img.get('src')
+            srcset_rel_link = cover_img.get('srcset')
+            if src_rel_link:
+              out_link = urljoin(base_url, src_rel_link)
+              cover_img['src'] = out_link
+            if srcset_rel_link:
+              srcset_list = re.split(r'[,]\s*', srcset_rel_link)
+              srcset_lu = srcset_list
+              srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
+              srcset_s = ', '.join(srcset_lu)
+              cover_img['srcset'] = srcset_s
+          else:
+            cover_img = None
 
-            # add `cover_img` to `wk_section_items`
-            wk_section_items.append(cover_img)
-      except KeyError:
-        print('No intro text')
+          # add `cover_img` to `wk_section_items`
+          wk_section_items.append(cover_img)
     
       # ---- * * *
       wk_section_items = list(zip(*[iter(wk_section_items)]*3))
@@ -545,7 +521,7 @@ class had(object):
         wk_section_items = sorted(wk_section_items, key=lambda x: x[1])
       except TypeError:
         wk_section_items = sorted(wk_section_items, key=lambda x: x[0])
-
+    
     # build template
     return self.render_template('section_list.html',
                                 nav_main=wk_nav_main,
@@ -737,4 +713,4 @@ def create_app(with_assets=True):
 if __name__ == '__main__':
 	from werkzeug.serving import run_simple
 	app = create_app()
-	run_simple('127.0.0.1', 5000, app, use_debugger=False, use_reloader=True)
+	run_simple('127.0.0.1', 5000, app, use_debugger=True, use_reloader=True)
