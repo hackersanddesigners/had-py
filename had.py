@@ -130,17 +130,16 @@ class had(object):
       img['class'] = 'h--half mg-v--1 shadow'
       del img['width']
       del img['height']
- 
-      # check if img has caption/wrapped inside a div
+
+      # check if img has caption/is wrapped inside a div
       img_thumb = img.find_parent('div', class_='thumbinner')
       img_p = img.find_parent('p')
       figure = img.find_parent('figure')
       if img_thumb:
         img_thumb.unwrap()
-
         figure = img.find_parent('div', class_='thumb')
         figure.name = 'figure'
-        figure['class'] = 'w--copy mg-auto mg-b--2'
+        figure['class'] = 'w--copy mg-b--2 mg-l--3'
       
         # set img caption
         img_caption = figure.find('div', class_='thumbcaption')
@@ -153,17 +152,19 @@ class had(object):
       
       elif img_p:
         img_p.name = 'figure'
-        img_p['class'] = 'w--copy mg-auto mg-b-0'
+        img_p['class'] = 'w--copy mg-b-0'
 
       a_img = img.find_parent('a')
       if a_img:
-        a_img.unwrap()
+        a_img.name = 'figure'
+        del a_img['href']
+        a_img['class'] = 'w--copy mg-b--2 mg-l--3'
 
     # --- set up embedded videos (yt)
     try:
       for embedvid in text.find_all('div', class_='embedvideo'):
         del embedvid['style']
-        embedvid['class'] = 'w--copy mg-auto mg-t--1 mg-b--3'
+        embedvid['class'] = 'w--copy mg-t--1 mg-b--3 mg-l--3'
 
         embedvid_c = embedvid.find('div', class_='thumbinner');
         del embedvid_c['style']
@@ -185,7 +186,8 @@ class had(object):
       print('No embed video')
 
     # --- iframe embed
-    for iframe in text.find_all('iframe'):
+    # for iframe in text.find_all('iframe'):
+    for iframe in text.find_all('iframe', src=re.compile(r'etherpad.hackersanddesigners.nl')):
       del iframe['style']
       iframe['frameborder'] = '0'
       iframe.wrap(text.new_tag('div'))
@@ -653,7 +655,7 @@ class had(object):
     # --- set class to flickity.js
     for gallery in soup_bodytext.find_all('ul', class_='gallery'):
       gallery.name = 'div'
-      gallery['class'] = 'gallery mg-b--2'
+      gallery['class'] = 'gallery w--copy mg-b--2'
 
     # --- typography
     typography(soup_bodytext)

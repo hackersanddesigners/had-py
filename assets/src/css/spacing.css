@@ -197,6 +197,10 @@
   }
 }
 
+.mg-b--4 {
+	margin-bottom: var(--spacing-big);
+}
+
 .mg-l--0 {
 	margin-left: var(--spacing-none);
 }
