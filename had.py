@@ -160,6 +160,15 @@ class had(object):
         del a_img['href']
         a_img['class'] = 'w--copy mg-b--2 mg-l--3'
 
+    # --- set up soundcloud
+    try:
+      for sc in text.find_all('iframe', src=re.compile(r'soundcloud')):
+        sc['class'] = 'w--full'
+        sc.parent.unwrap()
+
+    except:
+      print('no soundcloud embed')
+
     # --- set up embedded videos (yt)
     try:
       for embedvid in text.find_all('div', class_='embedvideo'):
@@ -174,7 +183,6 @@ class had(object):
         del embedvid_iframe['width']
         del embedvid_iframe['height']
         embedvid_iframe['frameborder'] = '0'
-        embedvid_iframe['allowfullscreen']
 
         # video caption
         embedvid_caption = embedvid_c.find('div', class_='thumbcaption')
@@ -185,15 +193,13 @@ class had(object):
     except TypeError:
       print('No embed video')
 
-    # --- iframe embed
-    # for iframe in text.find_all('iframe'):
-    for iframe in text.find_all('iframe', src=re.compile(r'etherpad.hackersanddesigners.nl')):
-      del iframe['style']
-      iframe['frameborder'] = '0'
-      iframe.wrap(text.new_tag('div'))
-      iframe.parent['class'] = 'w--full mhvh--half bd-a--1'
-      iframe['class'] = 'w--full mhvh--half bd-a--0'
-
+    # --- etherpad embed
+    for ep in text.find_all('iframe', src=re.compile(r'etherpad.hackersanddesigners.nl')):
+      del ep['style']
+      ep['frameborder'] = '0'
+      ep.wrap(text.new_tag('div'))
+      ep.parent['class'] = 'w--full mhvh--half bd-a--1'
+      ep['class'] = 'w--full mhvh--half bd-a--0'
 
     for ul in text.find_all('ul'):
       ul['class'] = 'd-tb pd-b--1 w--copy'
