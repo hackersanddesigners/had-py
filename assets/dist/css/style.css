@@ -370,9 +370,11 @@ a {
 	margin-left: var(--spacing-medium);
 }
 
-.mg-l--3 {
-	margin-left: 48.6px;
-	margin-left: var(--spacing-large);
+@media screen and (min-width: 45rem) {
+  .mg-l--3__m {
+	  margin-left: 48.6px;
+	  margin-left: var(--spacing-large);
+  }
 }
 
 /* Typography */

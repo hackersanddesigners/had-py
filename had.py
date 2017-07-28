@@ -139,7 +139,7 @@ class had(object):
         img_thumb.unwrap()
         figure = img.find_parent('div', class_='thumb')
         figure.name = 'figure'
-        figure['class'] = 'w--copy mg-b--2 mg-l--3'
+        figure['class'] = 'w--copy mg-b--2 mg-l--3__m'
       
         # set img caption
         img_caption = figure.find('div', class_='thumbcaption')
@@ -150,15 +150,11 @@ class had(object):
         if magnify:
           magnify.decompose()
       
-      elif img_p:
-        img_p.name = 'figure'
-        img_p['class'] = 'w--copy mg-b-0'
-
       a_img = img.find_parent('a')
       if a_img:
         a_img.name = 'figure'
         del a_img['href']
-        a_img['class'] = 'w--copy mg-b--2 mg-l--3'
+        a_img['class'] = 'w--copy mg-b--2 mg-l--3__m'
 
     # --- set up soundcloud
     try:
@@ -173,7 +169,7 @@ class had(object):
     try:
       for embedvid in text.find_all('div', class_='embedvideo'):
         del embedvid['style']
-        embedvid['class'] = 'w--copy mg-t--1 mg-b--3 mg-l--3'
+        embedvid['class'] = 'w--copy mg-t--1 mg-b--3 mg-l--3__m'
 
         embedvid_c = embedvid.find('div', class_='thumbinner');
         del embedvid_c['style']
