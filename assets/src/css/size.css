@@ -1,5 +1,9 @@
 /* Size */
 
+.w--auto {
+  width: auto;
+}
+
 .w--copy {
   max-width: 45rem;
 }
@@ -66,6 +70,10 @@
 
 .mhvh--half {
   min-height: 50vh;
+}
+
+.h--half {
+  height: 50%;
 }
 
 .h--full {

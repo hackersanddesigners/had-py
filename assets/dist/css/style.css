@@ -78,8 +78,8 @@ html {
 }
 
 body {
-	background-color: #ffffff;
-	background-color: var(--color-bg);
+  background-color: #ffffff;
+  background-color: var(--color-bg);
 }
 
 img {
@@ -540,6 +540,10 @@ hr {
 
 /* Size */
 
+.w--auto {
+  width: auto;
+}
+
 .w--copy {
   max-width: 45rem;
 }
@@ -607,6 +611,10 @@ hr {
 
 .mhvh--half {
   min-height: 50vh;
+}
+
+.h--half {
+  height: 50%;
 }
 
 .h--full {

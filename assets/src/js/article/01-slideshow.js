@@ -6,7 +6,7 @@ var gallery = document.querySelector('.gallery');
 
 if (gallery !== null) {
   var slideshow = new Flickity (gallery, {
-    adaptiveHeight: false,
+    adaptiveHeight: true,
     cellAlign: 'center',
     contain: false,
     imagesLoaded: true,

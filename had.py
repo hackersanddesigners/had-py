@@ -127,7 +127,7 @@ class had(object):
       code['class'] = 'w--copy d-bl ft-mono blue ft-05 ft-05__m mg-b--1 pd-l--2 bd-r--1 o-x__scroll'
 
     for img in text.find_all('img'):
-      img['class'] = 'h--half mg-v--1 shadow'
+      img['class'] = 'mg-v--1 shadow'
       del img['width']
       del img['height']
 
@@ -198,7 +198,7 @@ class had(object):
       del ep['style']
       ep['frameborder'] = '0'
       ep.wrap(text.new_tag('div'))
-      ep.parent['class'] = 'w--full mhvh--half bd-a--1'
+      ep.parent['class'] = 'w--full mhvh--half bd-a--1 mg-b--2'
       ep['class'] = 'w--full mhvh--half bd-a--0'
 
     for ul in text.find_all('ul'):
@@ -642,7 +642,6 @@ class had(object):
 
       # clean up <img>
       gallery_item_img = gallery_item.find('img')
-      gallery_item_img['class'] = 'h--half shadow'
       del gallery_item_img['width']
       del gallery_item_img['height']
 
@@ -661,7 +660,7 @@ class had(object):
     # --- set class to flickity.js
     for gallery in soup_bodytext.find_all('ul', class_='gallery'):
       gallery.name = 'div'
-      gallery['class'] = 'gallery w--copy mg-b--2'
+      gallery['class'] = 'gallery w--copy mg-b--3'
 
     # --- typography
     typography(soup_bodytext)
