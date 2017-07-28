@@ -54,11 +54,11 @@ function wrap_sm (nh) {
   main.style.paddingTop = nwh + 'px';
 
   // nav.classList.add('pd-t--1', 'pd-h--2', 'z-2', 'bg-white');
-  nav.classList.add('p-fx', 'p-tl', 'w--full', 'z-2', 'pd-t--1', 'pd-h--2', 'z-2', 'bg-white');
+  nav.classList.add('p-fx', 'p-tl', 'flex-r', 'flex-sb', 'w--full', 'z-2', 'pd-t--1', 'pd-h--2', 'z-2', 'bg-white');
   nav.classList.remove('mg-b--2');
   
   // set up `toggle`
-  toggle.classList.add('z-3', 'p-abs', 'p-tr', 'pd-t--1','pd-r--1', 'ft-2', 'ft-3__m', 'blue');
+  toggle.classList.add('ft-2', 'ft-3__m', 'blue', 'a--lss');
   toggle.innerHTML = '•••';
   nav.insertBefore(toggle, sm);
 }
@@ -77,9 +77,11 @@ function sm_toggle (event) {
   if (sm.classList.contains('d-n')) {
     sm.classList.remove('d-n');
     sm.classList.add('pd-b--2', 'pd-b--1__m', 'is-active');
+    toggle.classList.add('a--lss-o');
   } else {
     sm.classList.add('d-n');
     sm.classList.remove('pd-b--2', 'pd-b--1__m', 'is-active');
+    toggle.classList.remove('a--lss-o');
   }
 }
 
