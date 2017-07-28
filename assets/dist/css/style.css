@@ -682,18 +682,6 @@ hr {
   display: table-row;
 }
 
-.v-h {
-  visibility: hidden;
-}
-
-.o--0 {
-  opacity: 0;
-}
-
-.o--1 {
-  opacity: 1;
-}
-
 /* Position */
 
 .p-fx {
@@ -767,26 +755,13 @@ hr {
 	box-shadow: 0px 0px 8px 8px rgba(67, 67, 67, .3);
 }
 
-.a--lss {
+.trs--lss {
   transition: letter-spacing 0.15s ease-in;
 }
 
-.a--lss-o,
-.a--lss:hover {
+.trs--lss-o,
+.trs--lss:hover {
   letter-spacing: 0.3em;
-}
-
-.d-nn {
-  height: 0;
-}
-
-.a--sh {
-  opacity: 0;
-  transition: opacity 1s ease-in 3s;
-}
-
-.a--sh-o {
-  opacity: 1;
 }
 
 /*! Flickity v3.0.5

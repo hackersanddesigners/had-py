@@ -12,6 +12,7 @@ var main = document.querySelector('main');
 function sticky () {
   // --- set scroll trigger
   var threshold = nav.offsetHeight;
+  var trigger = threshold / 2;
 
   window.onscroll = function (event) {
     requestAnimationFrame(checkSticky);
@@ -19,7 +20,7 @@ function sticky () {
     
   // --- set function to check for scroll trigger
   function checkSticky() {
-    var y = window.scrollY;
+    var y = window.scrollY - trigger;
 
     // toggle sticky class &&
     // wrap/unwrap sm if ww > 640
@@ -77,11 +78,11 @@ function sm_toggle (event) {
   if (sm.classList.contains('d-n')) {
     sm.classList.remove('d-n');
     sm.classList.add('pd-b--2', 'pd-b--1__m', 'is-active');
-    toggle.classList.add('a--lss-o');
+    toggle.classList.add('trs--lss-o');
   } else {
     sm.classList.add('d-n');
     sm.classList.remove('pd-b--2', 'pd-b--1__m', 'is-active');
-    toggle.classList.remove('a--lss-o');
+    toggle.classList.remove('trs--lss-o');
   }
 }
 
@@ -89,7 +90,7 @@ function on_resizing (event) {
 
   var ww = window.innerWidth;
   var wh = window.innerHeight;
-  var dh = document.body.scrollHeight
+  var dh = document.body.scrollHeight;
   
   var n_wh = main.previousElementSibling.getBoundingClientRect();
   var nh = n_wh.height;
