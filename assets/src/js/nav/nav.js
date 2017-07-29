@@ -20,7 +20,8 @@ function sticky () {
     
   // --- set function to check for scroll trigger
   function checkSticky() {
-    var y = window.scrollY - trigger;
+    
+    var y = window.scrollY;
 
     // toggle sticky class &&
     // wrap/unwrap sm if ww > 640
@@ -91,13 +92,14 @@ function on_resizing (event) {
   var ww = window.innerWidth;
   var wh = window.innerHeight;
   var dh = document.body.scrollHeight;
-  
+  var dhnn = dh - nav.offsetHeight;
+
   var n_wh = main.previousElementSibling.getBoundingClientRect();
   var nh = n_wh.height;
 
   // check if document height 
   // is bigger than window height
-  if (dh > wh) {
+  if (dhnn > wh) {
     sticky();
   }
 
