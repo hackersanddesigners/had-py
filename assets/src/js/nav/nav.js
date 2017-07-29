@@ -60,7 +60,7 @@ function wrap_sm (nh) {
   nav.classList.remove('mg-b--2');
   
   // set up `toggle`
-  toggle.classList.add('ft-2', 'ft-3__m', 'blue', 'a--lss');
+  toggle.classList.add('ft-2', 'ft-3__m', 'blue', 'trs--lss');
   toggle.innerHTML = '•••';
   nav.insertBefore(toggle, sm);
 }
@@ -94,12 +94,13 @@ function on_resizing (event) {
   var dh = document.body.scrollHeight;
   var nh = nav.offsetHeight;
   var dhnh = dh - nh;
+  var whnh = wh + nh;
 
-  console.log(dhnh + '>' + wh);
+  console.log(dhnh + '>' + whnh);
 
-  // check if document height 
+  // check if document height
   // is bigger than window height
-  if (dhnh > wh) {
+  if (dhnh > whnh) {
     sticky();
   }
 
