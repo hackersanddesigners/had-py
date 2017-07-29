@@ -95,6 +95,8 @@ function on_resizing (event) {
   var nh = nav.offsetHeight;
   var dhnh = dh - nh;
 
+  console.log(dhnh + '>' + wh);
+
   // check if document height 
   // is bigger than window height
   if (dhnh > wh) {
