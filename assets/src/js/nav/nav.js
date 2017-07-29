@@ -92,14 +92,12 @@ function on_resizing (event) {
   var ww = window.innerWidth;
   var wh = window.innerHeight;
   var dh = document.body.scrollHeight;
-  var dhnn = dh - nav.offsetHeight;
-
-  var n_wh = main.previousElementSibling.getBoundingClientRect();
-  var nh = n_wh.height;
+  var nh = nav.offsetHeight;
+  var dhnh = dh - nh;
 
   // check if document height 
   // is bigger than window height
-  if (dhnn > wh) {
+  if (dhnh > wh) {
     sticky();
   }
 
