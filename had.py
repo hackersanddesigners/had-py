@@ -322,7 +322,7 @@ class had(object):
                                 past_event_list=wkdata_pastevents
                                 )
 
-  def on_section(self, request, typography=typography, section_title=None, page_title=None, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
+  def on_section(self, request, fix_extlinks_a=fix_extlinks_a, typography=typography, section_title=None, page_title=None, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
     base_url = 'https://wiki.hackersanddesigners.nl/'
     folder_url = 'mediawiki/'
     api_call =  'api.php?'
@@ -338,6 +338,12 @@ class had(object):
       wk_intro = wkdata_head['parse']['text']
       soup_wk_intro = BeautifulSoup(wk_intro, 'html.parser')
       typography(soup_wk_intro)
+      
+      # fix rel-links to be abs-ones
+      envy = request.environ
+      p_url = get_current_url(envy)
+      fix_extlinks_a(soup_wk_intro, url=p_url + '/p/')
+
       p_intro = soup_wk_intro.find('p')
       wk_intro = p_intro
 
