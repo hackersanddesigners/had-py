@@ -74,9 +74,15 @@ class had(object):
 
     # delete MainNavigation concept from the dict
     del wk_nav_sections['query']['results']['Concept:MainNavigation']
+    del wk_nav_sections['query']['results']['Concept:01Publications']
     
-    return wk_nav_sections
-  
+    nav_sections = []
+    for item in wk_nav_sections['query']['results']:
+      if not 'QUERY' in item:
+        nav_sections.append(item)
+    
+    return nav_sections
+
   # --- fix rel-links to be abs-ones (a)
   def fix_extlinks_a(text, url):
     base_url = 'https://wiki.hackersanddesigners.nl/'
