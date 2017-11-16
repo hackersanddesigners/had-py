@@ -24,6 +24,10 @@
 	background-color: var(--color-compl);
 }
 
+.bg-blue-l {
+	background-color: yellow;
+}
+
 .bg-white {
 	background-color: var(--color-bg);
 }

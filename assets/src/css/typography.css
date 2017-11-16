@@ -124,6 +124,10 @@ hr {
   border: var(--border-compl);
 }
 
+.bd-l--1 {
+  border-left: var(--border-compl);
+}
+
 .bd-r--1 {
   border-right: var(--border-compl);
 }

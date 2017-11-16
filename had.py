@@ -129,8 +129,11 @@ class had(object):
     for bq in text.find_all('blockquote'):
       bq['class'] = 'ft-2 ft-2__m w--copy'
 
-    for code in text.find_all(['pre', 'code']):
-      code['class'] = 'w--copy d-bl ft-mono blue ft-05 ft-05__m mg-b--1 pd-l--2 bd-r--1 o-x__scroll'
+    for code in text.find_all(['pre']):
+      code['class'] = 'w--copy d-b ft-mono blue ft-05 ft-05__m mg-b--1 pd-l--2 bd-l--1 bd-r--1 o-x__scroll'
+
+    for code in text.find_all(['code']):
+      code['class'] = 'ft-mono blue bd-a--1 ft-05 ft-05__m'
 
     for img in text.find_all('img'):
       img['class'] = 'mg-v--1 shadow'

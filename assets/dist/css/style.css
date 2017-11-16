@@ -526,6 +526,11 @@ hr {
   border: var(--border-compl);
 }
 
+.bd-l--1 {
+  border-left: 1px solid #0000ff;
+  border-left: var(--border-compl);
+}
+
 .bd-r--1 {
   border-right: 1px solid #0000ff;
   border-right: var(--border-compl);
@@ -677,7 +682,7 @@ hr {
   display: inline-block;
 }
 
-.d-bl {
+.d-b {
   display: block;
 }
 
@@ -749,6 +754,10 @@ hr {
 .bg-blue {
 	background-color: #0000ff;
 	background-color: var(--color-compl);
+}
+
+.bg-blue-l {
+	background-color: yellow;
 }
 
 .bg-white {
