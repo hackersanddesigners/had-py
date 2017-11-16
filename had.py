@@ -146,16 +146,21 @@ class had(object):
         figure = img.find_parent('div', class_='thumb')
         figure.name = 'figure'
         figure['class'] = 'w--copy mg-b--2 mg-l--3__m'
-      
+
         # set img caption
         img_caption = figure.find('div', class_='thumbcaption')
-        img_caption.name = 'figcaption'
-        img_caption['class'] = 'mg-auto w--four-fifths ft-sans t-a--c'
+        if img_caption.content:
+          img_caption.name = 'figcaption'
+          img_caption['class'] = 'mg-auto w--four-fifths ft-sans t-a--c'
+        else:
+          img_caption.decompose()
 
         magnify = img_caption.find('div', class_='magnify')
         if magnify:
           magnify.decompose()
-      
+
+        figure.unwrap()
+
       a_img = img.find_parent('a')
       if a_img:
         a_img.name = 'figure'
@@ -407,12 +412,14 @@ class had(object):
             wkdata_introtext_item = response_introtext_item.json()
 
             wkdata_text_item = wkdata_introtext_item['parse']['text']
-            
+
             # get section item's img
             soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
             if soup_wk_introtext.img:
               cover_img = soup_wk_introtext.img
               cover_img['class'] = 'mg-t--1 shadow'
+              del cover_img['width']
+              del cover_img['height']
 
               src_rel_link = cover_img.get('src')
               srcset_rel_link = cover_img.get('srcset')
@@ -460,6 +467,8 @@ class had(object):
           if soup_wk_introtext.img:
             cover_img = soup_wk_introtext.img
             cover_img['class'] = 'mg-t--1 shadow'
+            del cover_img['width']
+            del cover_img['height']
 
             src_rel_link = cover_img.get('src')
             srcset_rel_link = cover_img.get('srcset')
