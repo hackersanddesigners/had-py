@@ -58,6 +58,7 @@ http://flickity.metafizzy.co
   overflow: hidden;
   position: relative;
   height: 100%;
+  order: 2;
 }
 
 .flickity-slider {
@@ -97,6 +98,7 @@ http://flickity.metafizzy.co
   margin: 0;
   list-style: none;
   text-align: center;
+  order: 1;
 }
 
 .flickity-rtl .flickity-page-dots { direction: rtl; }

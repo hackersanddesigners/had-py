@@ -677,7 +677,7 @@ class had(object):
     # --- set class to flickity.js
     for gallery in soup_bodytext.find_all('ul', class_='gallery'):
       gallery.name = 'div'
-      gallery['class'] = 'gallery w--copy mg-b--3'
+      gallery['class'] = 'gallery flex-c w--copy mg-v--3'
 
     # --- typography
     typography(soup_bodytext)

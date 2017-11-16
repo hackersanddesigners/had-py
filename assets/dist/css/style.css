@@ -273,6 +273,13 @@ a {
   margin-bottom: var(--spacing-medium);
 }
 
+.mg-v--3 {
+  margin-top: 48.6px;
+  margin-top: var(--spacing-large);
+  margin-bottom: 48.6px;
+  margin-bottom: var(--spacing-large);
+}
+
 .mg-t--0 {
 	margin-top: 0;
 	margin-top: var(--spacing-none);
@@ -778,6 +785,8 @@ http://flickity.metafizzy.co
   overflow: hidden;
   position: relative;
   height: 100%;
+  -ms-flex-order: 2;
+      order: 2;
 }
 
 .flickity-slider {
@@ -824,6 +833,8 @@ http://flickity.metafizzy.co
   margin: 0;
   list-style: none;
   text-align: center;
+  -ms-flex-order: 1;
+      order: 1;
 }
 
 .flickity-rtl .flickity-page-dots { direction: rtl; }

@@ -135,6 +135,11 @@
   margin-bottom: var(--spacing-medium);
 }
 
+.mg-v--3 {
+  margin-top: var(--spacing-large);
+  margin-bottom: var(--spacing-large);
+}
+
 .mg-t--0 {
 	margin-top: var(--spacing-none);
 }
