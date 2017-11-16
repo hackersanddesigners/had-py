@@ -359,7 +359,11 @@ class had(object):
       fix_extlinks_a(soup_wk_intro, url=p_url + '/p/')
 
       p_intro = soup_wk_intro.find('p')
-      wk_intro = p_intro
+      print(p_intro)
+      if p_intro.string:
+        wk_intro = p_intro
+      else:
+        wk_intro = None
 
     # --------------------------
     today = datetime.date.today()
