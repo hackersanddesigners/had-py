@@ -430,14 +430,23 @@ class had(object):
               src_rel_link = cover_img.get('src')
               srcset_rel_link = cover_img.get('srcset')
               if src_rel_link:
+                src_c = re.split(r'[/]\s*', src_rel_link)
+                if 'thumb' in src_c:
+                  del src_c[3]
+                  del src_c[-1]
+                src_c = '/'.join(src_c)
                 out_link = urljoin(base_url, src_rel_link)
                 cover_img['src'] = out_link
               if srcset_rel_link:
-                srcset_list = re.split(r'[,]\s*', srcset_rel_link)
-                srcset_lu = srcset_list
-                srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
-                srcset_s = ', '.join(srcset_lu)
-                cover_img['srcset'] = srcset_s
+                src_c = re.split(r'[/]\s*', srcset_rel_link)
+                if 'thumb' in src_c:
+                  del cover_img['srcset']
+                else:
+                  srcset_list = re.split(r'[,]\s*', srcset_rel_link)
+                  srcset_lu = srcset_list
+                  srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
+                  srcset_s = ', '.join(srcset_lu)
+                  cover_img['srcset'] = srcset_s
             else:
               cover_img = None
 
