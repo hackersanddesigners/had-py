@@ -72,8 +72,6 @@ class had(object):
     response_nav_sections = requests.get(base_url + folder_url + api_call , params=nav_sections_options)
     wk_nav_sections = response_nav_sections.json()
 
-    print(wk_nav_sections)
-
     # delete MainNavigation concept from the dict
     del wk_nav_sections['query']['results']['Concept:MainNavigation']
     del wk_nav_sections['query']['results']['Concept:01Publications']
@@ -125,7 +123,7 @@ class had(object):
 
     for heading in text.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
       heading['class'] = 'ft-sans ft-1 ft-1__m ft-bold mg-b--1 w--copy'
- 
+
     for p in text.find_all('p'):
       p['class'] = 'w--copy mg-b--1'
 
@@ -474,6 +472,12 @@ class had(object):
           date = item[1]['printouts']['OnDate'][0]['fulltext']
           wk_section_pastitems.append(date)
 
+          # api.php?action=query&prop=pageimages&titles=Albert%20Einstein&pithumbsize=100
+          p_imgs = {'action': 'query', 'prop': 'pageimages', 'titles': title, 'pithumbsize': '700', 'format': 'json', 'formatversion': '2'}
+          response_p_imgs = requests.get(base_url + folder_url + api_call , params=p_imgs)
+          wkdata_p_imgs = response_p_imgs.json()
+          print(wkdata_p_imgs, '\n\n')
+
           # fetch section item's content
           item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
           response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
@@ -651,23 +655,28 @@ class had(object):
     for img in soup_bodytext.find_all('img', src=re.compile(r'/mediawiki/.*')):
       src_rel_link = img.get('src')
       srcset_rel_link = img.get('srcset')
-      if (src_rel_link):
-        if 'thumb' in src_rel_link:
-          split = src_rel_link.rsplit('/')
+      if src_rel_link:
+        split = re.split(r'[/]\s*', src_rel_link)
+        print(split)
+        if 'thumb' in split:
           del split[3]
           del split[-1]
-          uu_src_rel_link = '/'.join(split)
-          out_link = urljoin(base_url, uu_src_rel_link)
+          split = '/'.join(split)
+          out_link = urljoin(base_url, split)
           img['src'] = out_link
         else:
           out_link = urljoin(base_url, src_rel_link)
           img['src'] = out_link
       if (srcset_rel_link):
-        srcset_list = re.split(r'[,]\s*', srcset_rel_link)
-        srcset_lu = srcset_list
-        srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
-        srcset_s = ', '.join(srcset_lu)
-        img['srcset'] = srcset_s
+        split = re.split(r'[/]\s*', src_rel_link)
+        if 'thumb' in split:
+          del img['srcset']
+        else:
+          srcset_list = re.split(r'[,]\s*', srcset_rel_link)
+          srcset_lu = srcset_list
+          srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
+          srcset_s = ', '.join(srcset_lu)
+          img['srcset'] = srcset_s
 
     # --- flickity slideshow
     for gallery_item in soup_bodytext.find_all('li', class_='gallerybox'):
@@ -675,7 +684,7 @@ class had(object):
       gallery_item.name = 'div'
       del gallery_item['style']
       gallery_item['class'] = 'gallery-item'
-      
+
       # delete extra <div>s before and after img div wrapper
       gallery_item_div = gallery_item.find('div', class_='thumb')
       gallery_pp = gallery_item_div.parent
@@ -684,20 +693,15 @@ class had(object):
       child.unwrap()
       gallery_item_div.unwrap()
 
-      # clean up <img>
-      gallery_item_img = gallery_item.find('img')
-      del gallery_item_img['width']
-      del gallery_item_img['height']
-
       # set img caption
       gallery_item_caption = gallery_item.find('div', class_='gallerytext')
-      gallery_item_caption.name = 'figcaption'
-      gallery_item_caption['class'] = 'pd-t--1 mg-auto w--copy ft-sans t-a--c'
-      gcp = gallery_item_caption.find('p')
-      if gcp:
-        gcp.unwrap()
+      if gallery_item_caption.content:
+        gallery_item_caption.name = 'figcaption'
+        gallery_item_caption['class'] = 'pd-t--1 mg-auto w--copy ft-sans t-a--c'
+      else:
+        gallery_item_caption.unwrap()
 
-      #  get parent <ul>
+      # get parent <ul>
       gallerybox = gallery_item.find_parent('ul')
       gallerybox['class'] = 'gallery'
 
@@ -708,7 +712,7 @@ class had(object):
 
     # --- typography
     typography(soup_bodytext)
-    
+
     wk_bodytext = soup_bodytext
 
     # build template
