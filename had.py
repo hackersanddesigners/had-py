@@ -56,7 +56,7 @@ class had(object):
     base_url = 'https://wiki.hackersanddesigners.nl/'
     folder_url = 'mediawiki/'
     api_call =  'api.php?'
-    
+
     filters_nav_main = '|?MainNavigation|order=asc'
     nav_main_options = {'action': 'ask', 'query': '[[Concept:MainNavigation]]' + filters_nav_main, 'format': 'json', 'formatversion': '2'}
     response_nav_main = requests.get(base_url + folder_url + api_call , params=nav_main_options)
@@ -67,14 +67,17 @@ class had(object):
     base_url = 'https://wiki.hackersanddesigners.nl/'
     folder_url = 'mediawiki/'
     api_call =  'api.php?'
-    
+
     nav_sections_options = {'action': 'ask', 'query': '[[Concept:+]]', 'format': 'json', 'formatversion': '2'}
     response_nav_sections = requests.get(base_url + folder_url + api_call , params=nav_sections_options)
     wk_nav_sections = response_nav_sections.json()
 
+    print(wk_nav_sections)
+
     # delete MainNavigation concept from the dict
     del wk_nav_sections['query']['results']['Concept:MainNavigation']
     del wk_nav_sections['query']['results']['Concept:01Publications']
+    del wk_nav_sections['query']['results']['Concept:Activities# QUERYd64f49fa6b3fd3a2d4c7eda437e49e88']
     
     nav_sections = []
     for item in wk_nav_sections['query']['results']:
