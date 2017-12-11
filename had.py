@@ -87,7 +87,7 @@ class had(object):
   # --- fix rel-links to be abs-ones (a)
   def fix_extlinks_a(text, url):
     base_url = 'https://wiki.hackersanddesigners.nl/'
-    
+
     for a in text.find_all('a', href=re.compile(r'/mediawiki/.*')):
       rel_link = a.get('href')
       rel_link = rel_link.replace(':', '%3A')
@@ -209,7 +209,7 @@ class had(object):
       del ep['style']
       ep['frameborder'] = '0'
       ep.wrap(text.new_tag('div'))
-      ep.parent['class'] = 'w--full mhvh--half bd-a--1 mg-b--2'
+      ep.parent['class'] = 'w--copy mhvh--half bd-a--1 mg-b--2'
       ep['class'] = 'w--full mhvh--half bd-a--0'
 
     for ul in text.find_all('ul'):
