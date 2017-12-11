@@ -59,7 +59,7 @@ class had(object):
 
     filters_nav_main = '|?MainNavigation|order=asc'
     nav_main_options = {'action': 'ask', 'query': '[[Concept:MainNavigation]]' + filters_nav_main, 'format': 'json', 'formatversion': '2'}
-    response_nav_main = requests.get(base_url + folder_url + api_call , params=nav_main_options)
+    response_nav_main = requests.get(base_url + api_call , params=nav_main_options)
     wk_nav_main = response_nav_main.json()
     return wk_nav_main
 
@@ -69,7 +69,7 @@ class had(object):
     api_call =  'api.php?'
 
     nav_sections_options = {'action': 'ask', 'query': '[[Concept:+]]', 'format': 'json', 'formatversion': '2'}
-    response_nav_sections = requests.get(base_url + folder_url + api_call , params=nav_sections_options)
+    response_nav_sections = requests.get(base_url + api_call , params=nav_sections_options)
     wk_nav_sections = response_nav_sections.json()
 
     # delete MainNavigation concept from the dict
@@ -99,7 +99,7 @@ class had(object):
   def fix_extlink_imgs(text):
     base_url = 'https://wiki.hackersanddesigners.nl/'
 
-    for img in text.find_all('img', src=re.compile(r'/mediawiki/.*')):
+    for img in text.find_all('img', src=re.compile(r'/.*')):
       src_rel_link = img.get('src')
       srcset_rel_link = img.get('srcset')
       if (src_rel_link):
@@ -236,7 +236,7 @@ class had(object):
 
     # fetch intro
     intro_options = {'action': 'parse', 'pageid': '29', 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-    intro_response = requests.get(base_url + folder_url + api_call , params=intro_options)
+    intro_response = requests.get(base_url + api_call , params=intro_options)
     wkdata_intro = intro_response.json()
 
     wk_title = wkdata_intro['parse']['title']
@@ -269,7 +269,7 @@ class had(object):
         req.update(parameters)
         
         # call API
-        result = requests.get(base_url + folder_url + api_call, params=req).json()
+        result = requests.get(base_url + api_call, params=req).json()
         if 'error' in result:
           raise Error(result['error'])
         if 'warnings' in result:
@@ -296,7 +296,7 @@ class had(object):
           wkdata_upevents.append(date)
 
           upevents_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-          response_introtext_upevents = requests.get(base_url + folder_url + api_call , params=upevents_introtext_options)
+          response_introtext_upevents = requests.get(base_url + api_call , params=upevents_introtext_options)
           wkdata_introtext_upevents = response_introtext_upevents.json()
 
           text = wkdata_introtext_upevents['parse']['text'] 
@@ -344,7 +344,7 @@ class had(object):
 
     # fetch page-content
     page_head_options = {'action': 'parse', 'page': 'Concept:' + section_title, 'format': 'json', 'formatversion': '2'}
-    response_head = requests.get(base_url + folder_url + api_call, params=page_head_options)
+    response_head = requests.get(base_url + api_call, params=page_head_options)
     wkdata_head = response_head.json()
 
     wk_title = wkdata_head['parse']['title']
@@ -387,7 +387,7 @@ class had(object):
         req.update(parameters)
         
         # call API
-        result = requests.get(base_url + folder_url + api_call, params=req).json()
+        result = requests.get(base_url + api_call, params=req).json()
         if 'error' in result:
           raise Error(result['error'])
         if 'warnings' in result:
@@ -415,7 +415,7 @@ class had(object):
 
             # fetch section item's content
             item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-            response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
+            response_introtext_item = requests.get(base_url + api_call , params=item_introtext_options)
             wkdata_introtext_item = response_introtext_item.json()
 
             wkdata_text_item = wkdata_introtext_item['parse']['text']
@@ -474,13 +474,13 @@ class had(object):
 
           # api.php?action=query&prop=pageimages&titles=Albert%20Einstein&pithumbsize=100
           p_imgs = {'action': 'query', 'prop': 'pageimages', 'titles': title, 'pithumbsize': '700', 'format': 'json', 'formatversion': '2'}
-          response_p_imgs = requests.get(base_url + folder_url + api_call , params=p_imgs)
+          response_p_imgs = requests.get(base_url + api_call , params=p_imgs)
           wkdata_p_imgs = response_p_imgs.json()
           print(wkdata_p_imgs, '\n\n')
 
           # fetch section item's content
           item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-          response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
+          response_introtext_item = requests.get(base_url + api_call , params=item_introtext_options)
           wkdata_introtext_item = response_introtext_item.json()
 
           wkdata_text_item = wkdata_introtext_item['parse']['text']
@@ -542,7 +542,7 @@ class had(object):
 
           # fetch section item's content
           item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-          response_introtext_item = requests.get(base_url + folder_url + api_call , params=item_introtext_options)
+          response_introtext_item = requests.get(base_url + api_call , params=item_introtext_options)
           wkdata_introtext_item = response_introtext_item.json()
 
           wkdata_text_item = wkdata_introtext_item['parse']['text']
@@ -596,7 +596,7 @@ class had(object):
 
     # fetch page-content
     page_options = {'action': 'parse', 'page': page_title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-    response_content = requests.get(base_url + folder_url + api_call, params=page_options)
+    response_content = requests.get(base_url + api_call, params=page_options)
     wk_data = response_content.json()
 
     wk_title = wk_data['parse']['title']
@@ -606,7 +606,7 @@ class had(object):
       # --- if it has [Category:Event]
       # fetch page-metadata for Event
       page_meta_options = {'action': 'browsebysubject', 'subject': page_title, 'format': 'json', 'formatversion': '2'}
-      response_meta = requests.get(base_url + folder_url + api_call, params=page_meta_options)
+      response_meta = requests.get(base_url + api_call, params=page_meta_options)
       wkdata_meta = response_meta.json()
 
       def extract_metadata(query):
@@ -652,7 +652,7 @@ class had(object):
     fix_extlinks_a(soup_bodytext, url=p_url[0] + '/')
 
     # --- images
-    for img in soup_bodytext.find_all('img', src=re.compile(r'/mediawiki/.*')):
+    for img in soup_bodytext.find_all('img', src=re.compile(r'/.*')):
       src_rel_link = img.get('src')
       srcset_rel_link = img.get('srcset')
       if src_rel_link:
