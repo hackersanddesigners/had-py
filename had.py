@@ -54,7 +54,6 @@ class had(object):
   # navigation
   def nav_main():
     base_url = 'https://wiki.hackersanddesigners.nl/'
-    folder_url = 'mediawiki/'
     api_call =  'api.php?'
 
     filters_nav_main = '|?MainNavigation|order=asc'
@@ -65,7 +64,6 @@ class had(object):
 
   def nav_sections():
     base_url = 'https://wiki.hackersanddesigners.nl/'
-    folder_url = 'mediawiki/'
     api_call =  'api.php?'
 
     nav_sections_options = {'action': 'ask', 'query': '[[Concept:+]]', 'format': 'json', 'formatversion': '2'}
@@ -231,7 +229,6 @@ class had(object):
   # home	
   def on_home(self, request, typography=typography, fix_extlinks_a=fix_extlinks_a, fix_extlink_imgs=fix_extlink_imgs, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
     base_url = 'https://wiki.hackersanddesigners.nl/'
-    folder_url = 'mediawiki/'
     api_call =  'api.php?'
 
     # fetch intro
@@ -339,7 +336,6 @@ class had(object):
 
   def on_section(self, request, fix_extlinks_a=fix_extlinks_a, typography=typography, section_title=None, page_title=None, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
     base_url = 'https://wiki.hackersanddesigners.nl/'
-    folder_url = 'mediawiki/'
     api_call =  'api.php?'
 
     # fetch page-content
@@ -591,7 +587,6 @@ class had(object):
   # article
   def on_article(self, request, typography=typography, fix_extlinks_a=fix_extlinks_a, page_title=None, section_title=None, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
     base_url = 'https://wiki.hackersanddesigners.nl/'
-    folder_url = 'mediawiki/'
     api_call =  'api.php?'
 
     # fetch page-content
