@@ -429,7 +429,7 @@ class had(object):
               if src_rel_link:
                 src_c = re.split(r'[/]\s*', src_rel_link)
                 if 'thumb' in src_c:
-                  del src_c[3]
+                  del src_c[2]
                   del src_c[-1]
                 src_c = '/'.join(src_c)
                 out_link = urljoin(base_url, src_rel_link)
@@ -472,7 +472,6 @@ class had(object):
           p_imgs = {'action': 'query', 'prop': 'pageimages', 'titles': title, 'pithumbsize': '700', 'format': 'json', 'formatversion': '2'}
           response_p_imgs = requests.get(base_url + api_call , params=p_imgs)
           wkdata_p_imgs = response_p_imgs.json()
-          print(wkdata_p_imgs, '\n\n')
 
           # fetch section item's content
           item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
@@ -493,7 +492,7 @@ class had(object):
             if src_rel_link:
               src_c = re.split(r'[/]\s*', src_rel_link)
               if 'thumb' in src_c:
-                del src_c[3]
+                del src_c[2]
                 del src_c[-1]
               src_c = '/'.join(src_c)
               out_link = urljoin(base_url, src_c)
@@ -647,14 +646,13 @@ class had(object):
     fix_extlinks_a(soup_bodytext, url=p_url[0] + '/')
 
     # --- images
-    for img in soup_bodytext.find_all('img', src=re.compile(r'/.*')):
+    for img in soup_bodytext.find_all('img', src=re.compile(r'/images/.*')):
       src_rel_link = img.get('src')
       srcset_rel_link = img.get('srcset')
       if src_rel_link:
         split = re.split(r'[/]\s*', src_rel_link)
-        print(split)
         if 'thumb' in split:
-          del split[3]
+          del split[2]
           del split[-1]
           split = '/'.join(split)
           out_link = urljoin(base_url, split)
