@@ -96,8 +96,6 @@ function on_resizing (event) {
   var dhnh = dh - nh;
   var whnh = wh + nh;
 
-  console.log(dhnh + '>' + whnh);
-
   // check if document height
   // is bigger than window height
   if (dhnh > whnh) {
