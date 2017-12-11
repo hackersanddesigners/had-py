@@ -205,7 +205,7 @@ class had(object):
       print('No embed video')
 
     # --- etherpad embed
-    for ep in text.find_all('iframe', src=re.compile(r'etherpad.hackersanddesigners.nl')):
+    for ep in text.find_all('iframe', class_=re.compile(r'eplite')):
       del ep['style']
       ep['frameborder'] = '0'
       ep.wrap(text.new_tag('div'))
