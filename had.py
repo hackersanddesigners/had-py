@@ -288,7 +288,7 @@ class had(object):
         for item in result['results'].items():
           title = item[1]['printouts']['NameOfEvent'][0]['fulltext']
           wkdata_upevents.append(title)
-          
+
           date = item[1]['printouts']['OnDate'][0]['fulltext']
           wkdata_upevents.append(date)
 
@@ -296,7 +296,7 @@ class had(object):
           response_introtext_upevents = requests.get(base_url + api_call , params=upevents_introtext_options)
           wkdata_introtext_upevents = response_introtext_upevents.json()
 
-          text = wkdata_introtext_upevents['parse']['text'] 
+          text = wkdata_introtext_upevents['parse']['text']
           soup_wk_introtext = BeautifulSoup(text, 'html.parser')
           # ---
           typography(soup_wk_introtext)
@@ -428,9 +428,6 @@ class had(object):
               srcset_rel_link = cover_img.get('srcset')
               if src_rel_link:
                 src_c = re.split(r'[/]\s*', src_rel_link)
-                if 'thumb' in src_c:
-                  del src_c[2]
-                  del src_c[-1]
                 src_c = '/'.join(src_c)
                 out_link = urljoin(base_url, src_rel_link)
                 cover_img['src'] = out_link
@@ -468,11 +465,6 @@ class had(object):
           date = item[1]['printouts']['OnDate'][0]['fulltext']
           wk_section_pastitems.append(date)
 
-          # api.php?action=query&prop=pageimages&titles=Albert%20Einstein&pithumbsize=100
-          p_imgs = {'action': 'query', 'prop': 'pageimages', 'titles': title, 'pithumbsize': '700', 'format': 'json', 'formatversion': '2'}
-          response_p_imgs = requests.get(base_url + api_call , params=p_imgs)
-          wkdata_p_imgs = response_p_imgs.json()
-
           # fetch section item's content
           item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
           response_introtext_item = requests.get(base_url + api_call , params=item_introtext_options)
@@ -491,9 +483,6 @@ class had(object):
             srcset_rel_link = cover_img.get('srcset')
             if src_rel_link:
               src_c = re.split(r'[/]\s*', src_rel_link)
-              if 'thumb' in src_c:
-                del src_c[2]
-                del src_c[-1]
               src_c = '/'.join(src_c)
               out_link = urljoin(base_url, src_c)
               cover_img['src'] = out_link
