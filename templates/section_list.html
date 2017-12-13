@@ -14,6 +14,7 @@
       {% if item[1] %}<h2 class="ft-sans ft-3 ft-3__m">{{ item[1]|dateformat }}</h2>{% endif %}
       <a href="{{ title|replace('Concept:', '')|replace(' ', '_') }}/p/{{ item[0]|replace(' ', '_') }}" class="ft-2 ft-2__m">{{ item[0] }}</a>
       {% if item[2] %}{{ item[2]|safe }}{% endif %}
+      {% if item[3] %}{{ item[3]|safe }}{% endif %}
     </li>
   {% endfor %}
   <li class="w--half__m w--one_third__l w--one-fourth__w mg-b--2 mg-b--3__m">
@@ -30,6 +31,7 @@
       {% if item[1] %}<h2 class="ft-sans ft-3 ft-3__m">{{ item[1]|dateformat }}</h2>{% endif %}
       <a href="{{ title|replace('Concept:', '')|replace(' ', '_') }}/p/{{ item[0]|replace(' ', '_') }}" class="ft-2 ft-2_m">{{ item[0] }}</a>
       {% if item[2] %}{{ item[2]|safe }}{% endif %}
+      {% if item[3] %}{{ item[3]|safe }}{% endif %}
     </li>
   {% endfor %}
   <li class="w--half__m w--one_third__l w--one-fourth__w mg-b--2 mg-b--3__m"></li>
@@ -43,6 +45,7 @@
       {% if item[1] %}<h2 class="ft-sans ft-3 ft-3__m">{{ item[1]|dateformat }}</h2>{% endif %}
       <a href="{{ title|replace('Concept:', '')|replace(' ', '_') }}/p/{{ item[0]|replace(' ', '_') }}" class="ft-2 ft-2_m">{{ item[0] }}</a>
       {% if item[2] %}{{ item[2]|safe }}{% endif %}
+      {% if item[3] %}{{ item[3]|safe }}{% endif %}
     </li>
   {% endfor %}
   <li class="w--half__m w--one_third__l w--one-fourth__w mg-b--2 mg-b--3__m"></li>

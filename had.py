@@ -187,7 +187,7 @@ class had(object):
         embedvid_c = embedvid.find('div', class_='thumbinner');
         del embedvid_c['style']
         embedvid_c['class'] = 'embed-container'
-          
+
         embedvid_iframe = embedvid_c.find('iframe')
         del embedvid_iframe['width']
         del embedvid_iframe['height']
@@ -424,34 +424,54 @@ class had(object):
               del cover_img['width']
               del cover_img['height']
 
+              # setup <noscript> tag for original images
+              # in case of no js browser-enabled
+              noscript = soup_wk_introtext.new_tag('noscript')
+              noscript.append(cover_img)
+              ns_cover_img = noscript
+
               src_rel_link = cover_img.get('src')
-              srcset_rel_link = cover_img.get('srcset')
               if src_rel_link:
                 src_c = re.split(r'[/]\s*', src_rel_link)
                 src_c = '/'.join(src_c)
                 out_link = urljoin(base_url, src_rel_link)
                 cover_img['src'] = out_link
+
+              srcset_rel_link = cover_img.get('srcset')
               if srcset_rel_link:
-                src_c = re.split(r'[/]\s*', srcset_rel_link)
-                if 'thumb' in src_c:
-                  del cover_img['srcset']
-                else:
-                  srcset_list = re.split(r'[,]\s*', srcset_rel_link)
-                  srcset_lu = srcset_list
-                  srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
-                  srcset_s = ', '.join(srcset_lu)
-                  cover_img['srcset'] = srcset_s
+                del cover_img['srcset']
+
+              # duplicate img tag and 
+              # replace `src` w/ `data-src`
+              import copy
+              dcover_img = copy.copy(cover_img)
+              dcover_img['data-src'] = dcover_img['src']
+              dcover_img['class'] += ' cover-img d-n'
+              del dcover_img['src']
+
+              dsrc_rel_link = dcover_img.get('data-src')
+              if dsrc_rel_link:
+                src_c = re.split(r'[/]\s*', dsrc_rel_link)
+                src_c = '/'.join(src_c)
+                out_link = urljoin(base_url, dsrc_rel_link)
+                dcover_img['data-src'] = out_link
+
+              dsrcset_rel_link = dcover_img.get('srcset')
+              if dsrcset_rel_link:
+                del dcover_img['srcset']
+
             else:
               cover_img = None
 
-            # add `cover_img` to `wk_section_items`
-            wk_section_upitems.append(cover_img)
-        
+            # add `cover_img` & `dcover_img` to `wk_section_items`
+            wk_section_upitems.append(ns_cover_img)
+            wk_section_upitems.append(dcover_img)
+
         except AttributeError:
           print('No upcoming event')
 
       # ---- * * *
-      wk_section_upitems = list(zip(*[iter(wk_section_upitems)]*3))
+      wk_section_upitems = list(zip(*[iter(wk_section_upitems)]*4))
       wk_section_upitems = sorted(wk_section_upitems, key=lambda x: x[1])
      
       # ---- past items
@@ -471,6 +491,7 @@ class had(object):
           wkdata_introtext_item = response_introtext_item.json()
 
           wkdata_text_item = wkdata_introtext_item['parse']['text']
+
           # get section item's img
           soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
           if soup_wk_introtext.img:
@@ -479,32 +500,53 @@ class had(object):
             del cover_img['width']
             del cover_img['height']
 
+            # setup <noscript> tag for original images
+            # in case of no js browser-enabled
+            noscript = soup_wk_introtext.new_tag('noscript')
+            noscript.append(cover_img)
+            ns_cover_img = noscript
+
             src_rel_link = cover_img.get('src')
-            srcset_rel_link = cover_img.get('srcset')
             if src_rel_link:
               src_c = re.split(r'[/]\s*', src_rel_link)
               src_c = '/'.join(src_c)
-              out_link = urljoin(base_url, src_c)
+              out_link = urljoin(base_url, src_rel_link)
               cover_img['src'] = out_link
+
+            srcset_rel_link = cover_img.get('srcset')
             if srcset_rel_link:
-              src_c = re.split(r'[/]\s*', srcset_rel_link)
-              if 'thumb' in src_c:
-                del cover_img['srcset']
-              else:
-                srcset_list = re.split(r'[,]\s*', srcset_rel_link)
-                srcset_lu = srcset_list
-                srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
-                srcset_s = ', '.join(srcset_lu)
-                cover_img['srcset'] = srcset_s
+              del cover_img['srcset']
+
+            # duplicate img tag and 
+            # replace `src` w/ `data-src`
+            import copy
+            dcover_img = copy.copy(cover_img)
+            dcover_img['data-src'] = dcover_img['src']
+            dcover_img['class'] += ' cover-img d-n'
+            del dcover_img['src']
+
+            dsrc_rel_link = dcover_img.get('data-src')
+            if dsrc_rel_link:
+              src_c = re.split(r'[/]\s*', dsrc_rel_link)
+              src_c = '/'.join(src_c)
+              out_link = urljoin(base_url, dsrc_rel_link)
+              dcover_img['data-src'] = out_link
+
+            dsrcset_rel_link = dcover_img.get('srcset')
+            if dsrcset_rel_link:
+              del dcover_img['srcset']
+
           else:
             cover_img = None
 
-          # add `cover_img` to `wk_section_items`
-          wk_section_pastitems.append(cover_img)
+          # add `cover_img` & `dcover_img` to `wk_section_items`
+          wk_section_pastitems.append(ns_cover_img)
+          wk_section_pastitems.append(dcover_img)
     
       # ---- * * *
-      wk_section_pastitems = list(zip(*[iter(wk_section_pastitems)]*3))
+      wk_section_pastitems = list(zip(*[iter(wk_section_pastitems)]*4))
       wk_section_pastitems = sorted(wk_section_pastitems, key=lambda x: x[1], reverse=True)
+      print(wk_section_pastitems)
 
     # --------------
     # other sections
