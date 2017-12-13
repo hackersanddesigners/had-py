@@ -62,6 +62,18 @@ gulp.task('scripts:nav', function() {
 	.pipe(gulp.dest('assets/dist/js/'))
 });
 
+gulp.task('scripts:section', function() {
+ 	return gulp.src('assets/src/js/section/*.js')
+	.pipe(jshint())
+	.pipe(jshint.reporter('default'))
+  .pipe(concat('section.js'))
+	.pipe(rename({
+		suffix: '.min'
+	}))
+	.pipe(uglify())
+	.pipe(gulp.dest('assets/dist/js/'))
+});
+
 gulp.task('scripts:article', function() {
  	return gulp.src('assets/src/js/article/*.js')
 	.pipe(jshint())
@@ -75,7 +87,7 @@ gulp.task('scripts:article', function() {
 });
 
 // Scripts
-gulp.task('scripts', gulp.series('scripts:article', 'scripts:nav'));
+gulp.task('scripts', gulp.series('scripts:nav', 'scripts:section', 'scripts:article'));
 
 gulp.task('watch', function() {
   gulp.watch('assets/src/css/*.css', gulp.series('css'));
