@@ -421,8 +421,6 @@ class had(object):
             if soup_wk_introtext.img:
               cover_img = soup_wk_introtext.img
               cover_img['class'] = 'mg-t--1 shadow'
-              del cover_img['width']
-              del cover_img['height']
 
               # setup <noscript> tag for original images
               # in case of no js browser-enabled
@@ -497,8 +495,6 @@ class had(object):
           if soup_wk_introtext.img:
             cover_img = soup_wk_introtext.img
             cover_img['class'] = 'mg-t--1 shadow'
-            del cover_img['width']
-            del cover_img['height']
 
             # setup <noscript> tag for original images
             # in case of no js browser-enabled
