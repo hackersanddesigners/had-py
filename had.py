@@ -86,7 +86,7 @@ class had(object):
   def fix_extlinks_a(text, url):
     base_url = 'https://wiki.hackersanddesigners.nl/'
 
-    for a in text.find_all('a', href=re.compile(r'/mediawiki/.*')):
+    for a in text.find_all('a', href=re.compile(r'/index.php/.*')):
       rel_link = a.get('href')
       rel_link = rel_link.replace(':', '%3A')
       rel_link = rel_link.rsplit('/', 1)
