@@ -460,6 +460,8 @@ class had(object):
 
             else:
               cover_img = None
+              ns_cover_img = None
+              dcover_img = None
 
             # add `cover_img` & `dcover_img` to `wk_section_items`
             wk_section_upitems.append(ns_cover_img)
@@ -534,6 +536,8 @@ class had(object):
 
           else:
             cover_img = None
+            ns_cover_img = None
+            dcover_img = None
 
           # add `cover_img` & `dcover_img` to `wk_section_items`
           wk_section_pastitems.append(ns_cover_img)
@@ -542,7 +546,6 @@ class had(object):
       # ---- * * *
       wk_section_pastitems = list(zip(*[iter(wk_section_pastitems)]*4))
       wk_section_pastitems = sorted(wk_section_pastitems, key=lambda x: x[1], reverse=True)
-      print(wk_section_pastitems)
 
     # --------------
     # other sections
