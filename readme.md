@@ -147,9 +147,9 @@ Once you get acquainted with MediaWiki’s design language (Forms, Templates, et
 
 ## custom mediawiki styles
 
-/wiki-page-history-default.png
+![](https://github.com/hackersanddesigners/had-py/blob/master/wiki-page-history-default.png)
 
-/wiki-page-history-custom.png
+![](https://github.com/hackersanddesigners/had-py/blob/master/wiki-page-history-custom.png)
 
 - `/mediawiki/resources/src/mediawiki.action/mediawiki.action.history.styles.css`
 
