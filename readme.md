@@ -145,11 +145,11 @@ Once you get acquainted with MediaWiki’s design language (Forms, Templates, et
 
 ± ± ±
 
-## custom styles to mediawiki
+## custom mediawiki styles
 
 - `/mediawiki/resources/src/mediawiki.action/mediawiki.action.history.styles.css`
 
-this add more padding and take out list styles to the list of revisions
+this add more padding and take out list styles to the revision list
 
 ```
 #pagehistory {
@@ -169,7 +169,7 @@ this add more padding and take out list styles to the list of revisions
 
 - `/mediawiki/resources/src/mediawiki.action/mediawiki.action.history.css`
 
-this set the ‘compare selected revisions’ to the bottom-left, always at reach and more prominent (before there were two buttons at the top and bottom of the revision list, very much buried amongst the rest of the text)
+this set the ‘compare selected revisions’ to the bottom-rigjt, always at reach and more prominent (before there were two buttons at the top and bottom of the revision list, very much buried amongst the rest of the text)
 
 ```
 .historysubmit {
