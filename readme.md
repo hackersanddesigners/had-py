@@ -142,3 +142,46 @@ This double approach lets you inspect better what’s going on in case you are u
 ± ± ±
 
 Once you get acquainted with MediaWiki’s design language (Forms, Templates, etc), `json` data structures and some basic Python, you can play around with the website.
+
+± ± ±
+
+## custom styles to mediawiki
+
+- `/mediawiki/resources/src/mediawiki.action/mediawiki.action.history.styles.css`
+
+this add more padding and take out list styles to the list of revisions
+
+```
+#pagehistory {
+    margin-left: 0;
+    padding-top: 0.25rem;
+}
+#pagehistory li {
+	list-style: none;
+	padding: 0.5rem;
+	margin-bottom: 0.25rem;
+}
+#pagehistory li:hover {
+	background-color: #f8f9fa;
+	border: 1px dashed #a2a9b1;
+}
+```
+
+- `/mediawiki/resources/src/mediawiki.action/mediawiki.action.history.css`
+
+this set the ‘compare selected revisions’ to the bottom-left, always at reach and more prominent (before there were two buttons at the top and bottom of the revision list, very much buried amongst the rest of the text)
+
+```
+.historysubmit {
+    position: fixed;
+    bottom: 0.5rem;
+    right: 1rem;
+    padding: 0.5rem;
+    font-size: 100%;
+}
+
+.historysubmit:hover, .historysubmit:active {
+    background-color: yellow;
+    cursor: pointer;
+}
+```
