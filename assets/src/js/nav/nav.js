@@ -55,7 +55,6 @@ function wrap_sm (nh) {
   main.classList.remove('mg-t--3');
   main.style.paddingTop = nwh + 'px';
 
-  // nav.classList.add('pd-t--1', 'pd-h--2', 'z-2', 'bg-white');
   nav.classList.add('p-fx', 'p-tl', 'flex-r', 'flex-sb', 'w--full', 'z-2', 'pd-t--1', 'pd-h--2', 'z-2', 'bg-white');
   nav.classList.remove('mg-b--2');
   
