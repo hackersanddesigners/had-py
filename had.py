@@ -120,16 +120,16 @@ class had(object):
       infobox.decompose()
 
     for heading in text.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
-      heading['class'] = 'ft-sans ft-1 ft-1__m ft-bold mg-b--1 w--copy'
+      heading['class'] = 'ft-sans ft-1 ft-1__m ft-bold mg-v--2 w--copy'
 
     for p in text.find_all('p'):
-      p['class'] = 'w--copy mg-b--1'
+      p['class'] = 'w--copy mg-b--2'
 
     for bq in text.find_all('blockquote'):
       bq['class'] = 'ft-2 ft-2__m w--copy'
 
     for code in text.find_all(['pre']):
-      code['class'] = 'w--copy d-b ft-mono blue ft-05 ft-05__m mg-b--1 pd-l--2 bd-l--1 bd-r--1 o-x__scroll'
+      code['class'] = 'w--copy d-b ft-mono blue ft-05 ft-05__m mg-b--2 pd-l--2 bd-l--1 bd-r--1 o-x__scroll'
 
     for code in text.find_all(['code']):
       code['class'] = 'ft-mono blue bd-a--1 ft-05 ft-05__m'
@@ -195,7 +195,7 @@ class had(object):
 
         # video caption
         embedvid_caption = embedvid_c.find('div', class_='thumbcaption')
-        embedvid_caption['class'] = 'pd-t--1 mg-auto w--four-fifths ft-sans t-a--c'
+        embedvid_caption['class'] = 'pd-t--2 mg-auto w--four-fifths ft-sans t-a--c'
         # move video caption outside the `iframe`'s wrapper
         embedvid_caption.extract()
         embedvid.append(embedvid_caption)
