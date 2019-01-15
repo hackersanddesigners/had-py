@@ -20,7 +20,7 @@ class had(object):
     # --------------------
     # jinja custom filters
     def dateformat(value, format='%d.%m.%Y'):
-      item = re.search(r'(.*)-(.*)', value)
+      item = re.search(r'(\d{4}[/]\d{2}[/]\d{2})-(\d{4}[/]\d{2}[/]\d{2})', value)
       if item:
         date_start = item.group(1)
         date_start = datetime.datetime.strptime(date_start, '%Y/%m/%d')
@@ -636,10 +636,11 @@ class had(object):
       def extract_metadata(query):
         item_list = []
         for item in query:
+          print(item)
           str = item['item']
           # strip out weird hash at the end 
           # (see why https://www.semantic-mediawiki.org/wiki/Ask_API#BrowseBySubject)
-          item = re.sub(r'#\d#', '', str).replace('_', ' ')
+          item = re.sub(r'#\d##', '', str).replace('_', ' ')
           item_list.append(item)
         return item_list
 
