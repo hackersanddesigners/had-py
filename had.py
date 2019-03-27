@@ -302,6 +302,7 @@ class had(object):
           typography(soup_wk_introtext)
           p_intro = soup_wk_introtext.p
           fix_extlinks_a(p_intro, '/s/Events/p/')
+          fix_extlink_imgs(soup_wk_introtext)
           # ---
           soup_intro = p_intro
           wkdata_upevents.append(p_intro)
