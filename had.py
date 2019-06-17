@@ -71,9 +71,14 @@ class had(object):
     wk_nav_sections = response_nav_sections.json()
 
     # delete MainNavigation concept from the dict
-    del wk_nav_sections['query']['results']['Concept:MainNavigation']
-    del wk_nav_sections['query']['results']['Concept:01Publications']
-    del wk_nav_sections['query']['results']['Concept:Activities# QUERYd64f49fa6b3fd3a2d4c7eda437e49e88']
+    try:
+      del wk_nav_sections['query']['results']['Concept:MainNavigation']
+      del wk_nav_sections['query']['results']['Concept:01Publications']
+      del wk_nav_sections['query']['results']['Concept:ActiveSA']
+      del wk_nav_sections['query']['results']['Concept:HDSA']
+      # del wk_nav_sections['query']['results']['Concept:Activities# QUERYd64f49fa6b3fd3a2d4c7eda437e49e88']
+    except Exception as error:
+      print(error)
     
     nav_sections = []
     for item in wk_nav_sections['query']['results']:
