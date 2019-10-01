@@ -79,12 +79,12 @@ class had(object):
       # del wk_nav_sections['query']['results']['Concept:Activities# QUERYd64f49fa6b3fd3a2d4c7eda437e49e88']
     except Exception as error:
       print(error)
-    
+
     nav_sections = []
     for item in wk_nav_sections['query']['results']:
       if not 'QUERY' in item:
         nav_sections.append(item)
-    
+
     return nav_sections
 
   # --- fix rel-links to be abs-ones (a)
@@ -97,6 +97,16 @@ class had(object):
       rel_link = rel_link.rsplit('/', 1)
       a['href'] = urljoin(url, rel_link[1])
     return text
+
+  def fix_embeds(text):
+    wrappers = text.find_all("div", class_="embedvideowrap")
+    for wrap in text.find_all("div", class_="embedvideowrap"):
+      # wrap.unwrap()
+      wrap['width'] = None
+    for embed in text.find_all('iframe', src=re.compile("www.youtube.com")):
+      embed['width'] = None
+      embed['height'] = None
+
 
   # --- fix rel-links to be abs ones (img)
   def fix_extlink_imgs(text):
@@ -620,7 +630,7 @@ class had(object):
 
   # -------
   # article
-  def on_article(self, request, typography=typography, fix_extlinks_a=fix_extlinks_a, page_title=None, section_title=None, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
+  def on_article(self, request, typography=typography, fix_extlinks_a=fix_extlinks_a, fix_embeds=fix_embeds, page_title=None, section_title=None, wk_nav_main=nav_main(), wk_nav_sections=nav_sections()):
     base_url = 'https://wiki.hackersanddesigners.nl/'
     api_call =  'api.php?'
 
@@ -680,6 +690,8 @@ class had(object):
     p_url = get_current_url(envy)
     p_url = p_url.rsplit('/', 1)
 
+
+    fix_embeds(soup_bodytext)
     fix_extlinks_a(soup_bodytext, url=p_url[0] + '/')
 
     # --- images
