@@ -8,6 +8,11 @@
   position: absolute;
 }
 
+.p-stk {
+	position: sticky;
+	top: 20px;
+}
+
 .p-tl {
   top: 0;
   left: 0;

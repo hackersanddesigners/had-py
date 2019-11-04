@@ -9,10 +9,12 @@ var sm = document.querySelector('.section-menu');
 var toggle = document.createElement('button');
 var main = document.querySelector('main');
 
+
+
 function sticky () {
   // --- set scroll trigger
   var threshold = nav.offsetHeight;
-  var trigger = threshold / 2;
+  var trigger = threshold / 30;
 
   window.onscroll = function (event) {
     requestAnimationFrame(checkSticky);
@@ -44,16 +46,21 @@ function sticky () {
   }
 }
 
+const nw_wh = nav.getBoundingClientRect();
+const nwh = nw_wh.height;
+
+
 function wrap_sm (nh) {
   // hide `sm`
   sm.classList.add('d-n');
 
   // smooth in nav transition when scrolling
-  var nw_wh = main.previousElementSibling.getBoundingClientRect();
-  var nwh = nw_wh.height;
 
   main.classList.remove('mg-t--3');
-  main.style.paddingTop = nwh + 'px';
+
+  if (window.innerWidth > 640) {
+    main.style.paddingTop = nwh + 'px';
+}
 
   nav.classList.add('p-fx', 'p-tl', 'flex-r', 'flex-sb', 'w--full', 'z-2', 'pd-t--1', 'pd-h--2', 'z-2', 'bg-white');
   nav.classList.remove('mg-b--2');
