@@ -877,6 +877,56 @@ http://flickity.metafizzy.co
   background: var(--color-compl);
 }
 
+/* 
+→ moubarak.eu
+*/
+
+input {
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 500px;
+    /*align-self: flex-end;*/
+    margin-left: 30px;
+    cursor: default;
+    color: #0000ff;
+    color: var(--color-compl);
+    background-color: rgba(255, 255, 255, 1);
+    height: auto;
+    border-width: 2px;
+    border-color: #000000;
+    border-color: var(--color-main);
+    box-sizing: border-box;
+    transition: ease-out 0.5s;
+}
+
+input::-webkit-input-placeholder {
+    color: grey;
+}
+
+input:-ms-input-placeholder {
+    color: grey;
+}
+
+input::placeholder {
+    color: grey;
+}
+
+input:hover {
+    box-shadow:         0 0 4px 0px grey;
+    transition: ease 0.5s;
+}
+
+input:focus {
+    box-shadow: 0 0 7px 1px #0000ff;
+    box-shadow:         0 0 7px 1px var(--color-compl);
+    transition: ease-out 0.5s;
+    border-color: #0000ff;
+    border-color: var(--color-compl);
+    border-width: 2px;
+    outline: none;
+    cursor: text;
+}
+
 :root{
   --spacing-none: 0;
   --spacing-tiny: 6.075px;
