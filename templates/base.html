@@ -22,7 +22,6 @@
         {% for item in nav_main['query']['results'].items() %}
         <a href="/p/{{ item[0]|replace(" ", "_") }}" class="ft-sans ft-2 ft-3__m a-td--0 blue{% if not loop.last %} pd-r--1{% endif %}">{{ item[0] }}</a>
         {% endfor %}
-        <input class="command ft-1__m" type="Search" placeholder="Search for anything"></input>
       </div>
       <div class="section-menu">
 			  {% for item in nav_sections %}
