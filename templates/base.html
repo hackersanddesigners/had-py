@@ -17,7 +17,7 @@
 
 	<body class="mss pd-a--2 ft-1 ft-1__m">
     <nav class="nav">
-      <div class="main-menu pd-b--1">
+      <div class="main-menu pd-b--1 flex-r">
         <a href="/" class="ft-sans ft-2 ft-3__m a-td--0 pd-r--1 blue">H&amp;D</a>
         {% for item in nav_main['query']['results'].items() %}
         <a href="/p/{{ item[0]|replace(" ", "_") }}" class="ft-sans ft-2 ft-3__m a-td--0 blue{% if not loop.last %} pd-r--1{% endif %}">{{ item[0] }}</a>
