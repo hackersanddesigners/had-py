@@ -76,16 +76,30 @@ class had(object):
       del wk_nav_sections['query']['results']['Concept:01Publications']
       del wk_nav_sections['query']['results']['Concept:ActiveSA']
       del wk_nav_sections['query']['results']['Concept:HDSA']
-      # del wk_nav_sections['query']['results']['Concept:Activities# QUERYd64f49fa6b3fd3a2d4c7eda437e49e88']
+      del wk_nav_sections['query']['results']['Concept:Activities# QUERYd64f49fa6b3fd3a2d4c7eda437e49e88']
     except Exception as error:
       print(error)
-    
+
+    nav_ban = ['Concept:MainNavigation', 'Concept:01Publications', 'Concept:ActiveSA', 'Concept:HDSA', 'Concept:Activities# QUERYd64f49fa6b3fd3a2d4c7eda437e49e88']
+
     nav_sections = []
-    for item in wk_nav_sections['query']['results']:
-      if not 'QUERY' in item:
-        nav_sections.append(item)
-    
+    for item in wk_nav_sections['query']['results'].items():
+      if '# QUERY' not in item[0] and item[0] not in nav_ban:
+        if '1' in item[1]['exists']:
+          nav_item = item[1]['fulltext']
+          nav_sections.append(nav_item)
+
     return nav_sections
+
+    # nav_sections = []
+    # for item in wk_nav_sections['query']['results']:
+    #   print(item)
+    #   if not 'QUERY' in item:
+    #     nav_sections.append(item)
+
+    # print(nav_sections)
+
+    # return nav_sections
 
   # --- fix rel-links to be abs-ones (a)
   def fix_extlinks_a(text, url):
