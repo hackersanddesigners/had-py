@@ -574,46 +574,48 @@ class had(object):
       wk_section_pastitems = None
       wk_section_items = []
       for result in query({'conditions': 'Concept:' + section_title, 'printouts': 'Modification date|NameOfEvent|OnDate|Venue|Time', 'parameters': 'sort=Modification date|OnDate|order=desc'}):
+        try:
+          for item in result['results'].items():
+            title = item[1]['fulltext']
+            wk_section_items.append(title)
+            if len(item) > 1 and len(item[1]['printouts']['OnDate']) > 0:
+              date = item[1]['printouts']['OnDate'][0]['fulltext']
+              wk_section_items.append(date)
+            else:
+              date = None
+              wk_section_items.append(date)
 
-        for item in result['results'].items():
-          title = item[1]['fulltext']
-          wk_section_items.append(title)
-          if len(item) > 1 and len(item[1]['printouts']['OnDate']) > 0:
-            date = item[1]['printouts']['OnDate'][0]['fulltext']
-            wk_section_items.append(date)
-          else:
-            date = None
-            wk_section_items.append(date)
+            # fetch section item's content
+            item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
+            response_introtext_item = requests.get(base_url + api_call , params=item_introtext_options)
+            wkdata_introtext_item = response_introtext_item.json()
 
-          # fetch section item's content
-          item_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-          response_introtext_item = requests.get(base_url + api_call , params=item_introtext_options)
-          wkdata_introtext_item = response_introtext_item.json()
+            wkdata_text_item = wkdata_introtext_item['parse']['text']
+            # get section item's img
+            soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
+            if soup_wk_introtext.img:
+              cover_img = soup_wk_introtext.img
+              cover_img['class'] = 'mg-t--1 shadow'
 
-          wkdata_text_item = wkdata_introtext_item['parse']['text']
-          # get section item's img
-          soup_wk_introtext = BeautifulSoup(wkdata_text_item, 'html.parser')
-          if soup_wk_introtext.img:
-            cover_img = soup_wk_introtext.img
-            cover_img['class'] = 'mg-t--1 shadow'
+              src_rel_link = cover_img.get('src')
+              srcset_rel_link = cover_img.get('srcset')
+              if src_rel_link:
+                out_link = urljoin(base_url, src_rel_link)
+                cover_img['src'] = out_link
+              if srcset_rel_link:
+                srcset_list = re.split(r'[,]\s*', srcset_rel_link)
+                srcset_lu = srcset_list
+                srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
+                srcset_s = ', '.join(srcset_lu)
+                cover_img['srcset'] = srcset_s
+            else:
+              cover_img = None
 
-            src_rel_link = cover_img.get('src')
-            srcset_rel_link = cover_img.get('srcset')
-            if src_rel_link:
-              out_link = urljoin(base_url, src_rel_link)
-              cover_img['src'] = out_link
-            if srcset_rel_link:
-              srcset_list = re.split(r'[,]\s*', srcset_rel_link)
-              srcset_lu = srcset_list
-              srcset_list[:] = [urljoin(base_url, srcset_i) for srcset_i in srcset_list]
-              srcset_s = ', '.join(srcset_lu)
-              cover_img['srcset'] = srcset_s
-          else:
-            cover_img = None
-
-          # add `cover_img` to `wk_section_items`
-          wk_section_items.append(cover_img)
-    
+            # add `cover_img` to `wk_section_items`
+            wk_section_items.append(cover_img)
+        except AttributeError:
+          wk_intro = "Could not load items"
+          
       # ---- * * *
       wk_section_items = list(zip(*[iter(wk_section_items)]*3))
       try:
@@ -809,4 +811,4 @@ def create_app(with_assets=True):
 if __name__ == '__main__':
 	from werkzeug.serving import run_simple
 	app = create_app()
-	run_simple('127.0.0.1', 5000, app, use_debugger=False, use_reloader=True)
+	run_simple('127.0.0.1', 5000, app, use_debugger=True, use_reloader=True)
