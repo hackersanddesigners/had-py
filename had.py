@@ -60,7 +60,6 @@ class had(object):
     nav_main_options = {'action': 'ask', 'query': '[[Concept:MainNavigation]]' + filters_nav_main, 'format': 'json', 'formatversion': '2'}
     response_nav_main = requests.get(base_url + api_call , params=nav_main_options)
     wk_nav_main = response_nav_main.json()
-    print(wk_nav_main)
     return wk_nav_main
 
   def nav_sections():
