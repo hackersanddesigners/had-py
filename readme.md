@@ -27,11 +27,6 @@ Requirements
 - venv to setup a Python environment ([check this](http://www.marinamele.com/2014/07/install-python3-on-mac-os-x-and-use-virtualenv-and-virtualenvwrapper.html) for instructions)
 - git!
 
-UPDATE `<2020-02-08>`
-
-we switched to `pipenv` to manage python dependencies, we need to udpate the readme accordingly. the `Pipfile` is already in the repo.
-
-
 Then
 
 - open terminal
