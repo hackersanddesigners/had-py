@@ -5,6 +5,7 @@ from werkzeug.exceptions import HTTPException, NotFound
 from werkzeug.wsgi import SharedDataMiddleware
 from werkzeug.utils import redirect
 from werkzeug.wsgi import get_current_url
+from werkzeug.wsgi import get_host
 import requests
 import datetime
 import re
@@ -45,6 +46,7 @@ class had(object):
       Rule('/', endpoint='home'),
       Rule('/<file>', redirect_to='/assets/files/<file>'),
       Rule('/browserconfig.xml', redirect_to='/assets/files/favicon/browserconfig.xml'),
+      Rule('/title=<page_title>', endpoint='article'),
       Rule('/p/<page_title>', endpoint='article'),
       Rule('/s/<section_title>', endpoint='section'),
       Rule('/s/<section_title>/p/<page_title>', endpoint='article')
@@ -110,14 +112,21 @@ class had(object):
     # return nav_sections
 
   # --- fix rel-links to be abs-ones (a)
-  def fix_extlinks_a(text, url):
-    base_url = 'https://wiki.hackersanddesigners.nl/'
-
+  def fix_extlinks_a(text, url, environ):
+    
     for a in text.find_all('a', href=re.compile(r'/index.php/.*')):
       rel_link = a.get('href')
       rel_link = rel_link.replace(':', '%3A')
       rel_link = rel_link.rsplit('/', 1)
       a['href'] = urljoin(url, rel_link[1])
+
+    base_url = get_host(environ)
+    # match urls formatted like: index.php?title=Selby_Gildemacher but NOT /index.php?title=File:SelbyIMG_6338.jpg
+    # not sure how to handle those File: urls? 
+    for a in text.find_all('a', href=re.compile(r'(?!.*File:)/index.php\?title=.*')):
+      rel_link = a.get('href')
+      rel_link = rel_link.replace('index.php?title=', 'p/')
+      a['href'] = urljoin(base_url, rel_link)
     return text
 
   # --- fix rel-links to be abs ones (img)
@@ -268,7 +277,7 @@ class had(object):
     
     soup_wk_intro = BeautifulSoup(wk_intro, 'html.parser')
     # ---
-    fix_extlinks_a(soup_wk_intro, url='s/Events/p/')
+    fix_extlinks_a(soup_wk_intro, url='s/Events/p/', environ=request.environ)
     fix_extlink_imgs(soup_wk_intro)
     typography(soup_wk_intro)
     # ---
@@ -328,7 +337,7 @@ class had(object):
           # ---
           typography(soup_wk_introtext)
           p_intro = soup_wk_introtext.p
-          fix_extlinks_a(p_intro, '/s/Events/p/')
+          fix_extlinks_a(p_intro, '/s/Events/p/', environ=request.environ)
           fix_extlink_imgs(soup_wk_introtext)
           # ---
           soup_intro = p_intro
@@ -381,7 +390,7 @@ class had(object):
       # fix rel-links to be abs-ones
       envy = request.environ
       p_url = get_current_url(envy)
-      fix_extlinks_a(soup_wk_intro, url=p_url + '/p/')
+      fix_extlinks_a(soup_wk_intro, url=p_url + '/p/', environ=request.environ)
 
       p_intro = soup_wk_intro.find('p')
       if p_intro.string:
@@ -704,7 +713,7 @@ class had(object):
     p_url = get_current_url(envy)
     p_url = p_url.rsplit('/', 1)
 
-    fix_extlinks_a(soup_bodytext, url=p_url[0] + '/')
+    fix_extlinks_a(soup_bodytext, url=p_url[0] + '/', environ=request.environ)
 
     # --- images
     for img in soup_bodytext.find_all('img', src=re.compile(r'/images/.*')):
