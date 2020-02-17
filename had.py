@@ -60,6 +60,14 @@ class had(object):
     nav_main_options = {'action': 'ask', 'query': '[[Concept:MainNavigation]]' + filters_nav_main, 'format': 'json', 'formatversion': '2'}
     response_nav_main = requests.get(base_url + api_call , params=nav_main_options)
     wk_nav_main = response_nav_main.json()
+    print('MN', wk_nav_main)
+    print(wk_nav_main['query']['results'])
+    try:
+      del wk_nav_main['query']['results']['Summer Academy 2019']
+      del wk_nav_main['query']['results']['Concept:Summer Academy 2019']
+    except Exception as e:
+      print(e)
+
     return wk_nav_main
 
   def nav_sections():
@@ -811,4 +819,4 @@ def create_app(with_assets=True):
 if __name__ == '__main__':
 	from werkzeug.serving import run_simple
 	app = create_app()
-	run_simple('127.0.0.1', 5000, app, use_debugger=True, use_reloader=True)
+	run_simple('127.0.0.1', 5000, app, use_debugger=False, use_reloader=True)
