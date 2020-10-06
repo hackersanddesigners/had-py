@@ -2,7 +2,7 @@ import os
 from werkzeug.wrappers import Request, Response
 from werkzeug.routing import Map, Rule, NotFound, RequestRedirect
 from werkzeug.exceptions import HTTPException, NotFound
-from werkzeug.wsgi import SharedDataMiddleware
+from werkzeug.middleware.shared_data import SharedDataMiddleware
 from werkzeug.utils import redirect
 from werkzeug.wsgi import get_current_url
 from werkzeug.wsgi import get_host
@@ -825,4 +825,4 @@ def create_app(with_assets=True):
 if __name__ == '__main__':
 	from werkzeug.serving import run_simple
 	app = create_app()
-	run_simple('127.0.0.1', 5000, app, use_debugger=True, use_reloader=True)
+	run_simple('127.0.0.1', 5002, app, use_debugger=True, use_reloader=True)
