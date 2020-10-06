@@ -7,9 +7,6 @@ verify_ssl = true
 
 [packages]
 werkzeug = "*"
-requests = "*"
-bs4 = "*"
-jinja2 = "*"
 
 [requires]
 python_version = "3.6"
