@@ -789,7 +789,7 @@ class had(object):
                                 )
   
   def on_channels_manifest(self, request):
-    filename = './channels-manifest.json'
+    filename = os.path.abspath(os.getcwd()) + '/channels-manifest.json'
     content = ''
     if os.path.exists(filename):
       with open(filename, "r") as f:
