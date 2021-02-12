@@ -881,50 +881,49 @@ http://flickity.metafizzy.co
 → moubarak.eu
 */
 
-input {
-    padding-left: 20px;
-    padding-right: 20px;
-    width: 500px;
-    /*align-self: flex-end;*/
-    margin-left: 30px;
-    cursor: default;
-    color: #0000ff;
-    color: var(--color-compl);
-    background-color: rgba(255, 255, 255, 1);
-    height: auto;
-    border-width: 2px;
-    border-color: #000000;
-    border-color: var(--color-main);
-    box-sizing: border-box;
-    transition: ease-out 0.5s;
+/*@import 'search.css';*/
+
+.tool {
+  margin: 50px;
+  max-width: 45rem;
+  overflow: scroll;
+  border: 1px solid black;
+  border-radius: 5px;
+  background: lightgoldenrodyellow;
+  /* filter: drop-shadow(1px 1px 8px black); */
+  font-family: 'Helvetica', sans-serif;
 }
 
-input::-webkit-input-placeholder {
-    color: grey;
+.toolHeader {
+  text-align: center;
+  padding: 5px;
 }
 
-input:-ms-input-placeholder {
-    color: grey;
+.toolContent {
+  max-height: 500px;
+  overflow: scroll;
+  padding: 10px;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
 }
 
-input::placeholder {
-    color: grey;
+.toolFooter {
+  text-align: center;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: row;
+      flex-direction: row;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
 }
 
-input:hover {
-    box-shadow:         0 0 4px 0px grey;
-    transition: ease 0.5s;
+.toolFooter a {
+  width: 100%;
+  padding: 5px;
 }
 
-input:focus {
-    box-shadow: 0 0 7px 1px #0000ff;
-    box-shadow:         0 0 7px 1px var(--color-compl);
-    transition: ease-out 0.5s;
-    border-color: #0000ff;
-    border-color: var(--color-compl);
-    border-width: 2px;
-    outline: none;
-    cursor: text;
+.toolFooter .inGitHub {
+  border-left: 1px solid black;
 }
 
 :root{
