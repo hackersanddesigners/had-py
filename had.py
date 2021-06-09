@@ -66,7 +66,7 @@ class had(object):
       del wk_nav_main['query']['results']['Summer Academy 2019']
       del wk_nav_main['query']['results']['Concept:Summer Academy 2019']
     except Exception as error:
-      print(error)
+      print('err: nav, concept item =>', error)
     return wk_nav_main
 
   def nav_sections():
@@ -326,7 +326,7 @@ class had(object):
           wkdata_upevents.append(date)
 
           upevents_introtext_options = {'action': 'parse', 'page': title, 'format': 'json', 'formatversion': '2', 'disableeditsection': 'true'}
-          response_introtext_upevents = requests.get(base_url + api_call , params=upevents_introtext_options)
+          response_introtext_upevents = requests.get(base_url + api_call, params=upevents_introtext_options)
           wkdata_introtext_upevents = response_introtext_upevents.json()
 
           text = wkdata_introtext_upevents['parse']['text']
@@ -672,7 +672,6 @@ class had(object):
       def extract_metadata(query):
         item_list = []
         for item in query:
-          print(item)
           str = item['item']
           # strip out weird hash at the end 
           # (see why https://www.semantic-mediawiki.org/wiki/Ask_API#BrowseBySubject)
