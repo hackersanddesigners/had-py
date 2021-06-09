@@ -20,12 +20,12 @@
       <div class="main-menu pd-b--1 flex-r">
         <a href="/" class="ft-sans ft-2 ft-3__m a-td--0 pd-r--1 blue">H&amp;D</a>
         {% for item in nav_main['query']['results'].items() %}
-        <a href="/p/{{ item[0]|replace(" ", "_") }}" class="ft-sans ft-2 ft-3__m a-td--0 blue{% if not loop.last %} pd-r--1{% endif %}">{{ item[0] }}</a>
+        <a href="/p/{{ item[0]|replace(" ", "_") | urlencode }}" class="ft-sans ft-2 ft-3__m a-td--0 blue{% if not loop.last %} pd-r--1{% endif %}">{{ item[0] }}</a>
         {% endfor %}
       </div>
       <div class="section-menu">
 			  {% for item in nav_sections %}
-        <a href="/s/{{ item|replace("Concept:", "")|replace(" ", "_") }}" class="sm-item d-ib ft-serif ft-2 ft-2__m w--full w--auto__s{% if not loop.last %} mg-r--1 mg-b--05{% endif %}{% if item[0] == title %} ft-italic{% endif %}">{{ item|replace("Concept:", "")}}</a>
+        <a href="/s/{{ item|replace("Concept:", "")|replace(" ", "_") | urlencode }}" class="sm-item d-ib ft-serif ft-2 ft-2__m w--full w--auto__s{% if not loop.last %} mg-r--1 mg-b--05{% endif %}{% if item[0] == title %} ft-italic{% endif %}">{{ item|replace("Concept:", "")}}</a>
 			  {% endfor %}
       </div>
     </nav>
