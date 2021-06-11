@@ -45,6 +45,7 @@ class had(object):
     self.url_map = Map([
       Rule('/', endpoint='home'),
       Rule('/<file>', redirect_to='/assets/files/<file>'),
+      Rule('/channels-manifest.json', endpoint='channels_manifest'),
       Rule('/browserconfig.xml', redirect_to='/assets/files/favicon/browserconfig.xml'),
       Rule('/title=<page_title>', endpoint='article'),
       Rule('/p/<page_title>', endpoint='article'),
@@ -785,6 +786,14 @@ class had(object):
                                 peopleorgs=wk_peopleorgs,
                                 bodytext=wk_bodytext
                                 )
+  
+  def on_channels_manifest(self, request):
+    filename = os.path.abspath(os.getcwd()) + '/channels-manifest.json'
+    content = ''
+    if os.path.exists(filename):
+      with open(filename, "r") as f:
+          content = f.read()
+    return Response(content, mimetype='text/html')
 
   def error_404(self):
     response = self.render_template('404.html')
