@@ -793,7 +793,7 @@ class had(object):
     if os.path.exists(filename):
       with open(filename, "r") as f:
           content = f.read()
-    return Response(content, mimetype='text/html')
+    return Response(content, mimetype='application/json')
 
   def error_404(self):
     response = self.render_template('404.html')
