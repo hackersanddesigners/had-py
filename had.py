@@ -660,10 +660,13 @@ class had(object):
     response_content = requests.get(base_url + api_call, params=page_options)
     wk_data = response_content.json()
 
-    wk_title = wk_data['parse']['title']
-    wk_bodytext = wk_data['parse']['text']
+    print('wk_data =>', wk_data)
 
+    
     try:
+      wk_title = wk_data['parse']['title']
+      wk_bodytext = wk_data['parse']['text']
+
       # --- if it has [Category:Event]
       # fetch page-metadata for Event
       page_meta_options = {'action': 'browsebysubject', 'subject': page_title, 'format': 'json', 'formatversion': '2'}
@@ -698,13 +701,17 @@ class had(object):
         # --- PeopleOrgs
         if 'PeopleOrganisations' in item['property']:
           wk_peopleorgs = extract_metadata(item['dataitem'])
+
+
+        # fix rel-links to be abs-ones
+        soup_bodytext = BeautifulSoup(wk_bodytext, 'html.parser')
     
     # --- if it has not, set Event's metadata to `None`
     except KeyError:
       print('No Event metadata')
     
     # fix rel-links to be abs-ones
-    soup_bodytext = BeautifulSoup(wk_bodytext, 'html.parser')
+    # soup_bodytext = BeautifulSoup(wk_bodytext, 'html.parser')
    
     envy = request.environ
     p_url = get_current_url(envy)
